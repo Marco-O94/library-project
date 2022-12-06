@@ -7,6 +7,10 @@ Per quanto riguarda il test ho voluto utilizzare:
 - Flowbite
 - Swiper
 <br>
+## Utente di prova
+- Email: admin@localhost
+- Pass: password
+## Info + Comandi
 I commenti all'interno del test sono tutti in inglese.<br>
 Di seguito i comandi per avviare Laravel e vue:<br>
 <br>
@@ -15,5 +19,6 @@ Di seguito i comandi per avviare Laravel e vue:<br>
 <code>$ npm run serve</code><br>
 Nel file .env.example è presente la voce ORIGIN_URL, che permette di impostare l'Access-Control-Allow-Origin. <br>
 Inserire dunque l'url:port del progetto in vue.<br>
+
 
 <h3>Grazie per il vostro tempo</h3>
