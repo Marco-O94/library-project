@@ -7,10 +7,11 @@ Per quanto riguarda il test ho voluto utilizzare:
 - Flowbite
 - Swiper
 <br>
-## Utente di prova
+<h2> Utente di prova</h2>
 - Email: admin@localhost
 - Pass: password
-## Info + Comandi
+<br>
+<h2>Info + Comandi</h2>
 I commenti all'interno del test sono tutti in inglese.<br>
 Di seguito i comandi per avviare Laravel e vue:<br>
 <br>
