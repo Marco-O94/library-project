@@ -1,12 +1,14 @@
 <script setup lang="ts">
 //import CKEditor from '@ckeditor/ckeditor5-vue';
 //import InlineEditor from '@ckeditor/ckeditor5-build-inline';
-import NavBar from './components/NavBar.vue';
+import MainLayout from './components/MainLayout.vue';
 
 </script>
+
 <template>
-  <NavBar />
+  <MainLayout>
   <router-view/>
+</MainLayout>
 </template>
 
 <style>

@@ -27,4 +27,13 @@ class Book extends Model
         'quantity' => 'integer',
     ];
 
+    public function categories()
+    {
+        return $this->belongsToMany(Category::class);
+    }
+
+    public function BookedUsers()
+    {
+        return $this->belongsToMany(User::class, 'book_user', 'book_id', 'user_id');
+    }
 }
