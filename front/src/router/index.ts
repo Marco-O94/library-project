@@ -5,6 +5,7 @@ import RegisterView from '../views/RegisterView.vue'
 import BooksView from '../views/BooksView.vue'
 import { UserStore } from '../stores/UserStore'
 
+const userStore = UserStore();
 const routes: Array<RouteRecordRaw> = [
   
   {
@@ -47,17 +48,17 @@ const router = createRouter({
   history: createWebHistory(process.env.BASE_URL),
   routes
 })
-/*router.beforeEach(async (to, from) => {
+router.beforeEach(async (to, from) => {
   if (
     // make sure the user is authenticated
-    !UserStore.isLogged &&
+    !userStore.isLogged &&
     // ❗️ Avoid an infinite redirect
     to.name !== 'Login'
   ) {
     // redirect the user to the login page
     return { name: 'Login' }
   }
-})*/
+})
 /*
 router.beforeEach(async (to) => {
   // redirect to login page if not logged in and trying to access a restricted page
