@@ -11,7 +11,7 @@ I commenti all'interno del test sono tutti in inglese.
     <br>
 Di seguito i comandi per avviare Laravel e vue:
 <br>
-```php artisan migrate --seed```
-php artisan serve```
+<code>php artisan migrate --seed
+<php artisan serve</code>
 <br>
-```npm run serve```
+<code>npm run serve</code>
