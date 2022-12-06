@@ -8,7 +8,7 @@ Per quanto riguarda il test ho voluto utilizzare:
 - Swiper
 <br>
 <h2> Utente di prova</h2>
-- Email: admin@localhost
+- Email: admin@localhost<br>
 - Pass: password
 <br>
 <h2>Info + Comandi</h2>
