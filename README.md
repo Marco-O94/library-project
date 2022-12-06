@@ -7,10 +7,10 @@ Per quanto riguarda il test ho voluto utilizzare:
 - Flowbite
 - Swiper
 <br>
-I commenti all'interno del test sono tutti in inglese.\
-Di seguito i comandi per avviare Laravel e vue:\
+I commenti all'interno del test sono tutti in inglese. \
+Di seguito i comandi per avviare Laravel e vue: \
 <br>
-<code>$ php artisan migrate --seed</code>
+<code>$ php artisan migrate --seed</code> \
 <code>$ php artisan serve</code>
 <br>
 <code>$ npm run serve</code>
