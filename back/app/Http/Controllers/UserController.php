@@ -20,7 +20,7 @@ class UserController extends Controller
             $user->books = $user->books()->get();
         });
 
-
+        return response()->json($users, 201);
     }
 
     /**
@@ -50,6 +50,8 @@ class UserController extends Controller
         $user = User::find($id);
         $user->role = $user->role()->get();
         $user->books = $user->books()->get();
+
+        return response()->json($user, 201);
     }
 
     /**
@@ -83,6 +85,10 @@ class UserController extends Controller
         }
 
         $user->save();
+
+        return response()->json([
+            'message' => 'Utente modificato con successo'
+        ], 201);
     }
 
     /**
@@ -96,5 +102,9 @@ class UserController extends Controller
         $user = User::find($id);
         $user->detach();
         $user->delete();
+
+        return response()->json([
+            'message' => 'Utente eliminato con successo'
+        ], 201);
     }
 }

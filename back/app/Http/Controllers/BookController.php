@@ -88,7 +88,9 @@ class BookController extends Controller
         $book->save();
         $book->attach($request->category);
 
-        return response()->json($book, 201);
+        return response()->json([
+            'message' => 'Libro creato con successo'
+        ], 201);
     }
 
     /**
@@ -143,7 +145,9 @@ class BookController extends Controller
         $book->save();
         $book->attach($request->category);
 
-        return response()->json($book, 201);
+        return response()->json([
+            'message' => 'Libro modificato con successo'
+        ], 201);
     }
 
     /**
@@ -157,6 +161,8 @@ class BookController extends Controller
         $book = Book::find($id);
         $book->detach();
         $book->delete();
-        return response()->json($book, 201);
+        return response()->json([
+            'message' => 'Libro eliminato con successo'
+        ], 201);
     }
 }
