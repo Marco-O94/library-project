@@ -57,7 +57,7 @@ class BookController extends Controller
      */
     public function create(Request $request)
     {
-        $categories = Category::all();
+        $categories = Category::all()->pluck('id','name');
         return response()->json($categories, 201);
     }
 
