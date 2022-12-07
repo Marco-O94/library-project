@@ -49,7 +49,7 @@ const router = createRouter({
 
 router.beforeEach(async (to, from) => {
   const userStore = UserStore()
-  const publicPages = ['/', '/login', '/register', '/dashboard'];
+  const publicPages = ['/', '/login', '/register', '/dashboard', '/books'];
   const authRequired = !publicPages.includes(to.path);
   if (
     // make sure the user is authenticated

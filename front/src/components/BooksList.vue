@@ -1,5 +1,18 @@
 <script setup lang="ts">
+import { ref, watch  } from 'vue';
 import SearchBar from '../components/SearchBar.vue';
+import { BookStore } from '../stores/BookStore';
+
+const bookStore = BookStore();
+
+const data = ref({
+    search: '' as string,
+});
+
+// eslint-disable-next-line no-undef
+watch(() => data.value.search, (search) =>  {
+    bookStore.search(search);
+});
 </script>
 
 <template>
@@ -9,7 +22,7 @@ import SearchBar from '../components/SearchBar.vue';
                 <h2 class="text-2xl font-bold text-gray-900 sm:text-3xl">I nostri libri</h2>
                 <p class="mt-2 mb-3 text-xl text-gray-600 sm:mt-4">
                     Qui puoi trovare i libri che abbiamo in catalogo.</p>
-                <SearchBar />
+                <SearchBar placeholder="Cerca qui il tuo libro..." v-model:search="data.search" />
             </div>
     
             <div class="grid grid-cols-2 gap-6 mt-10 lg:mt-16 lg:gap-4 lg:grid-cols-4">

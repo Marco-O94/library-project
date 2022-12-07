@@ -1,3 +1,8 @@
+export interface Books {
+    current_page: number;
+    data: Book[];
+}
+
 export interface Book {
     id: number;
     quantity: number;

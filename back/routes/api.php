@@ -82,7 +82,7 @@ Route::controller(AuthController::class)->group(function () {
 Route::get('/books/count', [BookController::class, 'booksCount']);
 
 Route::prefix('books')->controller(BookController::class)->group(function () {
-    Route::get('/books', 'index');
+    Route::post('/query', 'index');
     Route::get('/show/{id}', 'show');
 });
 // Show single Book

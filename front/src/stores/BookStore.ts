@@ -1,6 +1,6 @@
 import { defineStore } from "pinia";
 import axios from 'axios';
-import { Book } from "@/interfaces/BookData";
+import { Book, Books } from "@/interfaces/BookData";
 
 export const BookStore = defineStore("BookStore", {
     state: () => ({
@@ -20,6 +20,16 @@ export const BookStore = defineStore("BookStore", {
                 console.log(err);
             });
         },
+
+        search(data: string) {
+            axios.get("/books/query", { params: data }).then((res) => {
+                this.books = res.data;
+                console.log(res)
+            }, (err) => {
+                console.log(err);
+            });
+            return;
+        }
 
     }
 });
