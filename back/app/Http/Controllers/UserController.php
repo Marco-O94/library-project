@@ -32,7 +32,7 @@ class UserController extends Controller
      */
     public function show($id)
     {
-        $user = User::find($id)->with('role', 'books')->get();
+        $user = User::where('id', $id)->with('role', 'books')->get();
 
         return response()->json($user, 201);
     }
@@ -73,8 +73,11 @@ class UserController extends Controller
         $user->name = $request->name;
         $user->email = $request->email;
         $user->is_admin = $request->is_admin;
-        $user->roles()->sync($request->role_id);
-        if($user->roles()->get()->first()->id == 2) {
+        $user->role()->update([
+            'role_id' => $request->role_id,
+        ]);
+
+        if($user->role()->get()->name === 'Student') {
            $user->student()->update([
                'school' => $request->school,
                'grade' => $request->grade,

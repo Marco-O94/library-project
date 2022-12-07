@@ -49,9 +49,9 @@ class User extends Authenticatable
         return $this->belongsToMany(Book::class)->withPivot('borrow_date','expiration_date');
     }
 
-    // User can have many roles
-    public function roles() {
-        return $this->belongsTo(Role::class, 'user_id');
+    // User can have one role
+    public function role() {
+        return $this->belongsTo(Role::class);
     }
 
     // User can have one student profile

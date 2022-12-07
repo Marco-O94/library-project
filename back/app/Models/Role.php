@@ -11,7 +11,7 @@ class Role extends Model
 
     // User can have many roles
     public function users() {
-        return $this->hasMany(User::class, 'role_id');
+        return $this->hasMany(User::class);
     }
 
     protected $fillable = [
@@ -19,5 +19,4 @@ class Role extends Model
         'color',
     ];
 
-    protected $hidden = ['pivot'];
 }

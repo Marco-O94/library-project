@@ -18,20 +18,9 @@ class UserSeeder extends Seeder
      */
     public function run()
     {
-
-
-        // Admin user
-        User::create([
-
-            'name' => 'Admin',
-            'is_admin' => true,
-            'email' => 'admin@localhost',
-            'password' => bcrypt('password'),
-        ]);
-
         // Generate 10 users with Guest role
             User::factory(10)->create()->each(function ($user) {
-            $user->roles()->attach(Role::where('name', 'Guest')->first());
+
             $user->books()->attach(Book::factory(5)->create()->each(
                 function ($book) {
                     $book->categories()->attach(Category::all()->random(1));
@@ -46,6 +35,15 @@ class UserSeeder extends Seeder
 
             $user->books()->attach(Book::factory(5)->count(5)->make(), ['borrow_date' => now()]);
         });*/
+        // Admin user
+        User::create([
+
+            'name' => 'Admin',
+            'is_admin' => true,
+            'role_id' => Role::where('name', 'Librarian')->first()->id,
+            'email' => 'admin@localhost',
+            'password' => bcrypt('password'),
+        ]);
 
 
 

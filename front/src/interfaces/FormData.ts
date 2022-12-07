@@ -20,14 +20,3 @@ export interface Errors {
     password_confirmation: string[];
     message: string[];
 }
-
-export interface User {
-    id: number;
-    name: string;
-    email: string;
-    image_path: string;
-    is_admin: boolean;
-    created_at: string;
-    updated_at: string;
-
-}

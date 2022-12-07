@@ -19,7 +19,6 @@ return new class extends Migration
             $table->string('school')->nullable();
             $table->string('grade')->nullable();
             $table->string('class')->nullable();
-
             $table->timestamps();
         });
     }

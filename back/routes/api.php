@@ -87,6 +87,13 @@ Route::prefix('books')->controller(BookController::class)->group(function () {
 });
 // Show single Book
 
-
 /* ---------- */
+
+Route::get('/test', function () {
+    $user = \App\Models\User::find(1);
+    $user = $user->role()->get()->name;
+    return response()->json(
+        $user
+    , 201);
+});
 

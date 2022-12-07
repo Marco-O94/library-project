@@ -1,6 +1,7 @@
 import { defineStore } from "pinia";
 import axios from 'axios';
-import { LoginData, RegisterData, Errors, User } from '../interfaces/FormData';
+import { LoginData, RegisterData, Errors } from '../interfaces/FormData';
+import { Role, User } from '../interfaces/UserData';
 import router from '@/router';
 // eslint-disable-next-line @typescript-eslint/no-var-requires
 const Cookies = require('js-cookie');
@@ -26,6 +27,7 @@ axios.defaults.withCredentials = true;
 export const UserStore = defineStore("UserStore", {
     state: () => ({
         user: JSON.parse(Cookies.get("user") || "{}")  as User,
+        roles: [] as Role[],
         token: Cookies.get('token') || '',
         returnURL: '' as string,
         errors: {
