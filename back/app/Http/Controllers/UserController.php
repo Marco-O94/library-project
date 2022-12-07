@@ -32,9 +32,7 @@ class UserController extends Controller
      */
     public function show($id)
     {
-        $user = User::find($id);
-        $user->role = $user->role()->get();
-        $user->books = $user->books()->get();
+        $user = User::find($id)->with('role', 'books')->get();
 
         return response()->json($user, 201);
     }

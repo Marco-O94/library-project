@@ -34,11 +34,8 @@ class BookController extends Controller
         $books = fn () => Book::query()
             // Name Search
         ->when($request->input('search') ?? '', function ($query, $search) {
-            $query->where('name', 'like', "%{$search}%");})
-            // Category Search
-        ->when($request->input('category'), function ($query, $order) {
-        $query->orderBy('name', $order);
-        })->categories()->paginate(5);
+            $query->where('name', 'like', "%{$search}%");}
+            )->with('categories')->paginate(5);
 
         return response()->json($books, 201);
     }
@@ -101,7 +98,7 @@ class BookController extends Controller
      */
     public function show($id)
     {
-        $book = Book::find($id)->categories()->get();
+        $book = Book::find($id)->with('categories')->first();
         return response()->json($book, 201);
     }
 

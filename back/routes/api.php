@@ -45,8 +45,6 @@ Route::middleware('auth:sanctum', 'ability:librarian')->group(function () {
 Route::prefix('books')->controller(BookController::class)->group(function () {
     // Show categories for Book creation
     Route::get('/create', 'create');
-    // Show single Book
-    Route::get('/show/{id}', 'show');
     // Store a new Book
     Route::post('/store', 'store');
     // Edit Book
@@ -82,7 +80,13 @@ Route::controller(AuthController::class)->group(function () {
     Route::post('register', 'register');
 });
 Route::get('/books/count', [BookController::class, 'booksCount']);
-Route::get('/books', [BookController::class, 'index']);
+
+Route::prefix('books')->controller(BookController::class)->group(function () {
+    Route::get('/books', 'index');
+    Route::get('/show/{id}', 'show');
+});
+// Show single Book
+
 
 /* ---------- */
 

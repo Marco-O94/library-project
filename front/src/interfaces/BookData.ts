@@ -1,10 +1,21 @@
 export interface Book {
     id: number;
-    title: string;
     quantity: number;
+    title: string;
+    author: string;
     publisher: string;
     isbn: string;
     description: string;
     image: string;
-    author: string;
+    categories: Category[];
+    
+}
+
+export interface Category {
+    id: number;
+    name: string;
+    slug: string;
+    description: string;
+    image: string;
+    color: string;
 }

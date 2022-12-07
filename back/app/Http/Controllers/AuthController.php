@@ -69,11 +69,17 @@ class AuthController extends Controller
             }
 
             $user = User::where('email', $request->email)->first();
-
+            // If user has librarian role
+            $token = '';
+            if($user->roles()->where('name', 'librarian')->exists()){
+                $token = $user->createToken("API TOKEN", ['ability:librarian'])->plainTextToken;
+            }else {
+                $token = $user->createToken("API TOKEN")->plainTextToken;
+            }
             return response()->json([
                 'status' => true,
                 'message' => 'Utente collegato con successo',
-                'token' => $user->createToken("API TOKEN")->plainTextToken,
+                'token' => $token,
                 'user' => $user
             ], 200);
 
