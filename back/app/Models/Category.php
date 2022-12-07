@@ -17,6 +17,8 @@ class Category extends Model
         'color'
     ];
 
+    protected $hidden = ['pivot'];
+
     public function books()
     {
         return $this->belongToMany(Book::class);

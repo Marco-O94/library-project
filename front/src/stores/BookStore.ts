@@ -2,9 +2,10 @@ import { defineStore } from "pinia";
 import axios from 'axios';
 import { Book, Books } from "@/interfaces/BookData";
 
+
 export const BookStore = defineStore("BookStore", {
     state: () => ({
-        books: {} as Books | unknown,
+        books: {} as Books,
         book: {} as Book,
         av_books: 0 as number,
         av_bookings: 0 as number,
@@ -21,7 +22,7 @@ export const BookStore = defineStore("BookStore", {
             });
         },
 
-        search(data: unknown) {
+        search(data: string) {
             axios.get("/books/query", { params: {search: data}}).then((res) => {
                 this.books = res.data;
                 console.log(res)

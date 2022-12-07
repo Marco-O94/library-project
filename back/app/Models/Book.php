@@ -23,6 +23,8 @@ class Book extends Model
         'quantity' => 'integer',
     ];
 
+    protected $hidden = ['pivot'];
+
     public function categories()
     {
         return $this->belongsToMany(Category::class);

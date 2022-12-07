@@ -30,15 +30,15 @@ class BookController extends Controller
      */
     public function index(Request $request)
     {
-
-
-
         // Dynamic Query based on search input and category 🔍
         return response()->json(Book::query()
             // Name Search
         ->when($request->input('search') ?? '', function ($query, $search) {
-            $query->where('title', 'like', "%{$search}%");}
-            )->with('categories')->paginate(5), 201);
+            $query->where('title', 'like', "%{$search}%");})
+            ->select('title','author','image')
+            ->paginate(5)
+
+            , 201);
     }
 
     public function userBooks($id)
