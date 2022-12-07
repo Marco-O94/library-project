@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use Illuminate\Http\Request;
 use App\Models\User;
 use App\Models\Book;
+use App\Models\Category;
 
 class BookController extends Controller
 {
@@ -38,6 +39,8 @@ class BookController extends Controller
         ->when($request->input('category'), function ($query, $order) {
         $query->orderBy('name', $order);
         })->categories()->paginate(5);
+
+        return response()->json($books, 201);
     }
 
     public function userBooks($id)
@@ -47,9 +50,113 @@ class BookController extends Controller
         return response()->json($books, 201);
     }
 
-    public function book($id)
+    /**
+     * Show the form for creating a new resource.
+     *
+     * @return \Illuminate\Http\Response
+     */
+    public function create(Request $request)
+    {
+        $categories = Category::all();
+        return response()->json($categories, 201);
+    }
+
+    /**
+     * Store a newly created resource in storage.
+     *
+     * @param  \Illuminate\Http\Request  $request
+     * @return \Illuminate\Http\Response
+     */
+    public function store(Request $request)
+    {
+        $book = new Book;
+        $book->title = $request->title; // string
+        $book->author = $request->author; // string
+        $book->description = $request->description; // text
+        $book->isbn = $request->isbn; //string
+        $book->publisher = $request->publisher; // string
+        $book->quantity = $request->quantity; // integer
+
+        // Upload Image
+        if ($request->hasFile('image')) {
+            $image = $request->file('image');
+            $name = time().'.'.$image->getClientOriginalExtension();
+            $destinationPath = public_path('/books/images');
+            $image->move($destinationPath, $name);
+            $book->image = $name;
+        }
+        $book->save();
+        $book->attach($request->category);
+
+        return response()->json($book, 201);
+    }
+
+    /**
+     * Display the specified resource.
+     *
+     * @param  int  $id
+     * @return \Illuminate\Http\Response
+     */
+    public function show($id)
     {
         $book = Book::find($id)->categories()->get();
+        return response()->json($book, 201);
+    }
+
+    /**
+     * Update the specified resource in storage.
+     *
+     * @param  \Illuminate\Http\Request  $request
+     * @param  int  $id
+     * @return \Illuminate\Http\Response
+     */
+    public function update(Request $request, $id)
+    {
+        $request->validateWithBag('updateBook', [
+            'title' => 'required|string',
+            'quantity' => 'required|integer',
+            'image' => 'image|mimes:jpeg,png,jpg|max:2048',
+            'category' => 'required|string',
+        ],
+        [
+            'title.required' => 'Titolo richiesto',
+            'quantity.required' => 'Quantità richiesta',
+            'category.required' => 'Categoria richiesta',
+        ]);
+
+        $book = Book::find($id);
+        $book->title = $request->title; // string
+        $book->author = $request->author; // string
+        $book->description = $request->description; // text
+        $book->isbn = $request->isbn; //string
+        $book->publisher = $request->publisher; // string
+        $book->quantity = $request->quantity; // integer
+
+        // Upload Image
+        if ($request->hasFile('image')) {
+            $image = $request->file('image');
+            $name = time().'.'.$image->getClientOriginalExtension();
+            $destinationPath = public_path('/books/images');
+            $image->move($destinationPath, $name);
+            $book->image = $name;
+        }
+        $book->save();
+        $book->attach($request->category);
+
+        return response()->json($book, 201);
+    }
+
+    /**
+     * Remove the specified resource from storage.
+     *
+     * @param  int  $id
+     * @return \Illuminate\Http\Response
+     */
+    public function destroy($id)
+    {
+        $book = Book::find($id);
+        $book->detach();
+        $book->delete();
         return response()->json($book, 201);
     }
 }

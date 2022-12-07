@@ -44,8 +44,7 @@ const props = defineProps({
                     <td scope="row" class="pl-6 py-4 font-medium text-gray-900 whitespace-nowrap">
                         {{ book.title }}
                      </td>
-                    <td scope="row" class="pl-6 py-4 font-medium text-gray-900 whitespace-nowrap">
-                        {{ book.genre }}
+                    
                 </tr>
 
 
