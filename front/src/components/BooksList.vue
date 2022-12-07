@@ -1,8 +1,9 @@
 <script setup lang="ts">
-import { ref, watch  } from 'vue';
+import { ref, watch } from 'vue';
 import SearchBar from '../components/SearchBar.vue';
 import * as _ from "lodash";
 import { BookStore } from '../stores/BookStore';
+import ListPagination from '../components/ListPagination.vue';
 const bookStore = BookStore();
 
 const data = ref({
@@ -10,7 +11,7 @@ const data = ref({
 });
 
 // I have no time for Throttle or Debounce but here goes the idea 😄
-watch(() => data.value.search, ((search) =>  {
+watch(() => data.value.search, ((search) => {
     bookStore.search(search);
 }));
 </script>
@@ -24,11 +25,14 @@ watch(() => data.value.search, ((search) =>  {
                     Qui puoi trovare i libri che abbiamo in catalogo.</p>
                 <SearchBar placeholder="Cerca qui il tuo libro..." v-model:search="data.search" />
             </div>
+            
             <div v-if="!bookStore.books.data" class="mt-10 font-bold text-xl">Inizia a cercare!</div>
-            <div v-else class="grid grid-cols-2 gap-6 mt-10 lg:mt-16 lg:gap-4 lg:grid-cols-4">
+            <template v-else>
+            <div class="grid grid-cols-2 gap-6 mt-10 lg:mt-16 lg:gap-4 lg:grid-cols-4">
                 <div class="relative group" v-for="book, index in bookStore.books.data" :key="index">
                     <div class="overflow-hidden aspect-w-1 aspect-h-1">
-                        <img class="object-cover w-full h-full transition-all duration-300 group-hover:scale-125" :src="book.image"/>
+                        <img class="object-cover w-full h-full transition-all duration-300 group-hover:scale-125"
+                            :src="book.image" />
                     </div>
                     <div class="flex items-start justify-between mt-4 space-x-4">
                         <div>
@@ -40,8 +44,10 @@ watch(() => data.value.search, ((search) =>  {
                             </h3>
                         </div>
                     </div>
-                </div>
+                </div> 
             </div>
+            <ListPagination :currentPage="bookStore.books.current_page" :lastPage="bookStore.books.last_page" :nextPage="bookStore.books.next_page_url" :prevPage="bookStore.books.prev_page_url" />
+        </template>
         </div>
     </section>
 </template>

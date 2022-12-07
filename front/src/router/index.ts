@@ -3,6 +3,7 @@ import HomeView from '../views/HomeView.vue'
 import LoginView from '../views/LoginView.vue'
 import RegisterView from '../views/RegisterView.vue'
 import BooksView from '../views/BooksView.vue'
+import NotFound from '../views/NotFound.vue'
 import { UserStore } from '../stores/UserStore'
 
 const routes: Array<RouteRecordRaw> = [
@@ -26,13 +27,22 @@ const routes: Array<RouteRecordRaw> = [
     name: 'books',
     component: BooksView
   },
+  {
+    path: '/books/:id',
+    name: 'book',
+    component: () => import(/* webpackChunkName: "book" */ '../views/BookView.vue')
+  },
   // Logged in routes
   {
     path: '/dashboard',
     name: 'Dashboard',
     component: () => import(/* webpackChunkName: "dashboard" */ '../views/DashboardView.vue')
     
-  }
+  },
+  { path: '/:pathMatch(.*)*', 
+    name: 'NotFound', 
+    component: NotFound
+  },
 
   /**
    * Use the lazyload pattern to load the views only when needed.
@@ -49,8 +59,8 @@ const router = createRouter({
 
 router.beforeEach(async (to, from) => {
   const userStore = UserStore()
-  const publicPages = ['/', '/login', '/register', '/dashboard', '/books'];
-  const authRequired = !publicPages.includes(to.path);
+  const privatePages = ['/Dashboard'];
+  const authRequired = privatePages.includes(to.path);
   if (
     // make sure the user is authenticated
     !userStore.isLogged && authRequired &&

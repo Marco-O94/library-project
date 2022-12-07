@@ -36,8 +36,7 @@ class BookController extends Controller
         ->when($request->input('search') ?? '', function ($query, $search) {
             $query->where('title', 'like', "%{$search}%");})
             ->select('title','author','image')
-            ->paginate(5)
-
+            ->paginate(6)
             , 201);
     }
 

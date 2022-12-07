@@ -22,15 +22,23 @@ export const BookStore = defineStore("BookStore", {
             });
         },
 
-        search(data: string) {
-            axios.get("/books/query", { params: {search: data}}).then((res) => {
+        async search(data: string) {
+            await axios.get("/books/query", { params: {search: data}}).then((res) => {
                 this.books = res.data;
                 console.log(res)
             }, (err) => {
                 console.log(err);
             });
             return;
+        },
+        async list(page=1){
+            await axios.get(`/books/query?page=${page}`).then(({data})=>{
+                this.books = data
+            }).catch(({ response })=>{
+                console.error(response)
+            })
         }
+
 
     }
 });
