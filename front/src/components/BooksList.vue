@@ -1,8 +1,8 @@
 <script setup lang="ts">
 import { ref, watch  } from 'vue';
 import SearchBar from '../components/SearchBar.vue';
+import _ from 'lodash';
 import { BookStore } from '../stores/BookStore';
-
 const bookStore = BookStore();
 
 const data = ref({
@@ -10,9 +10,9 @@ const data = ref({
 });
 
 // eslint-disable-next-line no-undef
-watch(() => data.value.search, (search) =>  {
-    bookStore.search(search);
-});
+watch(() => data.value.search, ((search) =>  {
+    _.debounce(bookStore.search(search), 900);
+}));
 </script>
 
 <template>

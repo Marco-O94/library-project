@@ -4,7 +4,7 @@ import { Book, Books } from "@/interfaces/BookData";
 
 export const BookStore = defineStore("BookStore", {
     state: () => ({
-        books: [] as Book[],
+        books: {} as Books | unknown,
         book: {} as Book,
         av_books: 0 as number,
         av_bookings: 0 as number,
@@ -21,8 +21,8 @@ export const BookStore = defineStore("BookStore", {
             });
         },
 
-        search(data: string) {
-            axios.get("/books/query", { params: data }).then((res) => {
+        search(data: unknown) {
+            axios.get("/books/query", { params: {search: data}}).then((res) => {
                 this.books = res.data;
                 console.log(res)
             }, (err) => {
