@@ -11,7 +11,7 @@ class Role extends Model
 
     // User can have many roles
     public function users() {
-        return $this->belongsToMany(User::class);
+        return $this->hasMany(User::class, 'role_id');
     }
 
     protected $fillable = [

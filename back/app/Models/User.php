@@ -51,7 +51,7 @@ class User extends Authenticatable
 
     // User can have many roles
     public function roles() {
-        return $this->belongsToMany(Role::class, 'role_user', 'user_id', 'role_id');
+        return $this->belongsTo(Role::class, 'user_id');
     }
 
     // User can have one student profile

@@ -15,8 +15,8 @@ return new class extends Migration
     {
         Schema::create('book_user', function (Blueprint $table) {
             $table->id();
-            $table->foreignId('user_id')->constrained('users');
-            $table->foreignId('book_id')->constrained('books');
+            $table->foreignId('user_id')->constrained('users')->onDelete('cascade');
+            $table->foreignId('book_id')->constrained('books')->onDelete('cascade');
             $table->date('borrow_date')->nullable();
             $table->date('expiration_date')->nullable();
         });
