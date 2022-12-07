@@ -12,7 +12,10 @@ class BookController extends Controller
     {
         // Display Actual books and bookings
         $user = User::all();
-        $count = $user->books()->count();
+        $count = 0;
+        foreach($user as $s) {
+            $count += $s->books()->count();
+        }
 
         return response()->json([
                 'av_books' => Book::count(),
@@ -37,69 +40,16 @@ class BookController extends Controller
         })->categories()->paginate(5);
     }
 
-    /**
-     * Show the form for creating a new resource.
-     *
-     * @return \Illuminate\Http\Response
-     */
-    public function create()
+    public function userBooks($id)
     {
-        //
+        $user = User::find($id);
+        $books = $user->books()->get();
+        return response()->json($books, 201);
     }
 
-    /**
-     * Store a newly created resource in storage.
-     *
-     * @param  \Illuminate\Http\Request  $request
-     * @return \Illuminate\Http\Response
-     */
-    public function store(Request $request)
+    public function book($id)
     {
-        //
-    }
-
-    /**
-     * Display the specified resource.
-     *
-     * @param  int  $id
-     * @return \Illuminate\Http\Response
-     */
-    public function show($id)
-    {
-        //
-    }
-
-    /**
-     * Show the form for editing the specified resource.
-     *
-     * @param  int  $id
-     * @return \Illuminate\Http\Response
-     */
-    public function edit($id)
-    {
-        //
-    }
-
-    /**
-     * Update the specified resource in storage.
-     *
-     * @param  \Illuminate\Http\Request  $request
-     * @param  int  $id
-     * @return \Illuminate\Http\Response
-     */
-    public function update(Request $request, $id)
-    {
-        //
-    }
-
-    /**
-     * Remove the specified resource from storage.
-     *
-     * @param  int  $id
-     * @return \Illuminate\Http\Response
-     */
-    public function destroy($id)
-    {
-        //
+        $book = Book::find($id)->categories()->get();
+        return response()->json($book, 201);
     }
 }

@@ -5,9 +5,7 @@ import RegisterView from '../views/RegisterView.vue'
 import BooksView from '../views/BooksView.vue'
 import { UserStore } from '../stores/UserStore'
 
-const userStore = UserStore();
 const routes: Array<RouteRecordRaw> = [
-  
   {
     path: '/',
     name: 'home',
@@ -48,10 +46,14 @@ const router = createRouter({
   history: createWebHistory(process.env.BASE_URL),
   routes
 })
+
 router.beforeEach(async (to, from) => {
+  const userStore = UserStore()
+  const publicPages = ['/', '/login', '/register', '/dashboard'];
+  const authRequired = !publicPages.includes(to.path);
   if (
     // make sure the user is authenticated
-    !userStore.isLogged &&
+    !userStore.isLogged && authRequired &&
     // ❗️ Avoid an infinite redirect
     to.name !== 'Login'
   ) {
@@ -59,17 +61,5 @@ router.beforeEach(async (to, from) => {
     return { name: 'Login' }
   }
 })
-/*
-router.beforeEach(async (to) => {
-  // redirect to login page if not logged in and trying to access a restricted page
-  const publicPages = ['/login', '/', '/register'];
-  const authRequired = !publicPages.includes(to.path);
-  const auth = UserStore();
-
-  if (authRequired && !auth.user) {
-      auth.returnURL = to.fullPath;
-      return '/login';
-  }
-})*/
 
 export default router

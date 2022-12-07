@@ -9,10 +9,6 @@ class Book extends Model
 {
     use HasFactory;
 
-    public function users() {
-        return $this->belongsToMany(User::class);
-    }
-
     protected $fillable = [
         'title',
         'author',
@@ -32,8 +28,8 @@ class Book extends Model
         return $this->belongsToMany(Category::class);
     }
 
-    public function BookedUsers()
+    public function users()
     {
-        return $this->belongsToMany(User::class, 'book_user', 'book_id', 'user_id');
+        return $this->belongsToMany(User::class);
     }
 }

@@ -20,8 +20,7 @@ Route::middleware('auth:sanctum')->group(function () {
     /*Route::get('/user', function (Request $request) {
         return $request->user();
     });*/
-
-        Route::post('logout', [AuthController::class, 'logout']);
+Route::post('logout', [AuthController::class, 'logout']);
 
 
 });
@@ -32,6 +31,7 @@ Route::controller(AuthController::class)->group(function () {
     Route::post('register', 'register');
 });
 Route::get('/books/count', [BookController::class, 'booksCount']);
+Route::get('/user/books/{id}', [BookController::class, 'userBooks']);
 
 //Route::group(['middleware' => 'auth:sanctum'], function () {
 //    Route::post('logout', [AuthController::class, 'logout']);

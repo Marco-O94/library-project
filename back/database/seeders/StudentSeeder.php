@@ -4,6 +4,9 @@ namespace Database\Seeders;
 
 use Illuminate\Database\Console\Seeds\WithoutModelEvents;
 use Illuminate\Database\Seeder;
+use App\Models\Student;
+use App\Models\User;
+use App\Models\Role;
 
 class StudentSeeder extends Seeder
 {
@@ -14,6 +17,13 @@ class StudentSeeder extends Seeder
      */
     public function run()
     {
-        //
+        // Attach to user
+        User::all()->each(function ($user) {
+            $user->student()->save(Student::factory()->make());
+            // User where role is student
+            $user->roles()->where('name', 'Student')->each(function ($user) {
+                $user->student()->save(Student::factory()->make());
+            });
+        });
     }
 }

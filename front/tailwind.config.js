@@ -1,4 +1,5 @@
 /** @type {import('tailwindcss').Config} */
+const colors = require('tailwindcss/colors');
 module.exports = {
   content: [
     "./index.html",
@@ -9,9 +10,19 @@ module.exports = {
   theme: {
     colors: {
       'primary': '#1E90FF',
-      'secondary': '#001162',
+      'secondary': '#001162'
     },
-    extend: {},
+    extend: {
+      colors: {
+        orange: colors.amber,
+        red: colors.red,
+        yellow: colors.yellow,
+        green: colors.green,
+        blue: colors.blue,
+        indigo: colors.indigo,
+        violet: colors.purple,
+      }
+    },
   },
   plugins: [
     require('flowbite/plugin'),

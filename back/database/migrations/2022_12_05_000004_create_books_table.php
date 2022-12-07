@@ -20,7 +20,7 @@ return new class extends Migration
             $table->string('author');
             $table->string('publisher');
             $table->string('isbn')->nullable();
-            $table->string('description')->nullable();
+            $table->text('description')->nullable();
             $table->string('image')->nullable();
             $table->timestamps();
         });

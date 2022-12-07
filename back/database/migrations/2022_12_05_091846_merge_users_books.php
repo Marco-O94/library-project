@@ -17,9 +17,8 @@ return new class extends Migration
             $table->id();
             $table->foreignId('user_id')->constrained('users');
             $table->foreignId('book_id')->constrained('books');
-            $table->date('borrowed_date');
-            $table->date('expiration_date');
-            $table->timestamps();
+            $table->date('borrow_date')->nullable();
+            $table->date('expiration_date')->nullable();
         });
     }
 

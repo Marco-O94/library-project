@@ -57,11 +57,11 @@ class CategorySeeder extends Seeder
             'violet',
         ];
 
-        foreach($categories as $category) {
+        foreach($categories as $cat) {
             $category = new Category();
-            $category->name = $category;
-            $category->slug = Str::slug($category);
-            $category->description = 'This is a description for the ' . $category . ' category.';
+            $category->name = $cat;
+            $category->slug = Str::slug($cat);
+            $category->description = 'This is a description for the ' . $cat . ' category.';
             $category->image = 'https://picsum.photos/500/500';
             $category->color = $colors[array_rand($colors)];
             $category->save();

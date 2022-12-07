@@ -1,3 +1,10 @@
+<script setup lang="ts">
+import { BookStore } from '../stores/BookStore';
+const bookStore = BookStore();
+
+bookStore.getBooksData();
+
+</script>
 <template>
   <section class="pt-12 pb-12 sm:pb-16 lg:pt-8">
     <div class="px-4 mx-auto max-w-7xl sm:px-6 lg:px-8">
@@ -10,8 +17,9 @@
 
                 <div class="flex items-center justify-center mt-10 space-x-6 lg:justify-start sm:space-x-8">
                     <div class="flex items-center">
-                        <p class="text-3xl font-medium text-gray-900 sm:text-4xl font-pj">50+</p>
-                        <p class="ml-3 text-sm text-gray-900 font-pj">Libri<br />Disponibili</p>
+                        <p class="text-3xl font-medium text-gray-900 sm:text-4xl font-pj">{{ bookStore.av_books }}</p>
+                        <p v-if="(bookStore.av_books === 1)" class="ml-3 text-sm text-gray-900 font-pj">Libro<br />Disponibile</p>
+                        <p v-else class="ml-3 text-sm text-gray-900 font-pj">Libri<br />Disponibili</p>
                     </div>
 
                     <div class="hidden sm:block">
@@ -25,8 +33,9 @@
                     </div>
 
                     <div class="flex items-center">
-                        <p class="text-3xl font-medium text-gray-900 sm:text-4xl font-pj">40+</p>
-                        <p class="ml-3 text-sm text-gray-900 font-pj">Libri<br />Prestati</p>
+                        <p class="text-3xl font-medium text-gray-900 sm:text-4xl font-pj">{{ bookStore.av_bookings }}</p>
+                        <p v-if="(bookStore.av_bookings === 1)"  class="ml-3 text-sm text-gray-900 font-pj">Libro<br />Prestato</p>
+                        <p v-else class="ml-3 text-sm text-gray-900 font-pj">Libri<br />Prestati</p>
                     </div>
                 </div>
             </div>
