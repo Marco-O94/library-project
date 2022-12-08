@@ -7,7 +7,7 @@ import SectionCard from '@/components/SectionCard.vue';
             <SectionCard title="Libri" link="#" :icon="0" />
         </div>
         <div class="w-full h-full">
-            <SectionCard title="Profilo" link="#" :icon="1" />
+            <SectionCard title="Profilo" link="dashboard" :icon="1" />
         </div>
         <div class="w-full h-full">
             <SectionCard title="Utenti" link="#" :icon="2" />

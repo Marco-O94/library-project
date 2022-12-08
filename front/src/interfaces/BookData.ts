@@ -10,9 +10,6 @@ export interface Category {
     description: string;
     image: string;
     color: string;
-    created_at: Date;
-    updated_at: Date;
-    pivot: Pivot;
 }
 
 export interface Book {
@@ -24,8 +21,6 @@ export interface Book {
     isbn: string;
     description: string;
     image: string;
-    created_at: Date;
-    updated_at: Date;
     categories: Category[];
 }
 

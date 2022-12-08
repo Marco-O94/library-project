@@ -7,6 +7,7 @@ use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Foundation\Auth\User as Authenticatable;
 use Illuminate\Notifications\Notifiable;
 use Laravel\Sanctum\HasApiTokens;
+use Illuminate\Support\Facades\Storage;
 
 class User extends Authenticatable
 {
@@ -42,7 +43,10 @@ class User extends Authenticatable
      */
     protected $casts = [
         'email_verified_at' => 'datetime',
+        'is_admin' => 'boolean',
     ];
+    // Return mutated value for image path
+
 
     protected $attributes = [
         'is_admin' => false, // Default value for is_admin
@@ -62,6 +66,15 @@ class User extends Authenticatable
     // User can have one student profile
     public function student() {
         return $this->hasOne(Student::class);
+    }
+
+    /**
+    * Get absolute image path with env url
+    *
+    * @return string
+    */
+    public function getImagePathAttribute() {
+        return url(Storage::url($this->attributes['image_path']));
     }
 
 }

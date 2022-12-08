@@ -5,10 +5,10 @@ import SectionCard from '@/components/SectionCard.vue';
 <template>
     <div class="w-full grid gap-8 grid-cols-1 md:grid-cols-2">
         <div class="w-full h-full">
-            <SectionCard link="/panel/profile" title="Miei Libri" :icon="0" />
+            <SectionCard link="home" title="Miei Libri" :icon="0" />
         </div>
         <div class="w-full h-full">
-            <SectionCard link="#" title="Profilo" :icon="1" />
+            <SectionCard link="profile" title="Profilo" :icon="1" />
         </div>
     </div>
 </template>

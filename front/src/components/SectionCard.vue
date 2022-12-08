@@ -17,7 +17,7 @@ const icons = [
 
 <template>
         <div class="rounded-lg shadow-lg bg-white max-w-sm mx-auto pt-8 pb-2 text-center">
-          <router-link :to="props.link">
+          <router-link :to="{name: props.link}">
             <div class="p-3 relative w-full generic_box">
               <svg version="1.1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink"
                         x="0px" y="0px" viewBox="0 0 80 80" xml:space="preserve">

@@ -32,7 +32,7 @@ const userStore = UserStore();
                 <div class="md:w-8/12 lg:w-5/12 lg:ml-20">
                   <div class="grid grid-cols-1 md:grid-cols-4 gap-4 align-middle items-center mb-8">
                   <div class="link-grow inline-block col-span-1">
-                  <router-link  to="login"><svg class="inline-block mr-3 w-5 h-5" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 448 512">
+                  <router-link  :to="{name: 'login'}"><svg class="inline-block mr-3 w-5 h-5" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 448 512">
                     <path d="M9.4 233.4c-12.5 12.5-12.5 32.8 0 45.3l160 160c12.5 12.5 32.8 12.5 45.3 0s12.5-32.8 0-45.3L109.2 288 416 288c17.7 0 32-14.3 32-32s-14.3-32-32-32l-306.7 0L214.6 118.6c12.5-12.5 12.5-32.8 0-45.3s-32.8-12.5-45.3 0l-160 160z"/></svg>
                   Login
                   </router-link>
@@ -88,7 +88,7 @@ const userStore = UserStore();
                     </button>
                     <button v-else
                       disabled
-                      class="inline-block px-7 py-3 bg-gray-600 text-white font-medium text-sm leading-snug uppercase rounded shadow-md  hover:shadow-lg focus:outline-none focus:ring-0  active:shadow-lg transition duration-150 ease-in-out w-full"
+                      class="inline-block px-7 py-3 cursor-not-allowed bg-gray-600 text-white font-medium text-sm leading-snug uppercase rounded shadow-md  hover:shadow-lg focus:outline-none focus:ring-0  active:shadow-lg transition duration-150 ease-in-out w-full"
                       data-mdb-ripple="true"
                       data-mdb-ripple-color="light"
                     >

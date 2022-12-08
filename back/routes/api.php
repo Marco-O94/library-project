@@ -35,7 +35,9 @@ Route::prefix('users')->controller(UserController::class)->group(function () {
     // Delete User
     Route::delete('destroy/{id}', 'destroy');
 
-    Route::put('/image', 'updateImage');
+    Route::post('/image', 'updateImage');
+
+    Route::put('/selfupdate', 'selfUpdate');
 });
 });
 /* ---------- */

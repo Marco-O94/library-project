@@ -15,12 +15,19 @@ const routes: Array<RouteRecordRaw> = [
   {
     path: '/login',
     name: 'login',
-    component: LoginView
+    component: LoginView,
   },
   {
     path: '/register',
     name: 'register',
-    component: RegisterView
+    component: RegisterView,
+    beforeEnter: (to, from, next) => {
+      if (UserStore().isLogged) {
+        next('/panel');
+      } else {
+        next();
+      }
+    }
   },
   {
     path: '/books',
@@ -41,7 +48,6 @@ const routes: Array<RouteRecordRaw> = [
   {
     path: '/panel',
     component: () => import(/* webpackChunkName: "dashboard" */ '../views/PanelView.vue'),
-    meta: { requiresAuth: true },
     children: [
       {
         path: '',
@@ -51,27 +57,10 @@ const routes: Array<RouteRecordRaw> = [
       },
       {
         path: 'profile',
-        name: 'Profile',
+        name: 'profile',
         component: () => import(/* webpackChunkName: "profile" */ '../views/subviews/ProfileView.vue'),
+        meta: { requiresAuth: true },
       },
-      {
-        path: 'librarian',
-        name: 'librarian',
-        component: () => import(/* webpackChunkName: "books" */ '../views/subviews/LibrarianDash.vue'),
-        beforeEnter: (to, from) => {
-          if(UserStore().user.role_id != 1)
-          return false
-        },
-      },
-      {
-        path: 'user',
-        name: 'user',
-        component: () => import(/* webpackChunkName: "user" */ '../views/subviews/UserDash.vue'),
-        beforeEnter: (to, from) => {
-          if(UserStore().user.role_id != 1)
-          return false
-        },
-      }
     ]
   },
 
@@ -83,19 +72,13 @@ const router = createRouter({
   routes
 })
 
-router.beforeEach(async (to, from) => {
-  const userStore = UserStore();
-  const privatePages = ['/panel', '/panel/profile', '/panel/librarian', '/panel/user'];
-  const authRequired = privatePages.includes(to.path);
-  if (
-    // make sure the user is authenticated
-    !userStore.isLogged && authRequired &&
-    // ❗️ Avoid an infinite redirect
-    to.name !== 'login'
-  ) {
-    // redirect the user to the login page
-    return { name: 'login' }
+router.beforeEach((to, from, next) => {
+  if (to.meta.requiresAuth && !UserStore().isLogged && to.name !== 'login') {
+    next('/login');
+  } else {
+    next();
   }
+
 });
 
 export default router

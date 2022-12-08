@@ -6,7 +6,7 @@ const userStore = UserStore();
 <template>
     <nav class="bg-secondary opacity-90 border-gray-200 px-2 sm:px-4 py-3 sticky top-0 z-50">
         <div class="md:container flex flex-wrap items-center justify-between mx-auto">
-          <router-link to="/" class="flex items-center">
+          <router-link :to="{name: 'home'}" class="flex items-center">
             <svg viewBox="0 0 320 88.820068359375" class="logo">
               <defs id="SvgjsDefs1168"></defs>
               <g id="SvgjsG1169" featurekey="odWo6G-0" transform="matrix(1,0,0,1,0,-5.589931011199951)" class="logo-book">
@@ -27,7 +27,7 @@ const userStore = UserStore();
           </router-link>
           <div class="grid grid-cols-2 gap-4 items-center">
             <div v-if="userStore.isLogged" class="grid grid-cols-2 gap-3">
-              <router-link class="w-5 h-auto fill-white" to="panel">
+              <router-link class="w-5 h-auto fill-white" :to="{name: 'dashboard'}">
                 <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 448 512">
                   <path
                     d="M224 256c70.7 0 128-57.3 128-128S294.7 0 224 0S96 57.3 96 128s57.3 128 128 128zm-45.7 48C79.8 304 0 383.8 0 482.3C0 498.7 13.3 512 29.7 512H418.3c16.4 0 29.7-13.3 29.7-29.7C448 383.8 368.2 304 269.7 304H178.3z" />
@@ -40,7 +40,7 @@ const userStore = UserStore();
                 </svg>
               </button>
             </div>
-            <router-link v-else to="login">
+            <router-link v-else :to="{name: 'login'}">
               <svg class="w-5 h-auto fill-white" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512">
                 <path
                   d="M352 96h64c17.7 0 32 14.3 32 32V384c0 17.7-14.3 32-32 32H352c-17.7 0-32 14.3-32 32s14.3 32 32 32h64c53 0 96-43 96-96V128c0-53-43-96-96-96H352c-17.7 0-32 14.3-32 32s14.3 32 32 32zm-7.5 177.4c4.8-4.5 7.5-10.8 7.5-17.4s-2.7-12.9-7.5-17.4l-144-136c-7-6.6-17.2-8.4-26-4.6s-14.5 12.5-14.5 22v72H32c-17.7 0-32 14.3-32 32v64c0 17.7 14.3 32 32 32H160v72c0 9.6 5.7 18.2 14.5 22s19 2 26-4.6l144-136z" />
@@ -68,7 +68,7 @@ const userStore = UserStore();
         </div>
         <div class="offcanvas-body overflow-y-auto">
           <div class="pt-4 pb-2 px-6" v-if="userStore.isLogged">
-            <router-link to="panel">
+            <router-link :to="{name: 'dashboard'}">
               <div class="flex items-center">
                 <div class="shrink-0">
                   <img v-if="userStore.user.image_path" :src="userStore.user.image_path" class="rounded-full w-10"
@@ -86,7 +86,7 @@ const userStore = UserStore();
             <li class="relative">
               <router-link
                 class="flex items-center text-sm py-4 px-6 h-12 overflow-hidden text-gray-700 text-ellipsis whitespace-nowrap rounded hover:text-blue-600 hover:bg-blue-50 transition duration-300 ease-in-out"
-                to="/" data-mdb-ripple="true" data-mdb-ripple-color="primary">
+                :to="{name: 'home'}" data-mdb-ripple="true" data-mdb-ripple-color="primary">
                 <svg aria-hidden="true" focusable="false" data-prefix="fas" class="w-3 h-3 mr-3" role="img"
                   xmlns="http://www.w3.org/2000/svg" viewBox="0 0 576 512">
                   <path
@@ -99,13 +99,25 @@ const userStore = UserStore();
             <li class="relative">
               <router-link
                 class="flex items-center text-sm py-4 px-6 h-12 overflow-hidden text-gray-700 text-ellipsis whitespace-nowrap rounded hover:text-blue-600 hover:bg-blue-50 transition duration-300 ease-in-out"
-                to="/books" data-mdb-ripple="true" data-mdb-ripple-color="primary">
+                :to="{name: 'books'}" data-mdb-ripple="true" data-mdb-ripple-color="primary">
                 <svg aria-hidden="true" focusable="false" data-prefix="fas" class="w-3 h-3 mr-3" role="img"
                   xmlns="http://www.w3.org/2000/svg" viewBox="0 0 448 512">
                   <path
                     d="M96 0C43 0 0 43 0 96V416c0 53 43 96 96 96H384h32c17.7 0 32-14.3 32-32s-14.3-32-32-32V384c17.7 0 32-14.3 32-32V32c0-17.7-14.3-32-32-32H384 96zm0 384H352v64H96c-17.7 0-32-14.3-32-32s14.3-32 32-32zm32-240c0-8.8 7.2-16 16-16H336c8.8 0 16 7.2 16 16s-7.2 16-16 16H144c-8.8 0-16-7.2-16-16zm16 48H336c8.8 0 16 7.2 16 16s-7.2 16-16 16H144c-8.8 0-16-7.2-16-16s7.2-16 16-16z" />
                 </svg>
                 <span>I nostri libri</span>
+              </router-link>
+            </li>
+            <li class="relative">
+              <router-link v-if="!userStore.isLogged"
+                class="flex items-center text-sm py-4 px-6 h-12 overflow-hidden text-gray-700 text-ellipsis whitespace-nowrap rounded hover:text-blue-600 hover:bg-blue-50 transition duration-300 ease-in-out"
+                :to="{name: 'login'}" data-mdb-ripple="true" data-mdb-ripple-color="primary">
+                <svg aria-hidden="true" focusable="false" data-prefix="fas" class="w-3 h-3 mr-3" role="img"
+                  xmlns="http://www.w3.org/2000/svg" viewBox="0 0 448 512">
+                  <path
+                    d="M96 0C43 0 0 43 0 96V416c0 53 43 96 96 96H384h32c17.7 0 32-14.3 32-32s-14.3-32-32-32V384c17.7 0 32-14.3 32-32V32c0-17.7-14.3-32-32-32H384 96zm0 384H352v64H96c-17.7 0-32-14.3-32-32s14.3-32 32-32zm32-240c0-8.8 7.2-16 16-16H336c8.8 0 16 7.2 16 16s-7.2 16-16 16H144c-8.8 0-16-7.2-16-16zm16 48H336c8.8 0 16 7.2 16 16s-7.2 16-16 16H144c-8.8 0-16-7.2-16-16s7.2-16 16-16z" />
+                </svg>
+                <span>Accedi</span>
               </router-link>
             </li>
           </ul>

@@ -3,6 +3,7 @@ import axios from 'axios';
 import { LoginData, RegisterData, Errors } from '../interfaces/FormData';
 import { Role, User } from '../interfaces/UserData';
 import router from '@/router';
+import { update } from "lodash";
 // eslint-disable-next-line @typescript-eslint/no-var-requires
 const Cookies = require('js-cookie');
 
@@ -19,6 +20,7 @@ axios.defaults.withCredentials = true;
 
 /* END AXIOS CONFIGURATION */
 
+/* Make bearer token */
  const makeToken = (token: string) => {
     return `Bearer ${token}`;
  };
@@ -30,6 +32,7 @@ export const UserStore = defineStore("UserStore", {
         roles: [] as Role[],
         token: Cookies.get('token') || '',
         returnURL: '' as string,
+        loading: false,
         errors: {
             email: [],
             password: [],
@@ -108,21 +111,45 @@ export const UserStore = defineStore("UserStore", {
             });
         }*/
 
-        async changeImage(userId: number, file: File) {
-            await axios.post("/logout", {id: userId, image: file}, { 
+        async changeImage(formData: FormData) { 
+            await axios.post("/users/image", formData, { 
                 headers: {
-                   authorization: Cookies.get("token"),
-               
-               }}).then((res) => {
-                if(res.status === 200) {
-                    Cookies.set("user", JSON.stringify(res.data.user));
+                    authorization: Cookies.get("token"),
+                    'Content-Type': 'multipart/form-data',
+                  },
+                  transformRequest: formData => formData
+                }).then((res) => {
+                if(res.status === 201) {
                     console.log(res);
-                    this.user = res.data.user;
+                    this.user.image_path = res.data.image;
+                    Cookies.remove("user");
+                    Cookies.set("user", JSON.stringify(this.user));
                 }
             }).catch((err) => {
                 console.log(err);
             });
-        }
+        },
+
+        async updateUser(formData: any) {
+            this.loading = true;
+            await axios.put("/users/selfupdate", formData, {
+                headers: {
+                    authorization: Cookies.get("token"),
+                    'Content-Type': 'application/json',
+                    'Accept': 'application/json',
+                    },
+            }).then((res) => {
+                if(res.status === 201) {
+                    this.user = res.data.user;
+                    Cookies.remove("user");
+                    Cookies.set("user", JSON.stringify(res.data.user));
+                }
+            }
+            ).catch((err) => {
+                console.log(err);
+            });
+            this.loading = false;
+    }
 
     }
 });

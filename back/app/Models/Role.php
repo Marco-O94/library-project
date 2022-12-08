@@ -19,4 +19,8 @@ class Role extends Model
         'color',
     ];
 
+    protected $hidden = [
+        'created_at',
+        'updated_at'
+    ];
 }

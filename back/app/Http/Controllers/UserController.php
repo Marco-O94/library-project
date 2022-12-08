@@ -53,42 +53,26 @@ class UserController extends Controller
         return response()->json([$user], 201);
     }
 
-    /**
-     * Update the specified resource in storage.
-     *
-     * @param  \Illuminate\Http\Request  $request
-     * @param  int  $id
-     * @return \Illuminate\Http\Response
-     */
-    public function update(Request $request, $id)
+
+    /* Update own user profile */
+
+    public function selfUpdate(Request $request)
     {
-        $request->validateWithBag('updateUser', [
+        $request->validateWithBag('user', [
             'name' => 'string|max:255',
-            'email' => 'string|email|max:255|unique:users,email,'.$id,
-            'is_admin' => 'boolean',
-
+            'email' => 'string|email|max:255|unique:users,email,'. $request->user()->id,
         ]);
 
-        $user = User::find($id);
-        //Edit user
-        $user->name = $request->name;
-        $user->email = $request->email;
-        $user->is_admin = $request->is_admin;
-        $user->role()->update([
-            'role_id' => $request->role_id,
+        // Request user through token
+        $user = $request->user();
+        $user->update([
+            'name' => $request->name,
+            'email' => $request->email,
         ]);
-
-        if($user->role()->select('name')->get() === 'Student') {
-           $user->student()->update([
-               'school' => $request->school,
-               'grade' => $request->grade,
-               'class' => $request->class,
-           ]);
-        }
-
-        $user->save();
-
-        return response()->json([$user], 201);
+        return response()->json([
+            'message' => 'Profilo modificato con successo',
+            'user' => $user,
+        ], 201);
     }
 
     /**
@@ -107,10 +91,11 @@ class UserController extends Controller
         ], 201);
     }
 
+    /* Update image */
     public function updateImage(Request $request)
     {
-        $request->validateWithBag('changeImage', [
-            'image' => 'required|image|mimes:jpeg,png,jpg|max:1024',
+        $request->validateWithBag('imagebag', [
+            'userpic' => 'required|image|mimes:jpeg,png,jpg|max:1024',
         ],
         [
             'image.required' => 'Seleziona un\'immagine',
@@ -119,24 +104,18 @@ class UserController extends Controller
             'image.max' => 'L\'immagine deve essere di massimo 1MB',
         ]);
 
-        $user = User::find($request->id);
-
+        $user = $request->user();
         // Store Avatar
-        if ($request->hasFile('image')) {
-            $path = $request->file('avatar')->storeAs(
-                'avatar_user', $request->user()->id
-            );
-            $user->image_path = $path;
-            $user->save();
-            $user->role = $user->role()->get();
+        $filename = $request->userpic->getClientOriginalName(); //Get original file name
+        $path = $request->userpic->storeAs('images/avatars',$filename,'public');
+            $user->update([
+                'image_path' => $path
+            ]);
 
-            return response()->json([$user], 201);
-        } else {
             return response()->json([
-                'message' => 'Errore nel caricamento dell\'immagine'
+                'image' =>  $user->image_path,
+                'message' => 'Immagine aggiornata con successo'
             ], 201);
-        }
-
-
     }
+
 }

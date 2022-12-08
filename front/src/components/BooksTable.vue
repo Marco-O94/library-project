@@ -2,6 +2,7 @@
 import { defineProps } from 'vue';
 import { Book } from '../interfaces/BookData';
 
+
 const props = defineProps({
     books: {
         type: Array as () => Book[],
@@ -44,7 +45,9 @@ const props = defineProps({
                     <td scope="row" class="pl-6 py-4 font-medium text-gray-900 whitespace-nowrap">
                         {{ book.title }}
                      </td>
-                    
+                     <td scope="row" class="pl-6 py-4 flex flex-nowrap align-middle gap-3 font-medium text-gray-900 whitespace-nowrap">
+                        <span class="px-4 py-2 rounded-full text-gray-500 bg-gray-200 font-semibold text-sm flex align-center w-max cursor-pointer active:bg-gray-300 transition duration-300 ease" v-for="cat, index in book.categories" :key="index">{{cat.name}}</span>
+                     </td>
                 </tr>
 
 

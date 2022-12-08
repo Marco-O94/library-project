@@ -12,7 +12,7 @@ use Illuminate\Support\Facades\Password;
 use Illuminate\Auth\Events\PasswordReset;
 use Illuminate\Support\Str;
 use Carbon\Carbon;
-
+use Illuminate\Support\Facades\Storage;
 class AuthController extends Controller
 {
 
@@ -74,8 +74,10 @@ class AuthController extends Controller
             if($user->role_id == 1){
                 $token = $user->createToken("API TOKEN", ['ability:librarian'])->plainTextToken;
             }else {
-                $token = $user->createToken("API TOKEN")->plainTextToken;
+                $token = $user->createToken("API TOKEN", ['ability:user'])->plainTextToken;
             }
+            // Convert image path relative to absolute
+
             return response()->json([
                 'message' => 'Utente collegato con successo',
                 'token' => $token,

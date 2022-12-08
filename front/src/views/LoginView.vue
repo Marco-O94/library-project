@@ -74,7 +74,7 @@ const loginData = reactive<LoginData>({
                 >
                   Accedi
                 </button>
-                <div class="text-gray-800 mt-3 mb-4 text-left">Non hai un account? <router-link to="register" class="text-blue-600 hover:text-blue-400">Registrati</router-link></div>
+                <div class="text-gray-800 mt-3 mb-4 text-left">Non hai un account? <router-link :to="{name: 'register'}" class="text-blue-600 hover:text-blue-400">Registrati</router-link></div>
               </form>
               <ErrorField v-if="userStore.errors.message" :errors="userStore.errors.message" />
               

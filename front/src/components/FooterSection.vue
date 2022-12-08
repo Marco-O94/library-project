@@ -6,7 +6,7 @@ const userStore = UserStore();
     <footer class="md:container mx-auto p-4 sm:p-6 dark:bg-gray-900 ">
         <div class="md:flex md:justify-between">
           <div class="mb-6 md:mb-0">
-            <router-link to="/" class="flex items-center">
+            <router-link :to="{name: 'home'}" class="flex items-center">
               <svg viewBox="0 0 320 88.820068359375" class="logo">
                 <defs id="SvgjsDefs1168"></defs>
                 <g id="SvgjsG1169" featurekey="odWo6G-0" transform="matrix(1,0,0,1,0,-5.589931011199951)" class="logo-book">
@@ -31,11 +31,11 @@ const userStore = UserStore();
               <h2 class="mb-6 text-sm font-semibold text-gray-900 uppercase dark:text-white">Utente</h2>
               <ul class="text-gray-600 dark:text-gray-400">
                 <li class="mb-4">
-                  <router-link to="/books" class="hover:underline">Libri</router-link>
+                  <router-link :to="{name: 'books'}" class="hover:underline">Libri</router-link>
                 </li>
                 <li>
-                  <router-link v-if="userStore.isLogged" to="panel" class="hover:underline">Dashboard</router-link>
-                  <router-link v-else to="login" class="hover:underline">Login</router-link>
+                  <router-link v-if="userStore.isLogged" :to="{name: 'dashboard'}" class="hover:underline">Dashboard</router-link>
+                  <router-link v-else :to="{name: 'login'}" class="hover:underline">Login</router-link>
                 </li>
               </ul>
             </div>
