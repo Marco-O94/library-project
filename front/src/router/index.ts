@@ -4,9 +4,13 @@ import LoginView from '../views/LoginView.vue'
 import RegisterView from '../views/RegisterView.vue'
 import NotFound from '../views/NotFound.vue'
 import { UserStore } from '../stores/UserStore'
+import { BookStore } from '../stores/BookStore'
+
+
 
 const routes: Array<RouteRecordRaw> = [
   // Public Routes
+
   {
     path: '/',
     name: 'home',
@@ -29,17 +33,12 @@ const routes: Array<RouteRecordRaw> = [
       }
     }
   },
-
-  // 404
-  {
-    path: '/:pathMatch(.*)*',
-    name: 'notFound',
-    component: NotFound
-  },
   // Logged in Routes
   {
     path: '/panel',
-    component: () => import(/* webpackChunkName: "dashboard" */ '../views/PanelView.vue'),
+    name: 'panel',
+    redirect: '/panel/',
+    component: () => import(/* webpackChunkName: "panel" */ '../views/PanelView.vue'),
     children: [
       {
         path: '',
@@ -57,17 +56,48 @@ const routes: Array<RouteRecordRaw> = [
   },
   {
     path: '/books',
-    component: () => import(/* webpackChunkName: "books" */ '../views/BooksView.vue'),
+    component: () => import(/* webpackChunkName: "booksIndex" */ '../views/BooksView.vue'),
     children: [
       {
         path: '',
         name: 'books',
-        component: () => import(/* webpackChunkName: "books" */ '../views/subviews/BooksListView.vue'),
+        component: () => import(/* webpackChunkName: "booksQuery" */ '../views/subviews/BooksListView.vue'),
 
+      },
+      {
+        path: 'manage',
+        name: 'manage',
+        component: () => import(/* webpackChunkName: "booksManage" */ '../views/subviews/ManageBooksView.vue'),
+        meta: { requiresAuth: true },
+        beforeEnter: (to, from, next) => {
+          if (UserStore().isLogged && UserStore().user.role.name === 'Librarian') {
+            next();
+          } else {
+            next('/panel');
+          }
+        }
+      },
+      {
+        // I'm gonna use ID as a slug - But I wanted to use /category/:slug but I don't have enough time by the way
+        path: 'show/:id',
+        name: 'show',
+        component: () => import(/* webpackChunkName: "bookDetails" */ '../views/subviews/BookDetailsView.vue'),
+        /*beforeEnter: (to, from, next) => {
+          // check to.params.id / to.params.code
+         if (to.params.id === BookStore().books.data.find(book => book.id === to.params.id)) return next()
+
+         next({ name: '404' })*/
+        
       }
     ]
-  }
+  },
 
+  // 404
+  {
+    path: '/:pathMatch(.*)*',
+    name: 'notFound',
+    component: NotFound
+  },
 
 ]
 
@@ -84,5 +114,7 @@ router.beforeEach((to, from, next) => {
   }
 
 });
+
+
 
 export default router

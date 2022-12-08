@@ -39,10 +39,10 @@ watch(() => data.value.search, ((search) => {
                     <div class="flex items-start justify-between mt-4 space-x-4">
                         <div>
                             <h3 class="text-xs font-bold text-gray-900 sm:text-sm md:text-base">
-                                <a href="#" title="">
+                                <router-link :to="`/books/show/${book.id}`">
                                     {{ book.title }}
                                     <span class="absolute inset-0" aria-hidden="true"></span>
-                                </a>
+                                </router-link>
                             </h3>
                         </div>
                     </div>

@@ -14,7 +14,5 @@ export interface User {
     role_id: number;
     email_verified_at: Date;
     image_path: string;
-    created_at: Date;
-    updated_at: Date;
     role: Role;
 }

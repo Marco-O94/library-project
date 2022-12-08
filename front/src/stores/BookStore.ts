@@ -6,10 +6,15 @@ import { Book, Books } from "@/interfaces/BookData";
 export const BookStore = defineStore("BookStore", {
     state: () => ({
         books: {} as Books,
-        book: {} as Book,
         av_books: 0 as number,
         av_bookings: 0 as number,
     }),
+    getters: {
+        book : (state) => (id: number) => {
+            return state.books.data.find((book: Book) => book.id === id);
+        }
+
+    },
     actions: {
 
         getBooksData() {
