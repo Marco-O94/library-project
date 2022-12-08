@@ -19,9 +19,8 @@ class StudentSeeder extends Seeder
     {
         // Attach to user
         User::all()->each(function ($user) {
-            $user->student()->save(Student::factory()->make());
             // User where role is student
-            $user->roles()->where('name', 'Student')->each(function ($user) {
+            $user->where('role_id', 2)->each(function ($user) {
                 $user->student()->save(Student::factory()->make());
             });
         });

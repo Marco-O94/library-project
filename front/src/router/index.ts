@@ -14,7 +14,7 @@ const routes: Array<RouteRecordRaw> = [
   },
   {
     path: '/login',
-    name: 'Login',
+    name: 'login',
     component: LoginView
   },
   {
@@ -29,26 +29,52 @@ const routes: Array<RouteRecordRaw> = [
   },
   {
     path: '/books/:id',
-    name: 'book',
+    name: 'Book',
     component: () => import(/* webpackChunkName: "book" */ '../views/BookView.vue')
   },
   // Logged in routes
   {
-    path: '/dashboard',
-    name: 'Dashboard',
-    component: () => import(/* webpackChunkName: "dashboard" */ '../views/DashboardView.vue')
-    
-  },
-  { path: '/:pathMatch(.*)*', 
-    name: 'NotFound', 
+    path: '/:pathMatch(.*)*',
+    name: 'notFound',
     component: NotFound
   },
+  {
+    path: '/panel',
+    component: () => import(/* webpackChunkName: "dashboard" */ '../views/PanelView.vue'),
+    meta: { requiresAuth: true },
+    children: [
+      {
+        path: '',
+        name: 'dashboard',
+        component: () => import(/* webpackChunkName: "dashboard" */ '../views/subviews/DashboardView.vue'),
+        meta: { requiresAuth: true },
+      },
+      {
+        path: 'profile',
+        name: 'Profile',
+        component: () => import(/* webpackChunkName: "profile" */ '../views/subviews/ProfileView.vue'),
+      },
+      {
+        path: 'librarian',
+        name: 'librarian',
+        component: () => import(/* webpackChunkName: "books" */ '../views/subviews/LibrarianDash.vue'),
+        beforeEnter: (to, from) => {
+          if(UserStore().user.role_id != 1)
+          return false
+        },
+      },
+      {
+        path: 'user',
+        name: 'user',
+        component: () => import(/* webpackChunkName: "user" */ '../views/subviews/UserDash.vue'),
+        beforeEnter: (to, from) => {
+          if(UserStore().user.role_id != 1)
+          return false
+        },
+      }
+    ]
+  },
 
-  /**
-   * Use the lazyload pattern to load the views only when needed.
-   * component: () => import(/* webpackChunkName: "pagename" */ /* '../views/AboutView.vue')
-   */
-  
 
 ]
 
@@ -58,18 +84,18 @@ const router = createRouter({
 })
 
 router.beforeEach(async (to, from) => {
-  const userStore = UserStore()
-  const privatePages = ['/Dashboard'];
+  const userStore = UserStore();
+  const privatePages = ['/panel', '/panel/profile', '/panel/librarian', '/panel/user'];
   const authRequired = privatePages.includes(to.path);
   if (
     // make sure the user is authenticated
     !userStore.isLogged && authRequired &&
     // ❗️ Avoid an infinite redirect
-    to.name !== 'Login'
+    to.name !== 'login'
   ) {
     // redirect the user to the login page
-    return { name: 'Login' }
+    return { name: 'login' }
   }
-})
+});
 
 export default router

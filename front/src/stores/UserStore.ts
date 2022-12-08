@@ -53,10 +53,10 @@ export const UserStore = defineStore("UserStore", {
                     loginData.remember ? Cookies.set("token", makeToken(res.data.token)) : Cookies.set("token", makeToken(res.data.token), { expires: 10 });
                     this.user = res.data.user;
                     this.token = res.data.token;
-                    router.push({ name: "Dashboard" });
+                    router.push({ name: "dashboard" });
                     }
             }).catch((error) => {
-                    this.errors = error.response.data.errors;
+                    this.errors = error?.response?.data?.errors;
                     console.log(error);
             });
 
@@ -69,7 +69,7 @@ export const UserStore = defineStore("UserStore", {
                     Cookies.set("token", makeToken(res.data.token));
                     this.user = res.data.user;
                     this.token = res.data.token;
-                    router.push({ name: "Dashboard" });
+                    router.push({ name: "panel" });
                 }
             }
             ).catch((err) => {
@@ -79,8 +79,8 @@ export const UserStore = defineStore("UserStore", {
 
         },
         /* Logout */
-        logout () {
-             return axios.post("/logout", {}, { 
+        async logout () {
+             await axios.post("/logout", {}, { 
              headers: {
                 authorization: Cookies.get("token"),
             
@@ -92,14 +92,37 @@ export const UserStore = defineStore("UserStore", {
                 delete axios.defaults.headers.common["authorization"]
                 Cookies.remove("token")
                 Cookies.remove("user")
-                router.push({ name: "Login" })
+                router.push({ name: "login" })
                 }
                 
               }).catch((err) => {
                 console.log(err);
                 })
 
-          }
+          },
+
+        /* Get Roles 
+        async getRoles() {
+            await axios.get("/roles").then((res) => {
+                this.roles = res.data;
+            });
+        }*/
+
+        async changeImage(userId: number, file: File) {
+            await axios.post("/logout", {id: userId, image: file}, { 
+                headers: {
+                   authorization: Cookies.get("token"),
+               
+               }}).then((res) => {
+                if(res.status === 200) {
+                    Cookies.set("user", JSON.stringify(res.data.user));
+                    console.log(res);
+                    this.user = res.data.user;
+                }
+            }).catch((err) => {
+                console.log(err);
+            });
+        }
 
     }
 });

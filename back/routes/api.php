@@ -34,6 +34,8 @@ Route::prefix('users')->controller(UserController::class)->group(function () {
     Route::put('/update/{id}', 'update');
     // Delete User
     Route::delete('destroy/{id}', 'destroy');
+
+    Route::put('/image', 'updateImage');
 });
 });
 /* ---------- */
@@ -89,11 +91,5 @@ Route::prefix('books')->controller(BookController::class)->group(function () {
 
 /* ---------- */
 
-Route::get('/test', function () {
-    $user = \App\Models\User::find(1);
-    $user = $user->role()->get()->name;
-    return response()->json(
-        $user
-    , 201);
-});
+
 

@@ -44,6 +44,11 @@ class User extends Authenticatable
         'email_verified_at' => 'datetime',
     ];
 
+    protected $attributes = [
+        'is_admin' => false, // Default value for is_admin
+        'role_id' => 3, // 3 is the default role_id for Guests
+    ];
+
     // User can book many books
     public function books() {
         return $this->belongsToMany(Book::class)->withPivot('borrow_date','expiration_date');

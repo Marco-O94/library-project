@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use Illuminate\Http\Request;
 use App\Models\User;
 use App\Models\Role;
+use Illuminate\Support\Facades\Storage;
 
 class UserController extends Controller
 {
@@ -20,7 +21,7 @@ class UserController extends Controller
             $user->books = $user->books()->get();
         });
 
-        return response()->json($users, 201);
+        return response()->json([$users], 201);
     }
 
     /**
@@ -34,7 +35,7 @@ class UserController extends Controller
     {
         $user = User::where('id', $id)->with('role', 'books')->get();
 
-        return response()->json($user, 201);
+        return response()->json([$user], 201);
     }
 
     /**
@@ -49,7 +50,7 @@ class UserController extends Controller
         $user->role = $user->role()->get();
         $user->books = $user->books()->get();
 
-        return response()->json($user, 201);
+        return response()->json([$user], 201);
     }
 
     /**
@@ -77,7 +78,7 @@ class UserController extends Controller
             'role_id' => $request->role_id,
         ]);
 
-        if($user->role()->get()->name === 'Student') {
+        if($user->role()->select('name')->get() === 'Student') {
            $user->student()->update([
                'school' => $request->school,
                'grade' => $request->grade,
@@ -87,9 +88,7 @@ class UserController extends Controller
 
         $user->save();
 
-        return response()->json([
-            'message' => 'Utente modificato con successo'
-        ], 201);
+        return response()->json([$user], 201);
     }
 
     /**
@@ -101,11 +100,43 @@ class UserController extends Controller
     public function destroy($id)
     {
         $user = User::find($id);
-        $user->detach();
         $user->delete();
 
         return response()->json([
             'message' => 'Utente eliminato con successo'
         ], 201);
+    }
+
+    public function updateImage(Request $request)
+    {
+        $request->validateWithBag('changeImage', [
+            'image' => 'required|image|mimes:jpeg,png,jpg|max:1024',
+        ],
+        [
+            'image.required' => 'Seleziona un\'immagine',
+            'image.image' => 'Il file selezionato non è un\'immagine',
+            'image.mimes' => 'Il file selezionato non è un\'immagine',
+            'image.max' => 'L\'immagine deve essere di massimo 1MB',
+        ]);
+
+        $user = User::find($request->id);
+
+        // Store Avatar
+        if ($request->hasFile('image')) {
+            $path = $request->file('avatar')->storeAs(
+                'avatar_user', $request->user()->id
+            );
+            $user->image_path = $path;
+            $user->save();
+            $user->role = $user->role()->get();
+
+            return response()->json([$user], 201);
+        } else {
+            return response()->json([
+                'message' => 'Errore nel caricamento dell\'immagine'
+            ], 201);
+        }
+
+
     }
 }

@@ -1,7 +1,7 @@
 <script setup lang="ts">
 //import CKEditor from '@ckeditor/ckeditor5-vue';
 //import InlineEditor from '@ckeditor/ckeditor5-build-inline';
-import MainLayout from './components/MainLayout.vue';
+import MainLayout from './views/Layout/MainLayout.vue';
 
 </script>
 
