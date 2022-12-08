@@ -26,7 +26,7 @@ class Category extends Model
 
     public function books()
     {
-        return $this->belongToMany(Book::class);
+        return $this->belongToMany(Book::class)->using(BookCategory::class);
     }
 
 }

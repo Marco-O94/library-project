@@ -1,6 +1,6 @@
 <script setup lang="ts">
 import { defineProps } from 'vue';
-import { Book } from '../interfaces/BookData';
+import { Book } from '../../interfaces/BookData';
 
 
 const props = defineProps({
@@ -46,7 +46,7 @@ const props = defineProps({
                         {{ book.title }}
                      </td>
                      <td scope="row" class="pl-6 py-4 flex flex-nowrap align-middle gap-3 font-medium text-gray-900 whitespace-nowrap">
-                        <span class="px-4 py-2 rounded-full text-gray-500 bg-gray-200 font-semibold text-sm flex align-center w-max cursor-pointer active:bg-gray-300 transition duration-300 ease" v-for="cat, index in book.categories" :key="index">{{cat.name}}</span>
+                        <span :class="'text-' + cat.color + '-500 bg-' + cat.color + '-200 bg-' + cat.color + '-300'" class="px-4 py-2 rounded-full font-semibold text-sm flex align-center w-max cursor-pointer transition duration-300 ease" v-for="cat, index in book.categories" :key="index">{{cat.name}}</span>
                      </td>
                 </tr>
 

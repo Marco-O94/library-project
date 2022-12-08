@@ -5,7 +5,8 @@ module.exports = {
     "./index.html",
     "./src/**/*.{html,vue,js,ts,jsx,tsx}",
     "./node_modules/flowbite/**/*.js",
-    './node_modules/tw-elements/dist/js/**/*.js'
+    './node_modules/tw-elements/dist/js/**/*.js',
+    "./src/assets/css/safelist.txt"
   ],
   theme: {
     colors: {

@@ -14,14 +14,14 @@ class BookController extends Controller
         // Display Actual books and bookings
         $user = User::all();
         $count = 0;
-        foreach($user as $s) {
+        foreach ($user as $s) {
             $count += $s->books()->count();
         }
 
         return response()->json([
-                'av_books' => Book::count(),
-                'av_bookings' => $count,
-            ], 201);
+            'av_books' => Book::count(),
+            'av_bookings' => $count,
+        ], 201);
     }
     /**
      * Display a listing of the resource.
@@ -31,13 +31,15 @@ class BookController extends Controller
     public function index(Request $request)
     {
         // Dynamic Query based on search input and category 🔍
-        return response()->json(Book::with('categories')
-            // Name Search
-        ->when($request->input('search') ?? '', function ($query, $search) {
-            $query->where('title', 'like', "%{$search}%");})
-            ->select('title','author','image')
-            ->paginate(6)
-            , 201);
+
+        $books = Book::when($request->input('search') ?? '', function ($query, $search) {
+            $query->where('title', 'like', "%{$search}%")->orderBy('title', 'asc');
+        })
+
+        ->with('categories')
+        ->paginate(6);
+
+        return response()->json($books, 201);
     }
 
     public function userBooks($id)
@@ -54,7 +56,7 @@ class BookController extends Controller
      */
     public function create(Request $request)
     {
-        $categories = Category::all()->pluck('id','name');
+        $categories = Category::all()->pluck('id', 'name');
         return response()->json($categories, 201);
     }
 
@@ -77,7 +79,7 @@ class BookController extends Controller
         // Upload Image
         if ($request->hasFile('image')) {
             $image = $request->file('image');
-            $name = time().'.'.$image->getClientOriginalExtension();
+            $name = time() . '.' . $image->getClientOriginalExtension();
             $destinationPath = public_path('/books/images');
             $image->move($destinationPath, $name);
             $book->image = $name;
@@ -111,17 +113,20 @@ class BookController extends Controller
      */
     public function update(Request $request, $id)
     {
-        $request->validateWithBag('updateBook', [
-            'title' => 'required|string',
-            'quantity' => 'required|integer',
-            'image' => 'image|mimes:jpeg,png,jpg|max:2048',
-            'category' => 'required|string',
-        ],
-        [
-            'title.required' => 'Titolo richiesto',
-            'quantity.required' => 'Quantità richiesta',
-            'category.required' => 'Categoria richiesta',
-        ]);
+        $request->validateWithBag(
+            'updateBook',
+            [
+                'title' => 'required|string',
+                'quantity' => 'required|integer',
+                'image' => 'image|mimes:jpeg,png,jpg|max:2048',
+                'category' => 'required|string',
+            ],
+            [
+                'title.required' => 'Titolo richiesto',
+                'quantity.required' => 'Quantità richiesta',
+                'category.required' => 'Categoria richiesta',
+            ]
+        );
 
         $book = Book::find($id);
         $book->title = $request->title; // string
@@ -134,7 +139,7 @@ class BookController extends Controller
         // Upload Image
         if ($request->hasFile('image')) {
             $image = $request->file('image');
-            $name = time().'.'.$image->getClientOriginalExtension();
+            $name = time() . '.' . $image->getClientOriginalExtension();
             $destinationPath = public_path('/books/images');
             $image->move($destinationPath, $name);
             $book->image = $name;

@@ -2,11 +2,11 @@ import { createRouter, createWebHistory, RouteRecordRaw } from 'vue-router'
 import HomeView from '../views/HomeView.vue'
 import LoginView from '../views/LoginView.vue'
 import RegisterView from '../views/RegisterView.vue'
-import BooksView from '../views/BooksView.vue'
 import NotFound from '../views/NotFound.vue'
 import { UserStore } from '../stores/UserStore'
 
 const routes: Array<RouteRecordRaw> = [
+  // Public Routes
   {
     path: '/',
     name: 'home',
@@ -29,22 +29,14 @@ const routes: Array<RouteRecordRaw> = [
       }
     }
   },
-  {
-    path: '/books',
-    name: 'books',
-    component: BooksView
-  },
-  {
-    path: '/books/:id',
-    name: 'Book',
-    component: () => import(/* webpackChunkName: "book" */ '../views/BookView.vue')
-  },
-  // Logged in routes
+
+  // 404
   {
     path: '/:pathMatch(.*)*',
     name: 'notFound',
     component: NotFound
   },
+  // Logged in Routes
   {
     path: '/panel',
     component: () => import(/* webpackChunkName: "dashboard" */ '../views/PanelView.vue'),
@@ -63,6 +55,18 @@ const routes: Array<RouteRecordRaw> = [
       },
     ]
   },
+  {
+    path: '/books',
+    component: () => import(/* webpackChunkName: "books" */ '../views/BooksView.vue'),
+    children: [
+      {
+        path: '',
+        name: 'books',
+        component: () => import(/* webpackChunkName: "books" */ '../views/subviews/BooksListView.vue'),
+
+      }
+    ]
+  }
 
 
 ]

@@ -1,8 +1,8 @@
 <script setup lang="ts">
-import BooksList from '../components/BooksList.vue';
+
 </script>
 <template>
     <div class="px-4">
-        <BooksList />
+        <router-view></router-view>
     </div>
 </template>
