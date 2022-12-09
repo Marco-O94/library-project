@@ -13,7 +13,7 @@ import NotificationBox from '@/components/NotificationBox.vue';
   <!-- Content -->
  <section name="content" class="min-h-screen md:container mx-auto">
   <BreadCrumbs class="pt-10" />
-  <div class="pt-20">
+  <div>
   <slot ></slot>
 </div>
 </section>

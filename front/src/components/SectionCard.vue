@@ -10,7 +10,8 @@ const props = defineProps<{
 const icons = [
     "https://cdn-icons-png.flaticon.com/512/3038/3038168.png",
     "https://cdn-icons-png.flaticon.com/512/8750/8750683.png",
-    "https://cdn-icons-png.flaticon.com/512/2158/2158509.png"
+    "https://cdn-icons-png.flaticon.com/512/2158/2158509.png",
+    "https://cdn-icons-png.flaticon.com/512/2417/2417791.png"
  ];
 
 </script>

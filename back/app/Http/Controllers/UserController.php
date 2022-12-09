@@ -14,43 +14,32 @@ class UserController extends Controller
      *
      * @return \Illuminate\Http\Response
      */
-    public function index()
+    public function index(Request $request)
     {
-        $users = User::all()->each(function ($user) {
-            $user->role = $user->role()->get();
-            $user->books = $user->books()->get();
-        });
 
-        return response()->json([$users], 200);
+        $users = User::when($request->input('search') ?? '', function ($query, $search) {
+            $query->where('name', 'like', "%{$search}%")->orderBy('name', 'asc');
+        })
+            ->when($request->input('category') ?? '', function ($query, $role) {
+                    $query->where('role', $role);
+                })
+            ->with('role')
+            ->withCount('books')
+            ->paginate(10);
+
+        return response()->json($users, 200);
     }
 
     /**
-     * Display the specified resource.
-     *
+     * Show single user to edit
      *
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
     public function show($id)
     {
-        $user = User::where('id', $id)->with('role', 'books')->get();
-
-        return response()->json([$user], 200);
-    }
-
-    /**
-     * Show the form for editing the specified resource.
-     *
-     * @param  int  $id
-     * @return \Illuminate\Http\Response
-     */
-    public function edit($id)
-    {
-        $user = User::find($id);
-        $user->role = $user->role()->get();
-        $user->books = $user->books()->get();
-
-        return response()->json([$user], 200);
+        $user = User::where('id', $id)->with('role', 'books')->first();
+        return response()->json($user, 200);
     }
 
 
@@ -76,7 +65,7 @@ class UserController extends Controller
     }
 
     /**
-     * Remove the specified resource from storage.
+     * Remove user from database
      *
      * @param  int  $id
      * @return \Illuminate\Http\Response
@@ -88,13 +77,13 @@ class UserController extends Controller
 
         return response()->json([
             'message' => 'Utente eliminato con successo'
-        ], 201);
+        ], 200);
     }
 
     /* Update image */
     public function updateImage(Request $request)
     {
-        $request->validateWithBag('imagebag', [
+        $request->validate([
             'userpic' => 'required|image|mimes:jpeg,png,jpg|max:1024',
         ],
         [
@@ -111,11 +100,18 @@ class UserController extends Controller
             $user->update([
                 'image_path' => $path
             ]);
+        $user = User::where('id', $request->user()->id)->with('role')->first();
 
             return response()->json([
-                'image' =>  $user->image_path,
+                'user' =>  $user,
                 'message' => 'Immagine aggiornata con successo'
             ], 201);
     }
 
+    /* Get Roles */
+    public function roles()
+    {
+        $roles = Role::select('name', 'id')->get(); // Return array of roles
+        return response()->json($roles, 200);
+    }
 }

@@ -17,6 +17,9 @@ use App\Http\Controllers\UserController;
 |
 */
 
+
+/* ❗ Api Routes have to be refactored with Route::resource ❗ */
+
 /* ----- Authenticated Routes ----- */
 
 /* --- Some Routes need to be refactored --- */
@@ -26,19 +29,13 @@ Route::post('logout', [AuthController::class, 'logout']);
 
 /* Users Routes */
 Route::prefix('users')->controller(UserController::class)->group(function () {
-    // All Users
-    Route::get('/', 'index');
-    // Books Booked by User
-    Route::get('/books/{id}', 'userBooks');
-    // Show single Book
-    Route::get('/show/{id}', 'show');
     // Edit User
     Route::put('/update/{id}', 'update');
     // Delete User
-    Route::delete('destroy/{id}', 'destroy');
-
+    Route::delete('/{id}', 'destroy');
+    // Change image to the User
     Route::post('/image', 'updateImage');
-
+    // Change data to the User
     Route::put('/selfupdate', 'selfUpdate');
 });
 
@@ -46,6 +43,16 @@ Route::prefix('users')->controller(UserController::class)->group(function () {
 
 /* ------ Librarian Routes ------ */
 Route::middleware('role:Librarian')->group(function () {
+
+    Route::prefix('users')->controller(UserController::class)->group(function () {
+        // All Users
+        Route::get('/', 'index');
+        // Store a new User
+        //Route::post('/store', 'store'); <-- Skipped for now
+        // Show single User
+        Route::get('/show/{id}', 'show');
+
+    });
 
 /* Books Routes */
 Route::prefix('books')->controller(BookController::class)->group(function () {
@@ -56,33 +63,28 @@ Route::prefix('books')->controller(BookController::class)->group(function () {
     // Edit Book
     Route::put('/update', 'update');
     // Delete Book
-    Route::delete('destroy/{id}', 'destroy');
-
+    Route::delete('/{id}', 'destroy');
+    // Show books for Librarian
     Route::get('/librarians/query', 'librarianIndex');
-
+    // Show categories for Category Filter or Book creation
     Route::get('/categories', 'categories');
-
+    // Change image to the Book
     Route::post('/image/{id}', 'updateImage');
 });
 
 /* Borrow Routes */
+
+/* That's what I'm trying to do */
 Route::prefix('borrow')->controller(BorrowController::class)->group(function () {
-    // All Borrow
-    Route::get('/', 'index');
-    // Show single Borrow
-    Route::get('/show/{id}', 'show');
-    // Store a new Borrow
-    Route::post('/store', 'store');
-    // Edit Borrow
-    Route::put('/update/{id}', 'update');
-    // Delete Borrow
-    Route::delete('destroy/{id}', 'destroy');
+    Route::resource('/', BorrowController::class);
 });
 
-});
-});
-/* ---------- */
 
+}); // End of Librarian Routes
+}); // End of Authenticated Routes
+
+
+/* <(°.°<) <(°.°)> (>°.°)> */
 
 
 /* ----- Public Routes ----- */
@@ -94,9 +96,13 @@ Route::controller(AuthController::class)->group(function () {
 });
 
 Route::prefix('books')->controller(BookController::class)->group(function () {
+    // Show all Books for Public
     Route::get('/query', 'index');
+    // Show single Book for Public
     Route::get('/show/{id}', 'show');
+    // Count the Books
     Route::get('/count', 'booksCount');
+    // Show single Book for Librarian
     Route::get('/single/{id}', 'singleBook');
 });
 

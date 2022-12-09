@@ -111,7 +111,7 @@ export const BookStore = defineStore("BookStore", {
 
         /* DELETE BOOK */
         async delete(id: number) {
-            await axios.delete(`/books/destroy/${id}`, {
+            await axios.delete(`/books/${id}`, {
                 headers: {
                     authorization: Cookies.get("token"),
                 }

@@ -1,28 +1,28 @@
 <script setup lang="ts">
-import { BookStore } from "@/stores/BookStore";
+import { UserStore } from "@/stores/UserStore";
 import { ref, watch } from 'vue';
 import { debounce } from '@/stores/myFunctions';
-import { librarianSearch } from "@/interfaces/BookData";
+import { userSearch } from "@/interfaces/UserData";
 import SearchBar from "@/components/SearchBar.vue";
 import ListPagination from '@/components/ListPagination.vue';
 import { useRouter } from 'vue-router';
 
-const bookStore = BookStore();
-bookStore.getCategories();
+const userStore = UserStore();
 const router = useRouter();
 
-const data = ref({
+const data = ref<userSearch>({
     search: '',
-    category: '',
+    role: '',
 });
-bookStore.librarianSearch(data.value);
-const debouncedFunction = debounce(function (value: librarianSearch) { bookStore.librarianSearch(value); }, 500);
-watch(() => [data.value.search, data.value.category], (() => {
+
+userStore.userSearch(data.value);
+const debouncedFunction = debounce(function (value: userSearch) { userStore.userSearch(value); }, 500);
+watch(() => [data.value.search, data.value.role], (() => {
     debouncedFunction(data.value);
 }));
 
-const toBook = (book: number) => {
-    router.push({ name: 'editbook', params: { id: book } })
+const toUser = (user: number) => {
+    router.push({ name: 'edituser', params: { id: user } })
 };
 
 </script>
@@ -30,18 +30,18 @@ const toBook = (book: number) => {
 <template>
     <!-- It should go in a child component, I'm speeding up a little bit, pls forgive me... -->
     
-    <h1 class="text-3xl md:text-4xl  font-bold text-gray-900 mb-8">Amministrazione Libri</h1>
-    <router-link :to="{name: 'addBook'}" data-mdb-ripple="true" data-mdb-ripple-color="light" class="inline-block px-6 py-2.5 bg-blue-600 text-white font-medium text-xs leading-tight uppercase rounded shadow-md hover:bg-blue-700 hover:shadow-lg focus:bg-blue-700 focus:shadow-lg focus:outline-none focus:ring-0 active:bg-blue-800 active:shadow-lg transition duration-150 ease-in-out">Aggiungi un nuovo libro</router-link>
+    <h1 class="text-3xl md:text-4xl  font-bold text-gray-900 mb-8">Amministrazione Utenti</h1>
+    <router-link :to="{name: 'adduser'}" data-mdb-ripple="true" data-mdb-ripple-color="light" class="inline-block px-6 py-2.5 bg-blue-600 text-white font-medium text-xs leading-tight uppercase rounded shadow-md hover:bg-blue-700 hover:shadow-lg focus:bg-blue-700 focus:shadow-lg focus:outline-none focus:ring-0 active:bg-blue-800 active:shadow-lg transition duration-150 ease-in-out">Aggiungi un nuovo libro</router-link>
     <div class="grid grid-cols-1 md:grid-cols-2 gap-10 my-10">
         <div>
-            <SearchBar placeholder="Cerca tra i libri caricati..." v-model:search="data.search" />
+            <SearchBar placeholder="Cerchi un utente in particolare ?" v-model:search="data.search" />
         </div>
         <div>
-           <select id="categories" name="categories" v-model="data.category"
+           <select id="roles" name="roles" v-model="data.role"
                 class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full  p-4  dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500">
-                <option value="" selected>-- Scegli una categoria -- </option>
-                <option v-for="category in bookStore.categories" :key="category.id" :value="category.name">
-                    {{ category.name }}
+                <option value="" selected>-- Scegli un ruolo -- </option>
+                <option v-for="role in userStore.roles" :key="role.id" :value="role.name">
+                    {{ role.name }}
                 </option>
             </select>
         </div>
@@ -56,16 +56,16 @@ const toBook = (book: number) => {
                         #
                     </th>
                     <th scope="col" class="px-6 py-3">
-                        Titolo
+                        Nome
                     </th>
                     <th scope="col" class="px-6 py-3">
-                        Genere
+                        Email
                     </th>
                     <th scope="col" class="px-6 py-3 text-center">
-                        Autore
+                        Ruolo
                     </th>
                     <th scope="col" class="px-6 py-3">
-                        Quantità disponibile
+                        Libri prestati
                     </th>
                     <th scope="col" class="px-6 py-3 text-center">
                         Modifica
@@ -76,28 +76,23 @@ const toBook = (book: number) => {
                 </tr>
             </thead>
             <tbody>
-                <tr v-for="book, index in bookStore.books.data" :key="index"
+                <tr v-for="user, index in userStore.users.data" :key="index"
                     class="border-b text-gray-900 bg-neutral-50  odd:bg-white even:bg-gray-50 ">
                     <td scope="row" class="pl-6 py-4 font-medium text-gray-900 whitespace-nowrap">
                         {{ index + 1 }}
                     </td>
                     <td scope="row" class="pl-6 py-4 font-medium text-gray-900 whitespace-nowrap">
-                        {{ book.title }}
+                        {{ user.name }}
                     </td>
-                    <td scope="row"
-                        class="pl-6 py-4 flex flex-nowrap align-middle gap-3 font-medium text-gray-900 whitespace-nowrap">
-                        <span :class="'text-' + cat.color + '-500 bg-' + cat.color + '-200 bg-' + cat.color + '-300'"
-                            class="px-4 py-2 rounded-full font-semibold text-sm flex align-center w-max cursor-pointer transition duration-300 ease"
-                            v-for="cat, index in book.categories" :key="index">{{ cat.name }}</span>
+                    
+                    <td scope="row" class="pl-6 py-4 font-medium text-gray-900 whitespace-nowrap">
+                        {{ user.role }}
                     </td>
                     <td scope="row" class="pl-6 py-4 font-medium text-gray-900 whitespace-nowrap">
-                        {{ book.author }}
-                    </td>
-                    <td scope="row" class="pl-6 py-4 font-medium text-gray-900 whitespace-nowrap">
-                        {{ book.quantity - book.users_count }}
+                       {{ user.books_count }}
                     </td>
                     <td scope="row" class="pl-6 py-4 font-medium whitespace-nowrap">
-                        <button @click="toBook(book.id)" class="font-medium">
+                        <button @click="toUser(user.id)" class="font-medium">
                             <svg class="w-5 h-5 fill-blue-600 hover:fill-blue-500" xmlns="http://www.w3.org/2000/svg"
                                 viewBox="0 0 512 512">
                                 <path
@@ -106,7 +101,7 @@ const toBook = (book: number) => {
                         </button>
                     </td>
                     <td scope="row" class="pl-6 py-4 font-medium whitespace-nowrap">
-                        <button @click="bookStore.delete(book.id)" class="font-medium ">
+                        <button @click="userStore.delete(user.id)" class="font-medium ">
                             <svg class="fill-red-600 hover:fill-red-500 w-5 h-5" xmlns="http://www.w3.org/2000/svg"
                                 viewBox="0 0 448 512">
                                 <path
@@ -119,8 +114,8 @@ const toBook = (book: number) => {
 
             </tbody>
         </table>
-        <ListPagination scope="librarianBooks" :currentPage="bookStore.books.current_page"
-            :lastPage="bookStore.books.last_page" :nextPage="bookStore.books.next_page_url"
-            :prevPage="bookStore.books.prev_page_url" />
+        <ListPagination scope="users" :currentPage="userStore.users.current_page"
+            :lastPage="userStore.users.last_page" :nextPage="userStore.users.next_page_url"
+            :prevPage="userStore.users.prev_page_url" />
     </div>
 </template>

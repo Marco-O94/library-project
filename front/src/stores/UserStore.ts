@@ -2,7 +2,7 @@ import { defineStore } from "pinia";
 import axios from 'axios';
 import { LoginData, RegisterData } from '../interfaces/FormData';
 import { GeneralStore } from './GeneralStore';
-import { Role, User } from '../interfaces/UserData';
+import { Role, User, Users, userSearch } from '../interfaces/UserData';
 import router from '@/router';
 // eslint-disable-next-line @typescript-eslint/no-var-requires
 const Cookies = require('js-cookie');
@@ -28,6 +28,7 @@ axios.defaults.withCredentials = true;
 export const UserStore = defineStore("UserStore", {
     state: () => ({
         user: JSON.parse(Cookies.get("user") || "{}")  as User,
+        users: {} as Users,
         roles: [] as Role[],
         token: Cookies.get('token') || '',
         returnURL: '' as string,
@@ -96,12 +97,21 @@ export const UserStore = defineStore("UserStore", {
 
           },
 
-        /* Get Roles 
-        async getRoles() {
-            await axios.get("/roles").then((res) => {
-                this.roles = res.data;
+         /* GET CATEGORIES */
+         async getRoles() {
+            await axios.get("/users/roles", {
+                headers: {
+                    authorization: Cookies.get("token"),
+                }
+            }).then((res) => {
+                if (res.status === 200) {
+                    this.roles = res.data;
+                }
+            }, (err) => {
+                console.log(err);
             });
-        }*/
+        },
+
         /* CHANGE USER IMAGE */
         async changeImage(formData: FormData) { 
             await axios.post("/users/image", formData, { 
@@ -112,15 +122,17 @@ export const UserStore = defineStore("UserStore", {
                   transformRequest: formData => formData
                 }).then((res) => {
                 if(res.status === 201) {
-                    this.user.image_path = res.data.image;
+                    this.user = res.data.user;
                     Cookies.remove("user");
-                    Cookies.set("user", JSON.stringify(this.user));
+                    Cookies.set("user", JSON.stringify(res.data.user));
                     GeneralStore().flash.message = res.data.message;
+                    console.log(res.data);
                 }
             }).catch((err) => {
                 console.log(err);
             });
         },
+
         /* UPDATE USER */
         async updateUser(formData: FormData) {
             this.loading = true;
@@ -142,7 +154,43 @@ export const UserStore = defineStore("UserStore", {
                 console.log(err);
             });
             this.loading = false;
-    }
+    },
+    
+    /* GET USERS FOR LIBRARIAN */
+    async userSearch(data: userSearch) {
+        await axios.get("/users", {
+            params: { search: data.search, role: data.role }, headers: {
+                authorization: Cookies.get("token"),
+            }
+        },
+        ).then((res) => {
+            this.users = res.data;
+        }, (err) => {
+            console.log(err);
+        });
+        return;
+    },
+    /* GET PAGINATED USERS FOR LIBRARIAN */
+    async userlist(page = 1) {
+        await axios.get(`/users?page=${page}`, {
+            headers: {
+                authorization: Cookies.get("token"),
+            }
+        }).then(({ data }) => {
+            this.users = data
+        }).catch(({ response }) => {
+            console.error(response)
+        })
+    },
 
+    /* DELETE USER */
+    async delete(id: number) {
+        await axios.delete(`/users/${id}`).then((res) => {
+            if(res.status === 200) {
+                GeneralStore().flash.message = res.data.message;
+            }
+        });
     }
+}
+
 });

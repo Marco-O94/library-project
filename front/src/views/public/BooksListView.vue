@@ -51,7 +51,7 @@ watch(() => data.value.search, ((search) => {
                     </div>
                 </div> 
             </div>
-            <ListPagination privilege="public" :currentPage="bookStore.books.current_page" :lastPage="bookStore.books.last_page" :nextPage="bookStore.books.next_page_url" :prevPage="bookStore.books.prev_page_url" />
+            <ListPagination scope="publicBooks" :currentPage="bookStore.books.current_page" :lastPage="bookStore.books.last_page" :nextPage="bookStore.books.next_page_url" :prevPage="bookStore.books.prev_page_url" />
         </template>
         </div>
     </section>
