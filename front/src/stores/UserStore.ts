@@ -133,6 +133,7 @@ export const UserStore = defineStore("UserStore", {
             }).then((res) => {
                 if(res.status === 201) {
                     this.user = res.data.user;
+                    GeneralStore().flash.message = res.data.message;
                     Cookies.remove("user");
                     Cookies.set("user", JSON.stringify(res.data.user));
                 }

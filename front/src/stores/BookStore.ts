@@ -127,8 +127,8 @@ export const BookStore = defineStore("BookStore", {
         },
 
         /* ADD BOOK */
-        async add(data: Book) {
-            await axios.post("/books", data, {
+        async add(data: FormData) {
+            await axios.post("/books/store", data, {
                 headers: {
                     authorization: Cookies.get("token"),
                     'Content-Type': 'multipart/form-data',
@@ -136,7 +136,7 @@ export const BookStore = defineStore("BookStore", {
                 
             }).then((res) => {
                 if(res.status === 201){
-                    router.push({ name: "dashboard" });
+                    router.push({ name: "managebooks" });
                     GeneralStore().flash.message = res.data.message;
                 }
                 console.log(res);

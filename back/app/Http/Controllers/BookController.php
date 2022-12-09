@@ -92,6 +92,11 @@ class BookController extends Controller
      */
     public function store(Request $request)
     {
+        $request->validate([
+            'title' => 'required|string',
+            'quantity' => 'required|integer',
+            'image' => 'image|mimes:jpeg,png,jpg|max:1024',
+        ]);
         $book = new Book;
         $book->title = $request->title; // string
         $book->author = $request->author; // string
@@ -103,6 +108,7 @@ class BookController extends Controller
         // Upload Image
         $filename = $request->image->getClientOriginalName();
         $path = $request->image->storeAs('images/books', $filename, 'public');
+        $book->image = $path;
         $book->save();
         if($request->category) {
             $request->category->each(function ($category) use ($book) {
@@ -136,8 +142,7 @@ class BookController extends Controller
      */
     public function update(Request $request)
     {
-        $request->validateWithBag(
-            'updateBook',
+        $request->validate(
             [
                 'title' => 'required|string',
                 'quantity' => 'required|integer',
@@ -185,8 +190,7 @@ class BookController extends Controller
     /* Update image */
     public function updateImage($id, Request $request)
     {
-        $request->validateWithBag(
-            'imagebag',
+        $request->validate(
             [
                 'image' => 'required|image|mimes:jpeg,png,jpg|max:1024',
             ],
