@@ -51,6 +51,8 @@ Route::middleware('role:Librarian')->group(function () {
         //Route::post('/store', 'store'); <-- Skipped for now
         // Show single User
         Route::get('/show/{id}', 'show');
+        // Show roles for User creation and Table
+        Route::get('/roles', 'roles');
 
     });
 
@@ -66,7 +68,7 @@ Route::prefix('books')->controller(BookController::class)->group(function () {
     Route::delete('/{id}', 'destroy');
     // Show books for Librarian
     Route::get('/librarians/query', 'librarianIndex');
-    // Show categories for Category Filter or Book creation
+    // Show categories for Book creation and Table
     Route::get('/categories', 'categories');
     // Change image to the Book
     Route::post('/image/{id}', 'updateImage');

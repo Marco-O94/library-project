@@ -14,7 +14,7 @@ const data = ref<userSearch>({
     search: '',
     role: '',
 });
-
+userStore.getRoles();
 userStore.userSearch(data.value);
 const debouncedFunction = debounce(function (value: userSearch) { userStore.userSearch(value); }, 500);
 watch(() => [data.value.search, data.value.role], (() => {

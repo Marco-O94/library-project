@@ -83,6 +83,24 @@ const routes: Array<RouteRecordRaw> = [
       },
       /* ----- SHOW / EDIT BOOKS ----- */
       {
+        path: 'users',
+        name: 'usersList',
+        children: [
+          {
+            path: '',
+            name: 'manageusers',
+            component: () => import(/* webpackChunkName: "usersManage" */ '@/views/private/ManageUsersView.vue'),
+            meta: { requiresAuth: true, requiresLibrarian: true },
+          },
+          {
+            path: ':id',
+            name: 'edituser',
+            component: () => import(/* webpackChunkName: "editUser" */ '@/views/private/ManageUserView.vue'),
+            meta: { requiresAuth: true, requiresLibrarian: true },
+          },
+        ]
+      },
+      {
         path: 'books',
         name: 'booksList',
         children: [
