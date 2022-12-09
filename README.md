@@ -18,8 +18,7 @@ Di seguito i comandi per avviare Laravel e vue:<br>
 <code>$ php artisan migrate --seed</code><br>
 <code>$ php artisan serve</code><br>
 <code>$ npm run serve</code><br>
-Nel file .env.example è presente la voce ORIGIN_URL, che permette di impostare l'Access-Control-Allow-Origin. <br>
-Inserire dunque l'url:port del progetto in vue.<br>
+Cambiare SESSION_DOMAIN in ENV se porta localhost diversa da 8080 <br>
 
 
 <h3>Grazie per il vostro tempo</h3>
