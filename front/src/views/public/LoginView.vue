@@ -1,9 +1,11 @@
 <script setup lang="ts">
 import { reactive } from 'vue';
-import { LoginData } from '../interfaces/FormData';
-import ErrorField from '../components/ErrorField.vue';
-import { UserStore } from '../stores/UserStore';
+import { LoginData } from '@/interfaces/FormData';
+import ErrorField from '@/components/ErrorField.vue';
+import { UserStore } from '@/stores/UserStore';
+import { GeneralStore } from '@/stores/GeneralStore';
 const userStore = UserStore();
+const generalStore = GeneralStore();
 
 const loginData = reactive<LoginData>({
   email: '',
@@ -18,7 +20,7 @@ const loginData = reactive<LoginData>({
           <div class="flex justify-center items-center flex-wrap h-full g-6 text-gray-800">
             <div class="md:w-8/12 lg:w-6/12 mb-12 md:mb-0">
               <img
-                src="../assets/images/loginImage.png"
+                src="@/assets/images/loginImage.png"
                 class="w-full"
                 alt="Phone image"
               />
@@ -33,7 +35,7 @@ const loginData = reactive<LoginData>({
                     class="form-control block w-full px-4 py-2 text-xl font-normal text-gray-700 bg-white bg-clip-padding border border-solid border-gray-300 rounded transition ease-in-out m-0 focus:text-gray-700 focus:bg-white focus:border-blue-600 focus:outline-none"
                     placeholder="Indirizzo Email"
                   />
-                  <ErrorField v-if="userStore.errors.email" :errors="userStore.errors.email" />
+                  <ErrorField v-if="generalStore.errors.email" :errors="generalStore.errors.email" />
                 </div>
       
                 <!-- Password input -->
@@ -62,7 +64,7 @@ const loginData = reactive<LoginData>({
                     class="text-blue-600 hover:text-blue-700 focus:text-blue-700 active:text-blue-800 duration-200 transition ease-in-out"
                     >Password dimenticata?</a
                   >
-                  <ErrorField v-if="userStore.errors.password" :errors="userStore.errors.password" />
+                  <ErrorField v-if="generalStore.errors.password" :errors="generalStore.errors.password" />
                 </div>
       
                 <!-- Submit button -->
@@ -76,7 +78,7 @@ const loginData = reactive<LoginData>({
                 </button>
                 <div class="text-gray-800 mt-3 mb-4 text-left">Non hai un account? <router-link :to="{name: 'register'}" class="text-blue-600 hover:text-blue-400">Registrati</router-link></div>
               </form>
-              <ErrorField v-if="userStore.errors.message" :errors="userStore.errors.message" />
+              <ErrorField v-if="generalStore.errors.message" :errors="generalStore.errors.message" />
               
             </div>
             

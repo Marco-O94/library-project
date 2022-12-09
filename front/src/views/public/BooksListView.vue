@@ -31,8 +31,10 @@ watch(() => data.value.search, ((search) => {
             <div class="grid grid-cols-1 gap-6 mt-10 lg:mt-16 lg:gap-4 md:grid-cols-2 lg:grid-cols-3">
                 <div class="relative group" v-for="book, index in bookStore.books.data" :key="index">
                     <div class="overflow-hidden aspect-w-1 aspect-h-1">
-                        <img class="object-cover w-full h-full transition-all duration-300 group-hover:scale-125"
+                        <img v-if="book.image" class="object-cover w-full h-full transition-all duration-300 group-hover:scale-125"
                             :src="book.image" />
+                            <img v-else class="object-cover w-full h-full transition-all duration-300 group-hover:scale-125"
+                            src="@/assets/images/image-placeholder.webp" />
                             <div class="absolute left-3 top-3 flex flex-nowrap gap-2">
                                 <p v-for="cat, index in book.categories" :key="index" :class="'bg-' + cat.color + '-200 bg-' + cat.color + '-300'" class="sm:px-3 sm:py-1.5 px-1.5 py-1 text-[8px] sm:text-xs text-white font-bold tracking-wide uppercase rounded-full">{{cat.name}}</p>
                             </div>

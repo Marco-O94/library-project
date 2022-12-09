@@ -1,8 +1,9 @@
 <script setup lang="ts">
 import { reactive } from 'vue';
-import { RegisterData } from '../interfaces/FormData';
-import { UserStore } from '../stores/UserStore';
-import  ErrorField from '../components/ErrorField.vue';
+import { RegisterData } from '@/interfaces/FormData';
+import { UserStore } from '@/stores/UserStore';
+import { GeneralStore } from '@/stores/GeneralStore';
+import  ErrorField from '@/components/ErrorField.vue';
 
 
 const registerData = reactive<RegisterData>({
@@ -13,6 +14,7 @@ const registerData = reactive<RegisterData>({
 });
 
 const userStore = UserStore();
+const generalStore = GeneralStore();
 
 
 
@@ -24,7 +26,7 @@ const userStore = UserStore();
               <div class="flex justify-center items-center flex-wrap h-full g-6 text-gray-800">
                 <div class="md:w-8/12 lg:w-6/12 mb-12 md:mb-0">
                   <img
-                    src="../assets/images/loginImage.png"
+                    src="@/assets/images/loginImage.png"
                     class="w-full"
                     alt="Phone image"
                   />
@@ -47,8 +49,8 @@ const userStore = UserStore();
                         class="form-control block w-full px-4 py-2 text-xl font-normal text-gray-700 bg-white bg-clip-padding border border-solid border-gray-300 rounded transition ease-in-out m-0 focus:text-gray-700 focus:bg-white focus:border-blue-600 focus:outline-none"
                         placeholder="Nome completo"
                       />
-                      <ErrorField v-if="userStore.errors.name" :errors="userStore.errors.name" /> 
-                    </div>
+                      <ErrorField v-if="generalStore.errors.name" :errors="generalStore.errors.name" /> 
+                    </div>generalStore
                     <div class="mb-6">
                       <input v-model="registerData.email"
                         type="email"
@@ -56,7 +58,7 @@ const userStore = UserStore();
                         placeholder="Indirizzo Email"
                       />
                     </div>
-                    <ErrorField v-if="userStore.errors.email" :errors="userStore.errors.email" />
+                    <ErrorField v-if="generalStore.errors.email" :errors="generalStore.errors.email" />
                     
                     <!-- Password input -->
                     <div class="mb-6">
@@ -65,7 +67,7 @@ const userStore = UserStore();
                         class="form-control block w-full px-4 py-2 text-xl font-normal text-gray-700 bg-white bg-clip-padding border border-solid border-gray-300 rounded transition ease-in-out m-0 focus:text-gray-700 focus:bg-white focus:border-blue-600 focus:outline-none"
                         placeholder="Password"
                       />
-                      <ErrorField v-if="userStore.errors.password" :errors="userStore.errors.password" />
+                      <ErrorField v-if="generalStore.errors.password" :errors="generalStore.errors.password" />
                     </div>
                     <div class="mb-6">
                       <input v-model="registerData.password_confirmation"
@@ -74,7 +76,7 @@ const userStore = UserStore();
                         placeholder="Conferma la password"
                       />
                     </div>
-                    <ErrorField v-if="userStore.errors.password_confirmation" :errors="userStore.errors.password_confirmation" />
+                    <ErrorField v-if="generalStore.errors.password_confirmation" :errors="generalStore.errors.password_confirmation" />
           
           
                     <!-- Submit button -->

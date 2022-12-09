@@ -47,5 +47,16 @@ export interface Books {
     total: number;
 }
 
+export interface BookData {
+    id?: number;
+    title?: string;
+    quantity?: number;
+    author?: string;
+    publisher?: string;
+    isbn?: string;
+    description?: string;
+
+}
+
 
 

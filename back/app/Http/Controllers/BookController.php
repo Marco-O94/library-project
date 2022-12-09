@@ -101,15 +101,14 @@ class BookController extends Controller
         $book->quantity = $request->quantity; // integer
 
         // Upload Image
-        if ($request->hasFile('image')) {
-            $image = $request->file('image');
-            $name = time() . '.' . $image->getClientOriginalExtension();
-            $destinationPath = public_path('/books/images');
-            $image->move($destinationPath, $name);
-            $book->image = $name;
-        }
+        $filename = $request->image->getClientOriginalName();
+        $path = $request->image->storeAs('images/books', $filename, 'public');
         $book->save();
-        $book->attach($request->category);
+        if($request->category) {
+            $request->category->each(function ($category) use ($book) {
+                $book->categories()->attach($category);
+            });
+        }
 
         return response()->json([
             'message' => 'Libro creato con successo'
@@ -129,51 +128,36 @@ class BookController extends Controller
     }
 
     /**
-     * Update the specified resource in storage.
+     * Update the Book resource in storage.
      *
      * @param  \Illuminate\Http\Request  $request
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function update(Request $request, $id)
+    public function update(Request $request)
     {
         $request->validateWithBag(
             'updateBook',
             [
                 'title' => 'required|string',
                 'quantity' => 'required|integer',
-                'image' => 'image|mimes:jpeg,png,jpg|max:2048',
-                'category' => 'required|string',
             ],
             [
                 'title.required' => 'Titolo richiesto',
                 'quantity.required' => 'Quantità richiesta',
-                'category.required' => 'Categoria richiesta',
             ]
         );
 
-        $book = Book::find($id);
-        $book->title = $request->title; // string
-        $book->author = $request->author; // string
-        $book->description = $request->description; // text
-        $book->isbn = $request->isbn; //string
-        $book->publisher = $request->publisher; // string
-        $book->quantity = $request->quantity; // integer
+        $book = Book::find($request->id)->first()->update([
+            'title' => $request->title,
+            'author' => $request->author,
+            'description' => $request->description,
+            'isbn' => $request->isbn,
+            'publisher' => $request->publisher,
+            'quantity' => $request->quantity,
+        ]);
 
-        // Upload Image
-        if ($request->hasFile('image')) {
-            $image = $request->file('image');
-            $name = time() . '.' . $image->getClientOriginalExtension();
-            $destinationPath = public_path('/books/images');
-            $image->move($destinationPath, $name);
-            $book->image = $name;
-        }
-        $book->save();
-        $book->attach($request->category);
-
-        return response()->json([
-            'message' => 'Libro modificato con successo'
-        ], 201);
+        return response()->json(['message' => 'Libro modificato con successo'], 201);
     }
 
     /**
@@ -186,11 +170,53 @@ class BookController extends Controller
     {
         $book = Book::find($id);
         $book->delete();
-        return response()->json(200);
+        return response()->json(
+            ['message' => 'Libro eliminato con successo'],
+            200
+        );
     }
 
-    public function categories() {
-        $categories = Category::select('name','id')->get(); // Return array of categories
+    public function categories()
+    {
+        $categories = Category::select('name', 'id')->get(); // Return array of categories
         return response()->json($categories, 200);
+    }
+
+    /* Update image */
+    public function updateImage($id, Request $request)
+    {
+        $request->validateWithBag(
+            'imagebag',
+            [
+                'image' => 'required|image|mimes:jpeg,png,jpg|max:1024',
+            ],
+            [
+                'image.required' => 'Seleziona un\'immagine',
+                'image.image' => 'Il file selezionato non è un\'immagine',
+                'image.mimes' => 'Il file selezionato non è un\'immagine',
+                'image.max' => 'L\'immagine deve essere di massimo 1MB',
+            ]
+        );
+
+        $book = Book::find($id)->first();
+        //Get original file name
+        $filename = $request->image->getClientOriginalName();
+        $path = $request->image->storeAs('images/books', $filename, 'public');
+        // Store Book
+        $book->update([
+            'image' => $path
+        ]);
+
+        return response()->json([
+            'image' =>  $book->image,
+            'message' => 'Immagine aggiornata con successo'
+        ], 201);
+    }
+
+    public function singleBook($id)
+    {
+
+        $book = Book::where('id', $id)->with('categories')->first();
+        return response()->json($book, 200);
     }
 }

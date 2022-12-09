@@ -2,6 +2,7 @@
 import NavBar from '@/components/NavBar.vue';
 import FooterSection from '@/components/FooterSection.vue';
 import BreadCrumbs from '@/components/BreadCrumbs.vue'
+import NotificationBox from '@/components/NotificationBox.vue';
 
 
 </script>
@@ -16,6 +17,8 @@ import BreadCrumbs from '@/components/BreadCrumbs.vue'
   <slot ></slot>
 </div>
 </section>
+<!-- Modal -->
+<NotificationBox />
   <!-- Footer -->
   <FooterSection />
 </template>

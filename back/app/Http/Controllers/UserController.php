@@ -98,10 +98,10 @@ class UserController extends Controller
             'userpic' => 'required|image|mimes:jpeg,png,jpg|max:1024',
         ],
         [
-            'image.required' => 'Seleziona un\'immagine',
-            'image.image' => 'Il file selezionato non è un\'immagine',
-            'image.mimes' => 'Il file selezionato non è un\'immagine',
-            'image.max' => 'L\'immagine deve essere di massimo 1MB',
+            'userpic.required' => 'Seleziona un\'immagine',
+            'userpic.image' => 'Il file selezionato non è un\'immagine',
+            'userpic.mimes' => 'Il file selezionato non è un\'immagine',
+            'userpic.max' => 'L\'immagine deve essere di massimo 1MB',
         ]);
 
         $user = $request->user();

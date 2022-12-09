@@ -13,10 +13,4 @@ export interface RegisterData {
     _method?: string;
 }
 
-export interface Errors {
-    email: string[];
-    password: string[];
-    name: string[];
-    password_confirmation: string[];
-    message: string[];
-}
+

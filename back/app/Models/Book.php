@@ -4,6 +4,7 @@ namespace App\Models;
 
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Support\Facades\Storage;
 
 class Book extends Model
 {
@@ -41,4 +42,12 @@ class Book extends Model
         return $this->belongsToMany(User::class)->using(BookUser::class);
     }
 
+    public function getImageAttribute()
+    {
+        if ($this->attributes['image'] == null) {
+            return null;
+        } else {
+            return url(Storage::url($this->attributes['image']));
+        }
+    }
 }

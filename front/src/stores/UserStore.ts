@@ -1,12 +1,11 @@
 import { defineStore } from "pinia";
 import axios from 'axios';
-import { LoginData, RegisterData, Errors } from '../interfaces/FormData';
+import { LoginData, RegisterData } from '../interfaces/FormData';
+import { GeneralStore } from './GeneralStore';
 import { Role, User } from '../interfaces/UserData';
 import router from '@/router';
-import { update } from "lodash";
 // eslint-disable-next-line @typescript-eslint/no-var-requires
 const Cookies = require('js-cookie');
-
 /* ❗❗ I usually use Cookies to store the token, but I'm using localStorage for this example ❗❗ */
 
 
@@ -33,13 +32,6 @@ export const UserStore = defineStore("UserStore", {
         token: Cookies.get('token') || '',
         returnURL: '' as string,
         loading: false,
-        errors: {
-            email: [],
-            password: [],
-            name: [],
-            password_confirmation: [],
-            message: [],
-        } as Errors,
     }),
 
     getters: {
@@ -47,7 +39,7 @@ export const UserStore = defineStore("UserStore", {
     },
 
     actions: {
-        /* Login */
+        /* LOGIN */
         async loginRequest(loginData: LoginData) {
             axios.post("/login", loginData)
             .then(res => {
@@ -59,12 +51,12 @@ export const UserStore = defineStore("UserStore", {
                     router.push({ name: "dashboard" });
                     }
             }).catch((error) => {
-                    this.errors = error?.response?.data?.errors;
+                    GeneralStore().errors = error?.response?.data?.errors;
                     console.log(error);
             });
 
         },
-        /* Register */
+        /* REGISTER */
         async registerRequest(registerData: RegisterData) {
             return axios.post("/register", registerData).then((res) => {
                 if(res.status === 201){
@@ -72,16 +64,16 @@ export const UserStore = defineStore("UserStore", {
                     Cookies.set("token", makeToken(res.data.token));
                     this.user = res.data.user;
                     this.token = res.data.token;
-                    router.push({ name: "panel" });
+                    router.push({ name: "dashboard" });
                 }
             }
             ).catch((err) => {
-                    this.errors = err.response.data.errors;
+                GeneralStore().errors = err.response.data.errors;
             });
             
 
         },
-        /* Logout */
+        /* LOGOUT */
         async logout () {
              await axios.post("/logout", {}, { 
              headers: {
@@ -110,7 +102,7 @@ export const UserStore = defineStore("UserStore", {
                 this.roles = res.data;
             });
         }*/
-
+        /* CHANGE USER IMAGE */
         async changeImage(formData: FormData) { 
             await axios.post("/users/image", formData, { 
                 headers: {
@@ -120,17 +112,17 @@ export const UserStore = defineStore("UserStore", {
                   transformRequest: formData => formData
                 }).then((res) => {
                 if(res.status === 201) {
-                    console.log(res);
                     this.user.image_path = res.data.image;
                     Cookies.remove("user");
                     Cookies.set("user", JSON.stringify(this.user));
+                    GeneralStore().flash.message = res.data.message;
                 }
             }).catch((err) => {
                 console.log(err);
             });
         },
-
-        async updateUser(formData: any) {
+        /* UPDATE USER */
+        async updateUser(formData: FormData) {
             this.loading = true;
             await axios.put("/users/selfupdate", formData, {
                 headers: {

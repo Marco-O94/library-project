@@ -22,7 +22,6 @@ class BookFactory extends Factory
             'description' => $this->faker->paragraph,
             'quantity' => $this->faker->numberBetween(1, 20),
             'isbn' => $this->faker->isbn13,
-            'image' => $this->faker->imageUrl(640, 480, 'books', true, 'Faker'),
             'publisher' => $this->faker->company,
         ];
 

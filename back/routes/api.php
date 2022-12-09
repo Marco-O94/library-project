@@ -54,13 +54,15 @@ Route::prefix('books')->controller(BookController::class)->group(function () {
     // Store a new Book
     Route::post('/store', 'store');
     // Edit Book
-    Route::put('/update/{id}', 'update');
+    Route::put('/update', 'update');
     // Delete Book
     Route::delete('destroy/{id}', 'destroy');
 
     Route::get('/librarians/query', 'librarianIndex');
 
     Route::get('/categories', 'categories');
+
+    Route::post('/image/{id}', 'updateImage');
 });
 
 /* Borrow Routes */
@@ -90,11 +92,12 @@ Route::controller(AuthController::class)->group(function () {
     Route::post('login', 'login');
     Route::post('register', 'register');
 });
-Route::get('/books/count', [BookController::class, 'booksCount']);
 
 Route::prefix('books')->controller(BookController::class)->group(function () {
     Route::get('/query', 'index');
     Route::get('/show/{id}', 'show');
+    Route::get('/count', 'booksCount');
+    Route::get('/single/{id}', 'singleBook');
 });
 
 

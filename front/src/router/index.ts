@@ -1,124 +1,110 @@
 import { createRouter, createWebHistory, RouteRecordRaw } from 'vue-router'
-import HomeView from '../views/HomeView.vue'
-import LoginView from '../views/LoginView.vue'
-import RegisterView from '../views/RegisterView.vue'
-import NotFound from '../views/NotFound.vue'
-import { UserStore } from '../stores/UserStore'
-import { BookStore } from '../stores/BookStore'
+import HomeView from '@/views/public/HomeView.vue'
+import LoginView from '@/views/public/LoginView.vue'
+import RegisterView from '@/views/public/RegisterView.vue'
+import NotFound from '@/views/public/NotFound.vue'
+import { UserStore } from '@/stores/UserStore'
+//import { BookStore } from '../stores/BookStore'
 
 
 
 const routes: Array<RouteRecordRaw> = [
   // Public Routes
-
+/* ----- HOME ----- */
   {
     path: '/',
     name: 'home',
     component: HomeView
   },
+  /* ----- USER LOGIN ----- */
   {
     path: '/login',
     name: 'login',
     component: LoginView,
   },
+  /* ----- USER REGISTRATION ----- */
   {
     path: '/register',
     name: 'register',
     component: RegisterView,
-    beforeEnter: (to, from, next) => {
-      if (UserStore().isLogged) {
-        next('/panel');
-      } else {
-        next();
-      }
-    }
   },
-  // Logged in Routes
-  {
-    path: '/panel',
-    name: 'panel',
-    redirect: '/panel/',
-    component: () => import(/* webpackChunkName: "panel" */ '../views/PanelView.vue'),
-    children: [
-      {
-        path: '',
-        name: 'dashboard',
-        component: () => import(/* webpackChunkName: "dashboard" */ '../views/subviews/DashboardView.vue'),
-        meta: { requiresAuth: true },
-      },
-      {
-        path: 'profile',
-        name: 'profile',
-        component: () => import(/* webpackChunkName: "profile" */ '../views/subviews/ProfileView.vue'),
-        meta: { requiresAuth: true },
-      },
-      {
-        path: 'books',
-        name: 'manage',
-        component: () => import(/* webpackChunkName: "booksManage" */ '../views/subviews/ManageBooksView.vue'),
-        meta: { requiresAuth: true },
-        beforeEnter: (to, from, next) => {
-          if (UserStore().isLogged && UserStore().user.role.name === 'Librarian') {
-            next();
-          } else {
-            next('/panel');
-          }
-        },
-        children: [
-          {
-            path: '/modify/:id',
-            name: 'manageBook',
-            component: () => import(/* webpackChunkName: "manageBook" */ '../views/subviews/ManageBookView.vue'),
-            meta: { requiresAuth: true },
-            beforeEnter: (to, from, next) => {
-              if (UserStore().user.role.name === 'Librarian') {
-                next();
-              } else {
-                next('/panel');
-              }
-            }
-          },
-          {
-            path: '/add',
-            name: 'addBook',
-            component: () => import(/* webpackChunkName: "addBook" */ '../views/subviews/AddBookView.vue'),
-            meta: { requiresAuth: true },
-            beforeEnter: (to, from, next) => {
-              if (UserStore().user.role.name === 'Librarian') {
-                next();
-              } else {
-                next('/panel');
-              }
-            }
-          }
-        ]
-      },
-    ]
-  },
+  /* ----- SHOW BOOKS PUBLICLY ----- */
   {
     path: '/books',
-    component: () => import(/* webpackChunkName: "booksIndex" */ '../views/BooksView.vue'),
+    component: () => import(/* webpackChunkName: "booksIndex" */ '@/views/public/BooksView.vue'),
     children: [
+      
       {
         path: '',
         name: 'books',
-        component: () => import(/* webpackChunkName: "booksQuery" */ '../views/subviews/BooksListView.vue'),
+        component: () => import(/* webpackChunkName: "booksQuery" */ '@/views/public/BooksListView.vue'),
 
       },
       {
-        // I'm gonna use ID as a slug - But I wanted to use /category/:slug but I don't have enough time by the way
+        // I'm gonna use ID as a slug 😅 - But I wanted to use /category/:slug but I don't have enough time btw 😅
         path: 'show/:id',
         name: 'show',
-        component: () => import(/* webpackChunkName: "bookDetails" */ '../views/subviews/BookDetailsView.vue'),
+        component: () => import(/* webpackChunkName: "bookDetails" */ '@/views/public/BookDetailsView.vue'),
         /*beforeEnter: (to, from, next) => {
           // check to.params.id / to.params.code
          if (to.params.id === BookStore().books.data.find(book => book.id === to.params.id)) return next()
 
          next({ name: '404' })*/
-        
+
       }
     ]
   },
+  // Logged in Routes
+  {
+    path: '/panel',
+    name: 'panel',
+    component: () => import(/* webpackChunkName: "panel" */ '@/views/private/PanelView.vue'),
+    children: [
+      /* ----- DASHBOARD ----- */
+      {
+        path: '',
+        name: 'dashboard',
+        component: () => import(/* webpackChunkName: "dashboard" */ '@/views/private/DashboardView.vue'),
+        meta: { requiresAuth: true },
+      },
+      /* ----- EDIT PROFILE ----- */
+      {
+        path: 'profile',
+        name: 'profile',
+        component: () => import(/* webpackChunkName: "profile" */ '@/views/private/ProfileView.vue'),
+        meta: { requiresAuth: true },
+      },
+      /* ----- ADD NEW BOOK ----- */
+      {
+        path: 'add',
+        name: 'addBook',
+        component: () => import(/* webpackChunkName: "addBook" */ '@/views/private/AddBookView.vue'),
+        meta: { requiresAuth: true, requiresLibrarian: true  },
+      },
+      /* ----- SHOW / EDIT BOOKS ----- */
+      {
+        path: 'books',
+        name: 'booksList',
+        children: [
+          {
+            path: '',
+            name: 'managebooks',
+            component: () => import(/* webpackChunkName: "booksManage" */ '@/views/private/ManageBooksView.vue'),
+            meta: { requiresAuth: true, requiresLibrarian: true },
+          },
+          {
+            path: ':id',
+            name: 'editbook',
+            component: () => import(/* webpackChunkName: "editBook" */ '@/views/private/ManageBookView.vue'),
+            meta: { requiresAuth: true, requiresLibrarian: true },
+
+          },
+        ]
+      },
+      
+    ]
+  },
+  
 
   // 404
   {
@@ -135,12 +121,10 @@ const router = createRouter({
 })
 
 router.beforeEach((to, from, next) => {
-  if (to.meta.requiresAuth && !UserStore().isLogged && to.name !== 'login') {
-    next('/login');
-  } else {
-    next();
-  }
-
+  if (to.name !== 'Login' && !UserStore().isLogged && to.meta.requiresAuth) next({ name: 'Login' })
+  if(to.meta.requiresLibrarian && UserStore().user.role.name !== 'Librarian') next({ name: 'home' })
+  
+  next()
 });
 
 

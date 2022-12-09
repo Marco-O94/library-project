@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import { BookStore } from '../stores/BookStore';
+import { BookStore } from '@/stores/BookStore';
 const bookStore = BookStore();
 
 </script>

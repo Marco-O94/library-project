@@ -1,3 +1,4 @@
+/* eslint-disable @typescript-eslint/no-explicit-any */
 
 // 😭😭 I hate Typescript and I hate this file too 😭😭
 
