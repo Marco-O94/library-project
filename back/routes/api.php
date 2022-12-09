@@ -18,6 +18,8 @@ use App\Http\Controllers\UserController;
 */
 
 /* ----- Authenticated Routes ----- */
+
+/* --- Some Routes need to be refactored --- */
 Route::middleware('auth:sanctum')->group(function () {
 /* Logout */
 Route::post('logout', [AuthController::class, 'logout']);
@@ -39,11 +41,11 @@ Route::prefix('users')->controller(UserController::class)->group(function () {
 
     Route::put('/selfupdate', 'selfUpdate');
 });
-});
+
 /* ---------- */
 
 /* ------ Librarian Routes ------ */
-Route::middleware('auth:sanctum', 'ability:librarian')->group(function () {
+Route::middleware('role:Librarian')->group(function () {
 
 /* Books Routes */
 Route::prefix('books')->controller(BookController::class)->group(function () {
@@ -55,6 +57,10 @@ Route::prefix('books')->controller(BookController::class)->group(function () {
     Route::put('/update/{id}', 'update');
     // Delete Book
     Route::delete('destroy/{id}', 'destroy');
+
+    Route::get('/librarians/query', 'librarianIndex');
+
+    Route::get('/categories', 'categories');
 });
 
 /* Borrow Routes */
@@ -71,6 +77,7 @@ Route::prefix('borrow')->controller(BorrowController::class)->group(function () 
     Route::delete('destroy/{id}', 'destroy');
 });
 
+});
 });
 /* ---------- */
 
@@ -89,9 +96,10 @@ Route::prefix('books')->controller(BookController::class)->group(function () {
     Route::get('/query', 'index');
     Route::get('/show/{id}', 'show');
 });
-// Show single Book
+
 
 /* ---------- */
+
 
 
 

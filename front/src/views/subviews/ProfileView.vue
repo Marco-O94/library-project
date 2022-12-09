@@ -1,7 +1,7 @@
 <script setup lang="ts">
 import { ref } from 'vue';
-import { UserStore } from '../../stores/UserStore';
-import LoadingButton from '../../components/LoadingButton.vue';
+import { UserStore } from '@/stores/UserStore';
+import LoadingButton from '@/components/LoadingButton.vue';
 const userStore = UserStore();
 
 // eslint-disable-next-line @typescript-eslint/no-explicit-any
@@ -24,7 +24,7 @@ const userForm = ref({
         <div class="grid grid-cols-1 md:grid-cols-3 mt-6 mb-10">
             <div class="col-span-1">
             <img class="w-28 h-28 rounded-full" v-if="userStore.user.image_path" :src="userStore.user.image_path" />
-            <img v-else class="w-28 h-28 rounded-full" src="../../assets/images/guest_avatar.png" />
+            <img v-else class="w-28 h-28 rounded-full" src="@/assets/images/guest_avatar.png" />
         </div>
             <div class="mb-3 w-auto col-span-2">
                 <label for="formFile" class="form-label inline-block mb-2 text-gray-700">Modifica la tua foto profilo</label>

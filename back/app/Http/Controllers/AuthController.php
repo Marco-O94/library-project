@@ -68,15 +68,11 @@ class AuthController extends Controller
                 ], 401);
             }
 
-            $user = User::where('email', $request->email)->first();
-            // If user has librarian role
+            $user = User::where('email', $request->email)->with('role')->first();
+
+            // Let's get the token
             $token = '';
-            if($user->role_id == 1){
-                $token = $user->createToken("API TOKEN", ['ability:librarian'])->plainTextToken;
-            }else {
-                $token = $user->createToken("API TOKEN", ['ability:user'])->plainTextToken;
-            }
-            // Convert image path relative to absolute
+            $token = $user->createToken("API TOKEN")->plainTextToken;
 
             return response()->json([
                 'message' => 'Utente collegato con successo',

@@ -1,17 +1,18 @@
 <script setup lang="ts">
 import { ref, watch } from 'vue';
-import SearchBar from '../../components/SearchBar.vue';
-import { BookStore } from '../../stores/BookStore';
-import ListPagination from '../../components/ListPagination.vue';
+import SearchBar from '@/components/SearchBar.vue';
+import { BookStore } from '@/stores/BookStore';
+import ListPagination from '@/components/ListPagination.vue';
+import { debounce } from '@/stores/myFunctions';
 const bookStore = BookStore();
-
+bookStore.search('');
 const data = ref({
     search: '' as string,
 });
 
-// I have no time for Throttle or Debounce but here goes the idea 😄
+const debouncedFunction = debounce(function(value: string) {  bookStore.search(value); }, 500);
 watch(() => data.value.search, ((search) => {
-    bookStore.search(search);
+    debouncedFunction(search);
 }));
 </script>
 
@@ -48,7 +49,7 @@ watch(() => data.value.search, ((search) => {
                     </div>
                 </div> 
             </div>
-            <ListPagination :currentPage="bookStore.books.current_page" :lastPage="bookStore.books.last_page" :nextPage="bookStore.books.next_page_url" :prevPage="bookStore.books.prev_page_url" />
+            <ListPagination privilege="public" :currentPage="bookStore.books.current_page" :lastPage="bookStore.books.last_page" :nextPage="bookStore.books.next_page_url" :prevPage="bookStore.books.prev_page_url" />
         </template>
         </div>
     </section>

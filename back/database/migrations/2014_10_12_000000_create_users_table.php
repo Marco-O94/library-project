@@ -6,6 +6,10 @@ use Illuminate\Support\Facades\Schema;
 
 return new class extends Migration
 {
+    protected $hidden = [
+        'created_at',
+        'updated_at',
+    ];
     /**
      * Run the migrations.
      *

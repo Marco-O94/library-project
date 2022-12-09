@@ -2,8 +2,6 @@
 import { BookStore } from '../stores/BookStore';
 const bookStore = BookStore();
 
-bookStore.getBooksData();
-
 </script>
 <template>
   <section class="pt-12 pb-12 sm:pb-16 lg:pt-8">
@@ -19,7 +17,7 @@ bookStore.getBooksData();
                     <div class="flex items-center">
                         <p class="text-3xl font-medium text-gray-900 sm:text-4xl font-pj">{{ bookStore.av_books }}</p>
                         <p v-if="(bookStore.av_books === 1)" class="ml-3 text-sm text-gray-900 font-pj">Libro<br />Disponibile</p>
-                        <p v-else class="ml-3 text-sm text-gray-900 font-pj">Libri<br />Disponibili</p>
+                        <p v-else class="ml-3 text-sm text-gray-900 font-pj">Libri<br />in Catalogo</p>
                     </div>
 
                     <div class="hidden sm:block">

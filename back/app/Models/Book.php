@@ -40,4 +40,5 @@ class Book extends Model
     {
         return $this->belongsToMany(User::class)->using(BookUser::class);
     }
+
 }

@@ -1,7 +1,7 @@
 <script setup lang="ts">
-import NavBar from '../../components/NavBar.vue';
-import FooterSection from '../../components/FooterSection.vue';
-import BreadCrumbs from '../../components/BreadCrumbs.vue'
+import NavBar from '@/components/NavBar.vue';
+import FooterSection from '@/components/FooterSection.vue';
+import BreadCrumbs from '@/components/BreadCrumbs.vue'
 
 
 </script>

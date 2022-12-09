@@ -21,7 +21,7 @@ class UserController extends Controller
             $user->books = $user->books()->get();
         });
 
-        return response()->json([$users], 201);
+        return response()->json([$users], 200);
     }
 
     /**
@@ -35,7 +35,7 @@ class UserController extends Controller
     {
         $user = User::where('id', $id)->with('role', 'books')->get();
 
-        return response()->json([$user], 201);
+        return response()->json([$user], 200);
     }
 
     /**
@@ -50,7 +50,7 @@ class UserController extends Controller
         $user->role = $user->role()->get();
         $user->books = $user->books()->get();
 
-        return response()->json([$user], 201);
+        return response()->json([$user], 200);
     }
 
 

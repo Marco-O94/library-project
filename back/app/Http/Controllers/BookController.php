@@ -21,10 +21,10 @@ class BookController extends Controller
         return response()->json([
             'av_books' => Book::count(),
             'av_bookings' => $count,
-        ], 201);
+        ], 200);
     }
     /**
-     * Display a listing of the resource.
+     * Display a listing of the resource to public
      *
      * @return \Illuminate\Http\Response
      */
@@ -35,18 +35,42 @@ class BookController extends Controller
         $books = Book::when($request->input('search') ?? '', function ($query, $search) {
             $query->where('title', 'like', "%{$search}%")->orderBy('title', 'asc');
         })
+            ->with('categories')
+            ->paginate(6);
 
-        ->with('categories')
-        ->paginate(6);
+        return response()->json($books, 200);
+    }
 
-        return response()->json($books, 201);
+    /*
+    *  Display a listing of the resource to librarians.
+    */
+
+    public function librarianIndex(Request $request)
+    {
+        /*
+        * Dynamic Query based on search input and category 🔍
+        * My Favourite Query Builder 🤩
+        */
+        $books = Book::when($request->input('search') ?? '', function ($query, $search) {
+            $query->where('title', 'like', "%{$search}%")->orderBy('title', 'asc');
+        })
+            ->when($request->input('category') ?? '', function ($query, $category) {
+                $query->whereHas('categories', function ($query) use ($category) {
+                    $query->where('name', $category);
+                });
+            })
+            ->with('categories')
+            ->withCount('users')
+            ->paginate(10);
+
+        return response()->json($books, 200);
     }
 
     public function userBooks($id)
     {
         $user = User::find($id);
         $books = $user->books()->get();
-        return response()->json($books, 201);
+        return response()->json($books, 200);
     }
 
     /**
@@ -101,7 +125,7 @@ class BookController extends Controller
     public function show($id)
     {
         $book = Book::find($id)->with('categories')->first();
-        return response()->json($book, 201);
+        return response()->json($book, 200);
     }
 
     /**
@@ -161,10 +185,12 @@ class BookController extends Controller
     public function destroy($id)
     {
         $book = Book::find($id);
-        $book->detach();
         $book->delete();
-        return response()->json([
-            'message' => 'Libro eliminato con successo'
-        ], 201);
+        return response()->json(200);
+    }
+
+    public function categories() {
+        $categories = Category::select('name','id')->get(); // Return array of categories
+        return response()->json($categories, 200);
     }
 }

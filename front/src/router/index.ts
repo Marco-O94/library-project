@@ -52,6 +52,47 @@ const routes: Array<RouteRecordRaw> = [
         component: () => import(/* webpackChunkName: "profile" */ '../views/subviews/ProfileView.vue'),
         meta: { requiresAuth: true },
       },
+      {
+        path: 'books',
+        name: 'manage',
+        component: () => import(/* webpackChunkName: "booksManage" */ '../views/subviews/ManageBooksView.vue'),
+        meta: { requiresAuth: true },
+        beforeEnter: (to, from, next) => {
+          if (UserStore().isLogged && UserStore().user.role.name === 'Librarian') {
+            next();
+          } else {
+            next('/panel');
+          }
+        },
+        children: [
+          {
+            path: '/modify/:id',
+            name: 'manageBook',
+            component: () => import(/* webpackChunkName: "manageBook" */ '../views/subviews/ManageBookView.vue'),
+            meta: { requiresAuth: true },
+            beforeEnter: (to, from, next) => {
+              if (UserStore().user.role.name === 'Librarian') {
+                next();
+              } else {
+                next('/panel');
+              }
+            }
+          },
+          {
+            path: '/add',
+            name: 'addBook',
+            component: () => import(/* webpackChunkName: "addBook" */ '../views/subviews/AddBookView.vue'),
+            meta: { requiresAuth: true },
+            beforeEnter: (to, from, next) => {
+              if (UserStore().user.role.name === 'Librarian') {
+                next();
+              } else {
+                next('/panel');
+              }
+            }
+          }
+        ]
+      },
     ]
   },
   {
@@ -63,19 +104,6 @@ const routes: Array<RouteRecordRaw> = [
         name: 'books',
         component: () => import(/* webpackChunkName: "booksQuery" */ '../views/subviews/BooksListView.vue'),
 
-      },
-      {
-        path: 'manage',
-        name: 'manage',
-        component: () => import(/* webpackChunkName: "booksManage" */ '../views/subviews/ManageBooksView.vue'),
-        meta: { requiresAuth: true },
-        beforeEnter: (to, from, next) => {
-          if (UserStore().isLogged && UserStore().user.role.name === 'Librarian') {
-            next();
-          } else {
-            next('/panel');
-          }
-        }
       },
       {
         // I'm gonna use ID as a slug - But I wanted to use /category/:slug but I don't have enough time by the way

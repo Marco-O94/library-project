@@ -20,15 +20,15 @@ class RoleSeeder extends Seeder
         $roles = [
             [
                 'name' => 'Librarian',
-                'color' => 'Green',
+                'color' => 'green',
             ],
             [
                 'name' => 'Student',
-                'color' => 'Blue',
+                'color' => 'blue',
             ],
             [
                 'name' => 'Guest',
-                'color' => 'Orange',
+                'color' => 'orange',
             ],
         ];
 

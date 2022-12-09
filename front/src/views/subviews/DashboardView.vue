@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import { UserStore } from '../../stores/UserStore';
+import { UserStore } from '@/stores/UserStore';
 import LibDash from './LibrarianDash.vue';
 import UserDash from './UserDash.vue';
 

@@ -1,17 +1,16 @@
-export interface Pivot {
-    book_id: number;
-    category_id: number;
-}
+import { User } from './UserData';
 
 export interface Category {
     id: number;
     name: string;
     slug: string;
-    description: string;
-    image: string;
     color: string;
 }
 
+export interface librarianSearch {
+    search: string;
+    category: string;
+}
 export interface Book {
     id: number;
     quantity: number;
@@ -22,6 +21,8 @@ export interface Book {
     description: string;
     image: string;
     categories: Category[];
+    users: User[];
+    users_count: number;
 }
 
 export interface Link {
@@ -38,11 +39,13 @@ export interface Books {
     last_page: number;
     last_page_url: string;
     links: Link[];
-    next_page_url: string;
+    next_page_url?: any;
     path: string;
     per_page: number;
     prev_page_url?: any;
     to: number;
     total: number;
 }
+
+
 

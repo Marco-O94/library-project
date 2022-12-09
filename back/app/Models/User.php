@@ -34,6 +34,8 @@ class User extends Authenticatable
     protected $hidden = [
         'password',
         'remember_token',
+        'created_at',
+        'updated_at',
     ];
 
     /**
@@ -54,27 +56,34 @@ class User extends Authenticatable
     ];
 
     // User can book many books
-    public function books() {
-        return $this->belongsToMany(Book::class)->using(BookUser::class)->withPivot('borrow_date','expiration_date');
+    public function books()
+    {
+        return $this->belongsToMany(Book::class)->using(BookUser::class)->withPivot('borrow_date', 'expiration_date');
     }
 
-    // User can have one role
-    public function role() {
+    // User can have one role (Inverse of Role)
+    public function role()
+    {
         return $this->belongsTo(Role::class);
     }
 
     // User can have one student profile
-    public function student() {
+    public function student()
+    {
         return $this->hasOne(Student::class);
     }
 
     /**
-    * Get absolute image path with env url
-    *
-    * @return string
-    */
-    public function getImagePathAttribute() {
-        return url(Storage::url($this->attributes['image_path']));
+     * Get absolute image path with env url
+     *
+     * @return string
+     */
+    public function getImagePathAttribute()
+    {
+        if ($this->attributes['image_path'] == null) {
+            return null;
+        } else {
+            return url(Storage::url($this->attributes['image_path']));
+        }
     }
-
 }
