@@ -90,7 +90,6 @@ export const UserStore = defineStore("UserStore", {
                 if (res.status === 200) {
                     //this.user = {} as User
                     //this.token = ''  
-                    console.log(res);
                     delete axios.defaults.headers.common["authorization"]
                     Cookies.remove("token")
                     Cookies.remove("user")
@@ -155,7 +154,6 @@ export const UserStore = defineStore("UserStore", {
                     Cookies.remove("user");
                     Cookies.set("user", JSON.stringify(res.data.user));
                     GeneralStore().flash.message = res.data.message;
-                    console.log(res.data);
                 }
             }).catch((err) => {
                 console.log(err);
@@ -183,7 +181,6 @@ export const UserStore = defineStore("UserStore", {
             }).then((res) => {
                 if (res.status === 200) {
                     this.anotherUser = res.data;
-                    console.log(res.data);
                 }
             }, (err) => {
                 console.log(err);
@@ -250,7 +247,6 @@ export const UserStore = defineStore("UserStore", {
                 if (res.status === 201) {
                     this.anotherUser.image_path = res.data.image;
                     GeneralStore().flash.message = res.data.message;
-                    console.log(res.data);
                 } else {
                     GeneralStore().errors.image = res.data.errors.image;
                 }

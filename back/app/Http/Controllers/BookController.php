@@ -93,6 +93,7 @@ class BookController extends Controller
             'image.mimes' => 'Il file deve essere un\'immagine',
             'image.max' => 'Il file deve essere un\'immagine',
         ]);
+
         $book = new Book;
         $book->title = $request->title; // string
         $book->author = $request->author; // string
@@ -142,7 +143,6 @@ class BookController extends Controller
             [
                 'title' => 'required|string',
                 'quantity' => 'required|integer',
-
             ],
             [
                 'title.required' => 'Titolo richiesto',

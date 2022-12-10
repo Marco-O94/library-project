@@ -1,5 +1,6 @@
 <script>
 import { BookStore } from "@/stores/BookStore";
+import { Category } from "@/interfaces/BookData";
 import { GeneralStore } from "@/stores/GeneralStore";
 import LoadingButton from "@/components/LoadingButton.vue";
 import CKEditor from '@ckeditor/ckeditor5-vue';
@@ -49,6 +50,7 @@ export default {
                 isbn: '',
                 description: '',
                 quantity: 1,
+                categories: [],
                 image: [],
 
             },
@@ -57,13 +59,21 @@ export default {
     setup() {
         const bookStore = BookStore();
         const generalStore = GeneralStore();
+        bookStore.getCategories();
         return { bookStore, generalStore };
     },
     methods: {
         updateFile(fileItem) {
-            console.log(fileItem);
             this.book.image = fileItem[0].file;
-        }
+        },
+        addObject(arr, obj) {
+            if (arr.find((o) => o.id === obj.id)) {
+                return;
+            } else {
+                this.book.categories.push(obj);
+                return;
+            }
+        },
     }
 }
 </script>
@@ -93,13 +103,7 @@ export default {
                 <input type="text" v-model="book.publisher" placeholder="Inserisci il nome dell'editore"
                     class="form-control block w-full px-3 py-1.5 text-base font-normal text-gray-700 bg-white bg-clip-padding border border-solid border-gray-300 rounded  transition ease-in-out m-0focus:text-gray-700 focus:bg-white focus:border-blue-600 focus:outline-none" />
             </div>
-            <!-- Quantity Input-->
-            <div>
-                <label for="isbn" class="form-label inline-block mb-2 text-gray-700">Quantità</label>
-                <input type="number" v-model="book.quantity" placeholder="Inserisci il codice ISBN del libro"
-                    class="form-control block w-full px-3 py-1.5 text-base font-normal text-gray-700 bg-white bg-clip-padding border border-solid border-gray-300 rounded  transition ease-in-out m-0focus:text-gray-700 focus:bg-white focus:border-blue-600 focus:outline-none" />
-                <ErrorField :errors="generalStore.errors.quantity" />
-            </div>
+
             <!-- ISBN Input-->
             <div>
                 <label for="isbn" class="form-label inline-block mb-2 text-gray-700">ISBN</label>
@@ -107,7 +111,44 @@ export default {
                     class="form-control block w-full px-3 py-1.5 text-base font-normal text-gray-700 bg-white bg-clip-padding border border-solid border-gray-300 rounded  transition ease-in-out m-0focus:text-gray-700 focus:bg-white focus:border-blue-600 focus:outline-none" />
             </div>
 
+            <!-- Quantity Input-->
+            <div>
+                <label for="isbn" class="form-label inline-block mb-2 text-gray-700">Quantità</label>
+                <input type="number" v-model="book.quantity" placeholder="Inserisci il codice ISBN del libro"
+                    class="form-control block w-full px-3 py-1.5 text-base font-normal text-gray-700 bg-white bg-clip-padding border border-solid border-gray-300 rounded  transition ease-in-out m-0focus:text-gray-700 focus:bg-white focus:border-blue-600 focus:outline-none" />
+                <ErrorField :errors="generalStore.errors.quantity" />
+            </div>
+            
+            <!-- Categories -->
+            <div>
+                <label for="categories" class="form-label inline-block mb-2 text-gray-700">Categorie</label>
+                <select id="categories"
+                    @input="addObject(book.categories, bookStore.categories[$event.target?.value - 1])"
+                    class="form-select appearance-none block w-full px-3 py-1.5 text-base font-normal text-gray-700 bg-white bg-clip-padding bg-no-repeat border border-solid border-gray-300 rounded transition ease-in-out m-0 focus:text-gray-700 focus:bg-white focus:border-blue-600 focus:outline-none">
+                    <option selected disabled value="">-- Seleziona le categorie --</option>
+                    <template v-for="cat, index in bookStore.categories" :key="index">
+                        <option :value="cat.id">{{ cat.name }}</option>
+                    </template>
+                </select>
+            </div>
         </div>
+
+        <!-- Categories View -->
+        <div class="flex align-middle gap-2 my-6">
+            <template v-for="cat, index in book.categories" :key="index">
+                <button @click="bookStore.removeObject(book.categories, cat.id)" type="button"
+                    :class="'hover:bg-' + cat.color + '-400 bg-' + cat.color + '-500'"
+                    class="text-white  focus:outline-none focus:ring-4  font-medium rounded-full text-sm px-4 py-2 flex flex-nowrap items-center gap-2 mr-2 mb-2">{{
+                            cat.name
+                    }}
+                    <svg class="w-3 h-3 fill-white" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 384 512">
+                        <path
+                            d="M376.6 84.5c11.3-13.6 9.5-33.8-4.1-45.1s-33.8-9.5-45.1 4.1L192 206 56.6 43.5C45.3 29.9 25.1 28.1 11.5 39.4S-3.9 70.9 7.4 84.5L150.3 256 7.4 427.5c-11.3 13.6-9.5 33.8 4.1 45.1s33.8 9.5 45.1-4.1L192 306 327.4 468.5c11.3 13.6 31.5 15.4 45.1 4.1s15.4-31.5 4.1-45.1L233.7 256 376.6 84.5z" />
+                    </svg>
+                </button>
+            </template>
+        </div>
+
         <div class="w-full mt-10">
             <label for="description" class="form-label inline-block mb-2 text-gray-700">Descrizione</label>
             <ckeditor id="description" v-model="book.description" :editor="InlineEditor" :config="defaultConfig" />

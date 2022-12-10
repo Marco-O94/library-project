@@ -26,6 +26,7 @@ class BookUser extends Pivot
 
     ];
 
+
     // Casting due_date as date and created_at as date with custom format 😁
     protected $casts = [
         'due_date' => 'date:d/m/Y',

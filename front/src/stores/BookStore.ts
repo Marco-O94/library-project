@@ -1,7 +1,6 @@
 import { defineStore } from "pinia";
 import axios from 'axios';
 import { Book, Books, librarianSearch, Category } from "@/interfaces/BookData";
-import { UserStore } from "./UserStore";
 import { GeneralStore } from "./GeneralStore";
 import router from '@/router';
 // eslint-disable-next-line @typescript-eslint/no-var-requires
@@ -18,6 +17,27 @@ export const BookStore = defineStore("BookStore", {
 
     }),
     actions: {
+
+        /* Remove Object from array */
+        removeObject(arr: any, id: number) {
+            const objWithIdIndex = arr.findIndex((obj: any) => obj.id === id);
+
+            if (objWithIdIndex > -1) {
+                arr.splice(objWithIdIndex, 1);
+            }
+            return arr;
+        },
+
+        /* Add Object to array */
+        addObject(arr: any, obj: any) {
+            if (arr.find((o: any) => o.id === obj.id)) {
+                return;
+            } else {
+                BookStore().book.categories.push(obj);
+                return;
+            }
+        },
+
         /* GET BOOKS GENERIC DATA */
         getBooksData() {
             axios.get("/books/count").then((res) => {
@@ -116,7 +136,6 @@ export const BookStore = defineStore("BookStore", {
                     authorization: Cookies.get("token"),
                 }
             }).then((res) => {
-                console.log(res);
                 if (res.status === 200) {
                     this.books.data = this.books.data.filter((book: Book) => book.id !== id)
                     GeneralStore().flash.message = res.data.message;
@@ -139,7 +158,6 @@ export const BookStore = defineStore("BookStore", {
                     router.push({ name: "managebooks" });
                     GeneralStore().flash.message = res.data.message;
                 }
-                console.log(res);
             }, (err) => {
                 GeneralStore().errors = err.response.data.errors;
             }

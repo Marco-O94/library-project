@@ -101,8 +101,19 @@ class BorrowController extends Controller
 
     public function borrowedBooks()
     {
-        $books = User::whereHas('books')->with('books')->get();
+        $books = User::whereHas('books')->with('books')->paginate(10);
         return response()->json($books, 200);
+    }
+
+    /**
+     * Get One Borrowed Book
+     * @param int $id
+     * @return \Illuminate\Http\Response
+     */
+
+    public function borrowedBook($id) {
+        $book = User::whereHas('books')->with('books')->findOrFail($id);
+        return response()->json($book, 200);
     }
 
     /**

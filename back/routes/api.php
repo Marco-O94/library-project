@@ -3,9 +3,10 @@
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\AuthController;
+use App\Http\Controllers\BorrowController;
 use App\Http\Controllers\BookController;
-use App\Http\Controllers\LibrarianController;
 use App\Http\Controllers\UserController;
+use App\Http\Controllers\LibrarianController;
 
 /*
 |--------------------------------------------------------------------------
@@ -86,9 +87,6 @@ Route::middleware('auth:sanctum')->group(function () {
         });
 
         /* Borrow Routes */
-
-
-        /* That's what I'm trying to do */
         Route::prefix('borrows')->controller(BorrowController::class)->group(function () {
             // Return Book
             Route::delete('/return', 'returnBook');
@@ -96,6 +94,8 @@ Route::middleware('auth:sanctum')->group(function () {
             Route::put('/update', 'updateDueDate');
             // Show all Borrowed Books
             Route::get('/query', 'borrowedBooks');
+            // Show Borrowed Book
+            Route::get('/query/{id}', 'borrowedBook');
             // User get book
             Route::post('/get', 'getBook');
             // Librarian give book
@@ -129,3 +129,4 @@ Route::prefix('books')->controller(BookController::class)->group(function () {
 
 
 /* ---------- */
+Route::get('/test', [BorrowController::class, 'borrowedBooks']);
