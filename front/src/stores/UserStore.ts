@@ -28,6 +28,7 @@ axios.defaults.withCredentials = true;
 export const UserStore = defineStore("UserStore", {
     state: () => ({
         user: JSON.parse(Cookies.get("user") || "{}")  as User,
+        anotherUser: {} as User,
         users: {} as Users,
         roles: [] as Role[],
         token: Cookies.get('token') || '',
@@ -40,6 +41,8 @@ export const UserStore = defineStore("UserStore", {
     },
 
     actions: {
+        /* --- USER FUNCTIONS FOR ALL --- */
+
         /* LOGIN */
         async loginRequest(loginData: LoginData) {
             axios.post("/login", loginData)
@@ -57,6 +60,7 @@ export const UserStore = defineStore("UserStore", {
             });
 
         },
+
         /* REGISTER */
         async registerRequest(registerData: RegisterData) {
             return axios.post("/register", registerData).then((res) => {
@@ -74,6 +78,7 @@ export const UserStore = defineStore("UserStore", {
             
 
         },
+
         /* LOGOUT */
         async logout () {
              await axios.post("/logout", {}, { 
@@ -97,43 +102,7 @@ export const UserStore = defineStore("UserStore", {
 
           },
 
-         /* GET CATEGORIES */
-         async getRoles() {
-            await axios.get("/users/roles", {
-                headers: {
-                    authorization: Cookies.get("token"),
-                }
-            }).then((res) => {
-                if (res.status === 200) {
-                    this.roles = res.data;
-                }
-            }, (err) => {
-                console.log(err);
-            });
-        },
-
-        /* CHANGE USER IMAGE */
-        async changeImage(formData: FormData) { 
-            await axios.post("/users/image", formData, { 
-                headers: {
-                    authorization: Cookies.get("token"),
-                    'Content-Type': 'multipart/form-data',
-                  },
-                  transformRequest: formData => formData
-                }).then((res) => {
-                if(res.status === 201) {
-                    this.user = res.data.user;
-                    Cookies.remove("user");
-                    Cookies.set("user", JSON.stringify(res.data.user));
-                    GeneralStore().flash.message = res.data.message;
-                    console.log(res.data);
-                }
-            }).catch((err) => {
-                console.log(err);
-            });
-        },
-
-        /* UPDATE USER */
+          /* UPDATE USER */
         async updateUser(formData: FormData) {
             this.loading = true;
             await axios.put("/users/selfupdate", formData, {
@@ -155,6 +124,69 @@ export const UserStore = defineStore("UserStore", {
             });
             this.loading = false;
     },
+
+         /* GET ROLES */
+         async getRoles() {
+            await axios.get("/users/roles", {
+                headers: {
+                    authorization: Cookies.get("token"),
+                }
+            }).then((res) => {
+                if (res.status === 200) {
+                    this.roles = res.data
+                }
+            }, (err) => {
+                console.log(err);
+            });
+        },
+
+    /* CHANGE USER IMAGE */
+    async changeImage(formData: FormData) { 
+        await axios.post("/users/selfImage", formData, { 
+            headers: {
+                authorization: Cookies.get("token"),
+                'Content-Type': 'multipart/form-data',
+              },
+              transformRequest: formData => formData
+            }).then((res) => {
+            if(res.status === 201) {
+                this.user = res.data.user;
+                Cookies.remove("user");
+                Cookies.set("user", JSON.stringify(res.data.user));
+                GeneralStore().flash.message = res.data.message;
+                console.log(res.data);
+            }
+        }).catch((err) => {
+            console.log(err);
+        });
+    },
+
+    /* DELETE USER */
+    async delete(id: number) {
+        await axios.delete(`/users/${id}`).then((res) => {
+            if(res.status === 200) {
+                GeneralStore().flash.message = res.data.message;
+            }
+        });
+    },
+        /* --- END USER FUNCTIONS FOR ALL --- */
+
+        /* --- USER FUNCTIONS FOR LIBRARIAN --- */
+        /* GET USER */
+        async getUser(id: number) {
+            await axios.get(`/users/show/${id}`, {
+                headers: {
+                    authorization: Cookies.get("token"),
+                }
+            }).then((res) => {
+                if (res.status === 200) {
+                    this.anotherUser = res.data;
+                    return res.data;
+                }
+            }, (err) => {
+                console.log(err);
+            });
+        },
     
     /* GET USERS FOR LIBRARIAN */
     async userSearch(data: userSearch) {
@@ -183,14 +215,26 @@ export const UserStore = defineStore("UserStore", {
         })
     },
 
-    /* DELETE USER */
-    async delete(id: number) {
-        await axios.delete(`/users/${id}`).then((res) => {
-            if(res.status === 200) {
-                GeneralStore().flash.message = res.data.message;
+    /* EDIT USER FOR LIBRARIAN */
+    async editUser(formData: FormData) {
+        this.loading = true;
+        await axios.put(`/users/update`, formData, {
+            headers: {
+                authorization: Cookies.get("token"),
+                'Content-Type': 'application/json',
+                'Accept': 'application/json',
+                },
+        }).then((res) => {
+            if(res.status === 201) {
+                return res.data;
             }
+        }
+        ).catch((err) => {
+            console.log(err);
         });
-    }
+        this.loading = false;
+},
+    /* --- END USER FUNCTIONS FOR LIBRARIAN --- */
 }
 
 });

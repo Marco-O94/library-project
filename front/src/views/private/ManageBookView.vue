@@ -2,7 +2,6 @@
 
 import { BookStore } from "@/stores/BookStore";
 import { useRoute } from "vue-router";
-import {ref } from "vue";
 import { BookData } from "@/interfaces/BookData";
 import LoadingButton from "@/components/LoadingButton.vue";
 import CKEditor from '@ckeditor/ckeditor5-vue';

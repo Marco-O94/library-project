@@ -34,7 +34,7 @@ Route::prefix('users')->controller(UserController::class)->group(function () {
     // Delete User
     Route::delete('/{id}', 'destroy');
     // Change image to the User
-    Route::post('/image', 'updateImage');
+    Route::post('/selfImage', 'selfUpdateImage');
     // Change data to the User
     Route::put('/selfupdate', 'selfUpdate');
 });
@@ -53,6 +53,8 @@ Route::middleware('role:Librarian')->group(function () {
         Route::get('/show/{id}', 'show');
         // Show roles for User creation and Table
         Route::get('/roles', 'roles');
+        Route::put('/update', 'update');
+        Route::post('/image/{id}', 'updateImage');
 
     });
 

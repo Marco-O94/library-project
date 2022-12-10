@@ -31,7 +31,6 @@ const toUser = (user: number) => {
     <!-- It should go in a child component, I'm speeding up a little bit, pls forgive me... -->
     
     <h1 class="text-3xl md:text-4xl  font-bold text-gray-900 mb-8">Amministrazione Utenti</h1>
-    <router-link :to="{name: 'adduser'}" data-mdb-ripple="true" data-mdb-ripple-color="light" class="inline-block px-6 py-2.5 bg-blue-600 text-white font-medium text-xs leading-tight uppercase rounded shadow-md hover:bg-blue-700 hover:shadow-lg focus:bg-blue-700 focus:shadow-lg focus:outline-none focus:ring-0 active:bg-blue-800 active:shadow-lg transition duration-150 ease-in-out">Aggiungi un nuovo libro</router-link>
     <div class="grid grid-cols-1 md:grid-cols-2 gap-10 my-10">
         <div>
             <SearchBar placeholder="Cerchi un utente in particolare ?" v-model:search="data.search" />
@@ -84,14 +83,19 @@ const toUser = (user: number) => {
                     <td scope="row" class="pl-6 py-4 font-medium text-gray-900 whitespace-nowrap">
                         {{ user.name }}
                     </td>
+                    <td scope="row" class="pl-6 py-4 font-medium text-gray-900 whitespace-nowrap">
+                        {{ user.email }}
+                    </td>
                     
                     <td scope="row" class="pl-6 py-4 font-medium text-gray-900 whitespace-nowrap">
-                        {{ user.role }}
+                        <span :class="'bg-' + user.role.color + '-200 bg-' + user.role.color + '-300'"
+                            class="px-4 py-2 text-white rounded-full font-semibold text-sm flex align-center w-max cursor-pointer transition duration-300 ease"
+                            >{{ user.role.name }}</span>
                     </td>
                     <td scope="row" class="pl-6 py-4 font-medium text-gray-900 whitespace-nowrap">
                        {{ user.books_count }}
                     </td>
-                    <td scope="row" class="pl-6 py-4 font-medium whitespace-nowrap">
+                    <td scope="row" class="pl-12 py-4 font-medium whitespace-nowrap">
                         <button @click="toUser(user.id)" class="font-medium">
                             <svg class="w-5 h-5 fill-blue-600 hover:fill-blue-500" xmlns="http://www.w3.org/2000/svg"
                                 viewBox="0 0 512 512">
@@ -100,7 +104,7 @@ const toUser = (user: number) => {
                             </svg>
                         </button>
                     </td>
-                    <td scope="row" class="pl-6 py-4 font-medium whitespace-nowrap">
+                    <td scope="row" class="pl-12 py-4 font-medium whitespace-nowrap">
                         <button @click="userStore.delete(user.id)" class="font-medium ">
                             <svg class="fill-red-600 hover:fill-red-500 w-5 h-5" xmlns="http://www.w3.org/2000/svg"
                                 viewBox="0 0 448 512">

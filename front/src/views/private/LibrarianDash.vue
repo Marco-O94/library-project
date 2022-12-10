@@ -10,7 +10,7 @@ import SectionCard from '@/components/SectionCard.vue';
             <SectionCard title="Profilo" link="profile" :icon="1" />
         </div>
         <div>
-            <SectionCard title="Utenti" link="home" :icon="2" />
+            <SectionCard title="Utenti" link="manageusers" :icon="2" />
         </div>
         <div>
             <SectionCard title="Prestiti" link="home" :icon="3" />
