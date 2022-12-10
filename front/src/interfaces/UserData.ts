@@ -39,7 +39,7 @@ export interface Users {
     total: number;
 }
 
-export interface userSearch{
+export interface userSearch {
     search: string;
     role: string;
 }

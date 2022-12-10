@@ -13,25 +13,30 @@ use Illuminate\Auth\Events\PasswordReset;
 use Illuminate\Support\Str;
 use Carbon\Carbon;
 use Illuminate\Support\Facades\Storage;
+
 class AuthController extends Controller
 {
 
     /* Register Api */
-    function register(Request $request) {
-        $request->validateWithBag('errors',[
-            'name' => 'required|string',
-            'email' => 'required|email|unique:users',
-            'password' => 'required',
-            'password_confirmation' => 'required|same:password'
-        ],
-    [
-        'name.required' => 'Nome richiesto',
-        'email.required' => 'Email richiesta',
-        'email.unique' => 'Email già in uso',
-        'password.required' => 'Password richiesta',
-        'confirm_password.required' => 'Il campo conferma password è richiesto',
-        'confirm_password.same' => 'La password di conferma non è la stessa del campo password'
-    ]);
+    function register(Request $request)
+    {
+        $request->validateWithBag(
+            'errors',
+            [
+                'name' => 'required|string',
+                'email' => 'required|email|unique:users',
+                'password' => 'required',
+                'password_confirmation' => 'required|same:password'
+            ],
+            [
+                'name.required' => 'Nome richiesto',
+                'email.required' => 'Email richiesta',
+                'email.unique' => 'Email già in uso',
+                'password.required' => 'Password richiesta',
+                'confirm_password.required' => 'Il campo conferma password è richiesto',
+                'confirm_password.same' => 'La password di conferma non è la stessa del campo password'
+            ]
+        );
 
 
         $data = $request->all();
@@ -48,49 +53,53 @@ class AuthController extends Controller
     }
 
     /* Login Api */
-    function login(Request $request) {
-            $request->validateWithBag('errors',[
+    function login(Request $request)
+    {
+        $request->validateWithBag(
+            'errors',
+            [
                 'email' => 'required|email',
                 'password' => 'required'
             ],
-        [
-            'email.required' => 'Email richiesta',
-            'password.required' => 'Password richiesta'
-        ]);
+            [
+                'email.required' => 'Email richiesta',
+                'password.required' => 'Password richiesta'
+            ]
+        );
 
-            if(!Auth::attempt($request->only(['email', 'password']))){
-                return response()->json([
-                    'errors' => [
-                        'message' => array('Email o Password non corretti.')
-                    ],
-                    'status' => false,
-
-                ], 401);
-            }
-
-            $user = User::where('email', $request->email)->with('role')->first();
-
-            // Let's get the token
-            $token = '';
-            $token = $user->createToken("API TOKEN")->plainTextToken;
-
+        if (!Auth::attempt($request->only(['email', 'password']))) {
             return response()->json([
-                'message' => 'Utente collegato con successo',
-                'token' => $token,
-                'user' => $user
-            ], 200);
+                'errors' => [
+                    'message' => array('Email o Password non corretti.')
+                ],
+                'status' => false,
 
+            ], 401);
+        }
+
+        $user = User::where('email', $request->email)->with('role')->first();
+
+        // Let's get the token
+        $token = '';
+        $token = $user->createToken("API TOKEN")->plainTextToken;
+
+        return response()->json([
+            'message' => 'Utente collegato con successo',
+            'token' => $token,
+            'user' => $user
+        ], 200);
     }
 
     /* Logout Api
     * @return \Laravel\Fortify\Contracts\LogoutResponse
     */
-    function logout(Request $request){
+    function logout(Request $request)
+    {
         /* Revoke all tokens of the current user
         If Intelephense gives error, it's a bug of the extension
         */
         Auth::user()->tokens()->delete();
 
-        return response()->json([],200);
+        return response()->json([], 200);
     }
 }

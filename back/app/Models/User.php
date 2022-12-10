@@ -60,6 +60,7 @@ class User extends Authenticatable
     public function books()
     {
         return $this->belongsToMany(Book::class)->using(BookUser::class)->withPivot('due_date','created_at');
+
     }
 
     // User can have one role (Inverse of Role)

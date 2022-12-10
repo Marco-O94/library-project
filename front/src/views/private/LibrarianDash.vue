@@ -15,5 +15,5 @@ import SectionCard from '@/components/SectionCard.vue';
         <div>
             <SectionCard title="Prestiti" link="home" :icon="3" />
         </div>
-        </div>
+    </div>
 </template>

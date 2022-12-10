@@ -7,7 +7,7 @@ const userStore = UserStore();
 <template>
     <div>
         <h1 class="font-bold">Bentornato {{ userStore.user.name }}!</h1>
-        
-        
+
+
     </div>
 </template>

@@ -20,37 +20,35 @@ const userForm = ref({
 });
 </script>
 <template>
-        <h1 class="font-bold text-4xl mb-5">Modifica i tuoi dati</h1>
-        <div class="grid grid-cols-1 md:grid-cols-3 mt-6 mb-10 items-center">
-            <div class="col-span-1">
+    <h1 class="font-bold text-4xl mb-5">Modifica i tuoi dati</h1>
+    <div class="grid grid-cols-1 md:grid-cols-3 mt-6 mb-10 items-center">
+        <div class="col-span-1">
             <img class="w-28 h-28 rounded-full" v-if="userStore.user.image_path" :src="userStore.user.image_path" />
             <img v-else class="w-28 h-28 rounded-full" src="@/assets/images/guest_avatar.png" />
         </div>
-            <div class="mb-3 w-auto col-span-2">
-                <label for="formFile" class="form-label inline-block mb-2 text-gray-700">Modifica la tua foto profilo</label>
-                <input type="file" ref="inputFile" label="Image" @change="onFileInput" class="form-control block w-full px-3 py-1.5 text-base font-normal text-gray-700 bg-white bg-clip-padding border border-solid border-gray-300 rounded  transition ease-in-out m-0focus:text-gray-700 focus:bg-white focus:border-blue-600 focus:outline-none" />
+        <div class="mb-3 w-auto col-span-2">
+            <label for="formFile" class="form-label inline-block mb-2 text-gray-700">Modifica la tua foto
+                profilo</label>
+            <input type="file" ref="inputFile" label="Image" @change="onFileInput"
+                class="form-control block w-full px-3 py-1.5 text-base font-normal text-gray-700 bg-white bg-clip-padding border border-solid border-gray-300 rounded  transition ease-in-out m-0focus:text-gray-700 focus:bg-white focus:border-blue-600 focus:outline-none" />
 
-                </div>
         </div>
-        <form @submit.prevent="UserStore().updateUser(userForm as unknown as FormData)">
+    </div>
+    <form @submit.prevent="UserStore().updateUser(userForm as unknown as FormData)">
         <div class="grid grid-cols-2 gap-10">
-                <div>
-                    <!-- Input Name -->
-                    <label for="name" class="form-label inline-block mb-2 text-gray-700">Nome</label>
-                    <input v-model="userForm.name" type="text" class=" form-control block w-full px-3 py-1.5 text-base font-normal text-gray-700 bg-white bg-clip-padding border border-solid border-gray-300 rounded transition ease-in-out m-0 focus:text-gray-700 focus:bg-white focus:border-blue-600 focus:outline-none
+            <div>
+                <!-- Input Name -->
+                <label for="name" class="form-label inline-block mb-2 text-gray-700">Nome</label>
+                <input v-model="userForm.name" type="text" class=" form-control block w-full px-3 py-1.5 text-base font-normal text-gray-700 bg-white bg-clip-padding border border-solid border-gray-300 rounded transition ease-in-out m-0 focus:text-gray-700 focus:bg-white focus:border-blue-600 focus:outline-none
                       " id="name" placeholder="Inserisci qui il tuo nome" />
-                </div>
-                <div>
-                    <label for="email" class="form-label inline-block mb-2 text-gray-700"
-                    >Indirizzo Email</label>
-                    <input 
-                    v-model="userForm.email"
-                    type="email"
+            </div>
+            <div>
+                <label for="email" class="form-label inline-block mb-2 text-gray-700">Indirizzo Email</label>
+                <input v-model="userForm.email" type="email"
                     class="form-control block w-full px-3 py-1.5 text-base font-normal text-gray-700 bg-white bg-clip-padding border border-solid border-gray-300 rounded transition ease-in-out m-0 focus:text-gray-700 focus:bg-white focus:border-blue-600 focus:outline-none"
-                    id="email"
-                    placeholder="Inserisci la tua email"/>
-                </div>
-            
+                    id="email" placeholder="Inserisci la tua email" />
+            </div>
+
         </div>
         <!-- Button Group -->
         <LoadingButton text="Salva" />

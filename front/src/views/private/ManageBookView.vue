@@ -74,9 +74,9 @@ export default {
             return arr;
         },
         addObject(arr: any, obj: any) {
-            if(arr.find((o: any) => o.id === obj.id)) {
+            if (arr.find((o: any) => o.id === obj.id)) {
                 return;
-            }else {
+            } else {
                 BookStore().book.categories.push(obj);
                 return;
             }
@@ -150,7 +150,7 @@ export default {
         <!-- Categorie -->
         <label for="categories" class="form-label inline-block mb-3 mt-5 text-gray-700">Categorie</label>
 
-        <select id="categories" @input="addObject(book.categories, bookStore.categories[$event.target.value-1])"
+        <select id="categories" @input="addObject(book.categories, bookStore.categories[$event.target?.value - 1])"
             class="form-select appearance-none block w-full px-3 py-1.5 text-base font-normal text-gray-700 bg-white bg-clip-padding bg-no-repeat border border-solid border-gray-300 rounded transition ease-in-out m-0 focus:text-gray-700 focus:bg-white focus:border-blue-600 focus:outline-none">
             <option selected disabled value="">-- Seleziona le categorie --</option>
             <template v-for="cat, index in bookStore.categories" :key="index">
@@ -158,10 +158,10 @@ export default {
             </template>
         </select>
         <div class="flex align-middle gap-2 my-6">
-            
-                <template v-for="cat, index in book.categories" :key="index">
-                <button @click="removeObject(book.categories, cat.id)"
-                    type="button" :class="'hover:bg-' + cat.color + '-400 bg-' + cat.color + '-500'"
+
+            <template v-for="cat, index in book.categories" :key="index">
+                <button @click="removeObject(book.categories, cat.id)" type="button"
+                    :class="'hover:bg-' + cat.color + '-400 bg-' + cat.color + '-500'"
                     class="text-white  focus:outline-none focus:ring-4  font-medium rounded-full text-sm px-4 py-2 flex flex-nowrap items-center gap-2 mr-2 mb-2">{{
                             cat.name
                     }}
@@ -171,7 +171,7 @@ export default {
                     </svg>
                 </button>
             </template>
-            
+
         </div>
         <div class="w-full mt-10">
             <label for="description" class="form-label inline-block mb-2 text-gray-700">Descrizione</label>
@@ -186,5 +186,4 @@ export default {
     border: 1px solid rgb(203 213 225 / var(--tw-border-opacity)) !important;
     border-radius: 0.375rem !important;
 }
-
 </style>

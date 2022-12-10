@@ -40,12 +40,8 @@ class LibrarianController extends Controller
      */
     public function show($id)
     {
-       $user = User::where('id', $id)->with('role', 'books')->first();
+        $user = User::where('id', $id)->with('role', 'books')->first();
         return response()->json($user, 200);
-
-
-
-
     }
 
     /**
@@ -56,11 +52,12 @@ class LibrarianController extends Controller
 
     public function update(Request $request)
     {
-        $request->validate([
-            'name' => 'required|string|max:255',
-            'email' => 'required|string|email|max:255|unique:users,email,' . $request->id,
-            'role' => 'required',
-        ],
+        $request->validate(
+            [
+                'name' => 'required|string|max:255',
+                'email' => 'required|string|email|max:255|unique:users,email,' . $request->id,
+                'role' => 'required',
+            ],
             [
                 'name.required' => 'Il nome è obbligatorio',
                 'name.string' => 'Il nome deve essere una stringa',
@@ -71,7 +68,8 @@ class LibrarianController extends Controller
                 'email.max' => 'L\'email deve essere di massimo 255 caratteri',
                 'email.unique' => 'L\'email è già stata utilizzata',
                 'role.required' => 'Il ruolo è obbligatorio',
-            ]);
+            ]
+        );
 
         // Request user through token
         $user = User::find($request->id);

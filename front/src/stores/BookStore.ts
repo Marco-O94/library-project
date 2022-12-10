@@ -81,7 +81,7 @@ export const BookStore = defineStore("BookStore", {
             }).then((res) => {
                 if (res.status === 200) {
                     this.categories = res.data;
-                    
+
                 }
                 console.log(res);
             }, (err) => {
@@ -133,9 +133,9 @@ export const BookStore = defineStore("BookStore", {
                     authorization: Cookies.get("token"),
                     'Content-Type': 'multipart/form-data',
                 },
-                
+
             }).then((res) => {
-                if(res.status === 201){
+                if (res.status === 201) {
                     router.push({ name: "managebooks" });
                     GeneralStore().flash.message = res.data.message;
                 }

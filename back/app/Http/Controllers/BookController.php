@@ -106,7 +106,7 @@ class BookController extends Controller
         $path = $request->image->storeAs('images/books', $filename, 'public');
         $book->image = $path;
         $book->save();
-        if($request->category) {
+        if ($request->category) {
             $request->category->each(function ($category) use ($book) {
                 $book->categories()->attach($category);
             });
@@ -160,7 +160,7 @@ class BookController extends Controller
         ]);
         $book = Book::where('id', $request->id)->first();
         $book->categories()->detach();
-        foreach($request->categories as $category) {
+        foreach ($request->categories as $category) {
             $book->categories()->attach($category['id']);
         }
 

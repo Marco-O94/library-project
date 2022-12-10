@@ -5,8 +5,8 @@ import MainLayout from './views/Layout/MainLayout.vue';
 
 <template>
   <MainLayout>
-  <router-view/>
-</MainLayout>
+    <router-view />
+  </MainLayout>
 </template>
 
 <style>
@@ -32,11 +32,13 @@ nav a.router-link-exact-active {
 }
 
 .logo-text {
-fill:white;
+  fill: white;
 }
+
 .logo-book {
-fill:#0B87F0;
+  fill: #0B87F0;
 }
+
 .logo {
   width: 150px;
   height: auto;

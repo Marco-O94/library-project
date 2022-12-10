@@ -29,15 +29,17 @@ const toBook = (book: number) => {
 
 <template>
     <!-- It should go in a child component, I'm speeding up a little bit, pls forgive me... -->
-    
+
     <h1 class="text-3xl md:text-4xl  font-bold text-gray-900 mb-8">Amministrazione Libri</h1>
-    <router-link :to="{name: 'addBook'}" data-mdb-ripple="true" data-mdb-ripple-color="light" class="inline-block px-6 py-2.5 bg-blue-600 text-white font-medium text-xs leading-tight uppercase rounded shadow-md hover:bg-blue-700 hover:shadow-lg focus:bg-blue-700 focus:shadow-lg focus:outline-none focus:ring-0 active:bg-blue-800 active:shadow-lg transition duration-150 ease-in-out">Aggiungi un nuovo libro</router-link>
+    <router-link :to="{ name: 'addBook' }" data-mdb-ripple="true" data-mdb-ripple-color="light"
+        class="inline-block px-6 py-2.5 bg-blue-600 text-white font-medium text-xs leading-tight uppercase rounded shadow-md hover:bg-blue-700 hover:shadow-lg focus:bg-blue-700 focus:shadow-lg focus:outline-none focus:ring-0 active:bg-blue-800 active:shadow-lg transition duration-150 ease-in-out">Aggiungi
+        un nuovo libro</router-link>
     <div class="grid grid-cols-1 md:grid-cols-2 gap-10 my-10">
         <div>
             <SearchBar placeholder="Cerca tra i libri caricati..." v-model:search="data.search" />
         </div>
         <div>
-           <select id="categories" name="categories" v-model="data.category"
+            <select id="categories" name="categories" v-model="data.category"
                 class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full  p-4  dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500">
                 <option value="" selected>-- Scegli una categoria -- </option>
                 <option v-for="category in bookStore.categories" :key="category.id" :value="category.name">

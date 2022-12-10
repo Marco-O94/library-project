@@ -11,14 +11,14 @@ import NotificationBox from '@/components/NotificationBox.vue';
   <!-- Navbar -->
   <NavBar />
   <!-- Content -->
- <section name="content" class="min-h-screen md:container mx-auto">
-  <BreadCrumbs class="pt-10" />
-  <div>
-  <slot ></slot>
-</div>
-</section>
-<!-- Modal -->
-<NotificationBox />
+  <section name="content" class="min-h-screen md:container mx-auto">
+    <BreadCrumbs class="pt-10" />
+    <div>
+      <slot></slot>
+    </div>
+  </section>
+  <!-- Modal -->
+  <NotificationBox />
   <!-- Footer -->
   <FooterSection />
 </template>

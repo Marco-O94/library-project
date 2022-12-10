@@ -29,14 +29,14 @@ const toUser = (user: number) => {
 
 <template>
     <!-- It should go in a child component, I'm speeding up a little bit, pls forgive me... -->
-    
+
     <h1 class="text-3xl md:text-4xl  font-bold text-gray-900 mb-8">Amministrazione Utenti</h1>
     <div class="grid grid-cols-1 md:grid-cols-2 gap-10 my-10">
         <div>
             <SearchBar placeholder="Cerchi un utente in particolare ?" v-model:search="data.search" />
         </div>
         <div>
-           <select id="roles" name="roles" v-model="data.role"
+            <select id="roles" name="roles" v-model="data.role"
                 class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full  p-4  dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500">
                 <option value="" selected>-- Scegli un ruolo -- </option>
                 <option v-for="role in userStore.roles" :key="role.id" :value="role.name">
@@ -86,14 +86,15 @@ const toUser = (user: number) => {
                     <td scope="row" class="pl-6 py-4 font-medium text-gray-900 whitespace-nowrap">
                         {{ user.email }}
                     </td>
-                    
+
                     <td scope="row" class="pl-6 py-4 font-medium text-gray-900 whitespace-nowrap">
                         <span :class="'hover:bg-' + user.role.color + '-400 bg-' + user.role.color + '-500'"
-                            class="px-4 py-2 text-white rounded-full font-semibold text-sm flex align-center w-max cursor-pointer transition duration-300 ease"
-                            >{{ user.role.name }}</span>
+                            class="px-4 py-2 text-white rounded-full font-semibold text-sm flex align-center w-max cursor-pointer transition duration-300 ease">{{
+                                    user.role.name
+                            }}</span>
                     </td>
                     <td scope="row" class="pl-6 py-4 font-medium text-gray-900 whitespace-nowrap">
-                       {{ user.books_count }}
+                        {{ user.books_count }}
                     </td>
                     <td scope="row" class="pl-12 py-4 font-medium whitespace-nowrap">
                         <button @click="toUser(user.id)" class="font-medium">
@@ -118,8 +119,7 @@ const toUser = (user: number) => {
 
             </tbody>
         </table>
-        <ListPagination scope="users" :currentPage="userStore.users.current_page"
-            :lastPage="userStore.users.last_page" :nextPage="userStore.users.next_page_url"
-            :prevPage="userStore.users.prev_page_url" />
+        <ListPagination scope="users" :currentPage="userStore.users.current_page" :lastPage="userStore.users.last_page"
+            :nextPage="userStore.users.next_page_url" :prevPage="userStore.users.prev_page_url" />
     </div>
 </template>

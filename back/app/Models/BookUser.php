@@ -22,7 +22,8 @@ class BookUser extends Pivot
     protected $hidden = [
         'updated_at',
         'book_id',
-        'user_id'
+        'user_id',
+
     ];
 
     // Casting due_date as date and created_at as date with custom format 😁

@@ -54,7 +54,7 @@ const userForm = computed(() => {
             <div>
                 <!-- Input Name -->
                 <label for="name" class="form-label inline-block mb-2 text-gray-700">Nome</label>
-                <input v-model="userForm.name" type="text" class=" form-control block w-full px-3 py-1.5 text-base font-normal text-gray-700 bg-white bg-clip-padding border border-solid border-gray-300 rounded transition ease-in-out m-0 focus:text-gray-700 focus:bg-white focus:border-blue-600 focus:outline-none
+                <input v-model="userForm.name" type="text" class="form-control block w-full px-3 py-1.5 text-base font-normal text-gray-700 bg-white bg-clip-padding border border-solid border-gray-300 rounded transition ease-in-out m-0 focus:text-gray-700 focus:bg-white focus:border-blue-600 focus:outline-none
                       " id="name" placeholder="Inserisci un nome" />
                 <ErrorField :errors="generalStore.errors.name" />
             </div>
@@ -63,16 +63,16 @@ const userForm = computed(() => {
                 <input v-model="userForm.email" type="email"
                     class="form-control block w-full px-3 py-1.5 text-base font-normal text-gray-700 bg-white bg-clip-padding border border-solid border-gray-300 rounded transition ease-in-out m-0 focus:text-gray-700 focus:bg-white focus:border-blue-600 focus:outline-none"
                     id="email" placeholder="Inserisci una email" />
-                    <ErrorField :errors="generalStore.errors.email" />
+                <ErrorField :errors="generalStore.errors.email" />
             </div>
             <div class="col-span-2">
                 <label for="role" class="form-label inline-block mb-2 text-gray-700">Ruolo</label>
                 <select id="role" v-model="userForm.role"
                     class="form-select appearance-none block w-full px-3 py-1.5 text-base font-normal text-gray-700 bg-white bg-clip-padding bg-no-repeat border border-solid border-gray-300 rounded transition ease-in-out m-0 focus:text-gray-700 focus:bg-white focus:border-blue-600 focus:outline-none">
-                    <template v-for="role, index in userStore.roles"  :key="index">
-                    <option selected v-if="role.id === userForm.role" :value="role.id" >{{ role.name }}</option>
-                    <option v-else :value="role.id" >{{ role.name }}</option>
-                </template>
+                    <template v-for="role, index in userStore.roles" :key="index">
+                        <option selected v-if="role.id === userForm.role" :value="role.id">{{ role.name }}</option>
+                        <option v-else :value="role.id">{{ role.name }}</option>
+                    </template>
                 </select>
                 <ErrorField :errors="generalStore.errors.role" />
             </div>
@@ -83,7 +83,7 @@ const userForm = computed(() => {
     </form>
 
     <!-- If user has Books borrowed show table -->
-    <!--<template v-if="userStore.anotherUser.books">
+    <template v-if="userStore.anotherUser.books">
         <div class="relative overflow-x-auto shadow-md rounded-lg mt-5 mb-16">
 
             <table class="w-full text-sm text-left text-gray-500 lg:table-auto">
@@ -110,37 +110,32 @@ const userForm = computed(() => {
                     </tr>
                 </thead>
                 <tbody>
-                    <tr v-for="book, index in bookStore.books.data" :key="index"
+                    <tr v-for="book, index in userStore.anotherUser.books" :key="index"
                         class="border-b text-gray-900 bg-neutral-50  odd:bg-white even:bg-gray-50 ">
                         <td scope="row" class="pl-6 py-4 font-medium text-gray-900 whitespace-nowrap">
                             {{ index + 1 }}
                         </td>
-                        <td scope="row" class="pl-6 py-4 font-medium text-gray-900 whitespace-nowrap">
-                            {{ book.title }}
-                        </td>
-                        <td scope="row"
-                            class="pl-6 py-4 flex flex-nowrap align-middle gap-3 font-medium text-gray-900 whitespace-nowrap">
-                            <span :class="'hover:bg-' + cat.color + '-400 bg-' + cat.color + '-500'"
-                                class="px-4 py-2 text-white rounded-full font-semibold text-sm flex align-center w-max cursor-pointer transition duration-300 ease"
-                                v-for="cat, index in book.categories" :key="index">{{ cat.name }}</span>
+                        <td scope="row" class="pl-6 py-4  font-medium text-gray-900 whitespace-nowrap">
+                            <p class="truncate w-60">{{ book.title }}</p>
                         </td>
                         <td scope="row" class="pl-6 py-4 font-medium text-gray-900 whitespace-nowrap">
-                            {{ book.author }}
+                            {{ book.pivot.created_at !== null ? book.pivot.created_at : 'N/D' }}
                         </td>
                         <td scope="row" class="pl-6 py-4 font-medium text-gray-900 whitespace-nowrap">
-                            {{ book.quantity - book.users_count }}
+                            {{ book.pivot.due_date !== null ? book.pivot.due_date : 'N/D' }}
                         </td>
+
                         <td scope="row" class="pl-6 py-4 font-medium whitespace-nowrap">
                             <button class="font-medium">
-                                <svg class="w-5 h-5 fill-blue-600 hover:fill-blue-500" xmlns="http://www.w3.org/2000/svg"
-                                    viewBox="0 0 512 512">
+                                <svg class="w-5 h-5 fill-blue-600 hover:fill-blue-500"
+                                    xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512">
                                     <path
                                         d="M471.6 21.7c-21.9-21.9-57.3-21.9-79.2 0L362.3 51.7l97.9 97.9 30.1-30.1c21.9-21.9 21.9-57.3 0-79.2L471.6 21.7zm-299.2 220c-6.1 6.1-10.8 13.6-13.5 21.9l-29.6 88.8c-2.9 8.6-.6 18.1 5.8 24.6s15.9 8.7 24.6 5.8l88.8-29.6c8.2-2.8 15.7-7.4 21.9-13.5L437.7 172.3 339.7 74.3 172.4 241.7zM96 64C43 64 0 107 0 160V416c0 53 43 96 96 96H352c53 0 96-43 96-96V320c0-17.7-14.3-32-32-32s-32 14.3-32 32v96c0 17.7-14.3 32-32 32H96c-17.7 0-32-14.3-32-32V160c0-17.7 14.3-32 32-32h96c17.7 0 32-14.3 32-32s-14.3-32-32-32H96z" />
                                 </svg>
                             </button>
                         </td>
                         <td scope="row" class="pl-6 py-4 font-medium whitespace-nowrap">
-                            <button class="font-medium ">
+                            <button class="font-medium">
                                 <svg class="fill-red-600 hover:fill-red-500 w-5 h-5" xmlns="http://www.w3.org/2000/svg"
                                     viewBox="0 0 448 512">
                                     <path
@@ -153,5 +148,5 @@ const userForm = computed(() => {
             </table>
         </div>
 
-    </template>-->
+    </template>
 </template>

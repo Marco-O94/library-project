@@ -62,7 +62,7 @@ export default {
     methods: {
         updateFile(fileItem) {
             console.log(fileItem);
-           this.book.image = fileItem[0].file;
+            this.book.image = fileItem[0].file;
         }
     }
 }
@@ -79,7 +79,7 @@ export default {
                 <label for="title" class="form-label inline-block mb-2 text-gray-700">Titolo</label>
                 <input type="text" v-model="book.title" placeholder="Inserisci il titolo del libro"
                     class="form-control block w-full px-3 py-1.5 text-base font-normal text-gray-700 bg-white bg-clip-padding border border-solid border-gray-300 rounded  transition ease-in-out m-0focus:text-gray-700 focus:bg-white focus:border-blue-600 focus:outline-none" />
-                    <ErrorField :errors="generalStore.errors.title" />
+                <ErrorField :errors="generalStore.errors.title" />
             </div>
             <!-- Author Input-->
             <div>
@@ -93,20 +93,20 @@ export default {
                 <input type="text" v-model="book.publisher" placeholder="Inserisci il nome dell'editore"
                     class="form-control block w-full px-3 py-1.5 text-base font-normal text-gray-700 bg-white bg-clip-padding border border-solid border-gray-300 rounded  transition ease-in-out m-0focus:text-gray-700 focus:bg-white focus:border-blue-600 focus:outline-none" />
             </div>
-             <!-- Quantity Input-->
-             <div>
+            <!-- Quantity Input-->
+            <div>
                 <label for="isbn" class="form-label inline-block mb-2 text-gray-700">Quantità</label>
                 <input type="number" v-model="book.quantity" placeholder="Inserisci il codice ISBN del libro"
                     class="form-control block w-full px-3 py-1.5 text-base font-normal text-gray-700 bg-white bg-clip-padding border border-solid border-gray-300 rounded  transition ease-in-out m-0focus:text-gray-700 focus:bg-white focus:border-blue-600 focus:outline-none" />
                 <ErrorField :errors="generalStore.errors.quantity" />
-                </div>
+            </div>
             <!-- ISBN Input-->
             <div>
                 <label for="isbn" class="form-label inline-block mb-2 text-gray-700">ISBN</label>
                 <input type="text" v-model="book.isbn" placeholder="Inserisci il codice ISBN del libro"
                     class="form-control block w-full px-3 py-1.5 text-base font-normal text-gray-700 bg-white bg-clip-padding border border-solid border-gray-300 rounded  transition ease-in-out m-0focus:text-gray-700 focus:bg-white focus:border-blue-600 focus:outline-none" />
             </div>
-           
+
         </div>
         <div class="w-full mt-10">
             <label for="description" class="form-label inline-block mb-2 text-gray-700">Descrizione</label>
@@ -119,7 +119,7 @@ export default {
                 labelIdle="Trascina i tuoi file qui o <span class='filepond--label-action'> cerca nel pc </span>"
                 allowMultiple="false" maxFiles="1" @updatefiles="updateFile"
                 accepted-file-types="image/jpg, image/jpeg, image/png" labelInvalidField="Solo immagini!" />
-                <ErrorField :errors="generalStore.errors.image" />
+            <ErrorField :errors="generalStore.errors.image" />
         </div>
         <LoadingButton text="Aggiungi" />
     </form>

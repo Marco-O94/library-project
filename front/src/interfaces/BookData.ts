@@ -23,6 +23,7 @@ export interface Book {
     categories: Category[];
     users: User[];
     users_count: number;
+    pivot: Pivot;
 }
 
 export interface Link {
