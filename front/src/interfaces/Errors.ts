@@ -7,4 +7,5 @@ export interface Errors {
     image: string[];
     title: string[];
     quantity: string[];
+    role: string[];
 }

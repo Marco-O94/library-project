@@ -31,7 +31,7 @@ const generalStore = GeneralStore();
                     alt="Phone image"
                   />
                 </div>
-                <div class="md:w-8/12 lg:w-5/12 lg:ml-20">
+                <div class="w-10/12 lg:w-5/12 lg:ml-20">
                   <div class="grid grid-cols-1 md:grid-cols-4 gap-4 align-middle items-center mb-8">
                   <div class="link-grow inline-block col-span-1">
                   <router-link  :to="{name: 'login'}"><svg class="inline-block mr-3 w-5 h-5" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 448 512">
@@ -50,7 +50,7 @@ const generalStore = GeneralStore();
                         placeholder="Nome completo"
                       />
                       <ErrorField v-if="generalStore.errors.name" :errors="generalStore.errors.name" /> 
-                    </div>generalStore
+                    </div>
                     <div class="mb-6">
                       <input v-model="registerData.email"
                         type="email"

@@ -82,11 +82,12 @@ class BookController extends Controller
     public function store(Request $request)
     {
         $request->validate([
-            'title' => 'required|string',
+            'title' => 'required|string|unique:books',
             'quantity' => 'required|integer',
             'image' => 'image|mimes:jpeg,png,jpg|max:1024',
         ], [
             'title.required' => 'Il titolo è obbligatorio',
+            'title.unique' => 'Il titolo è già presente, prova con un altro',
             'quantity.required' => 'La quantità è obbligatoria',
             'image.image' => 'Il file deve essere un\'immagine',
             'image.mimes' => 'Il file deve essere un\'immagine',
@@ -124,7 +125,7 @@ class BookController extends Controller
      */
     public function show($id)
     {
-        $book = Book::find($id)->with('categories')->first();
+        $book = Book::find($id)->with('categories')->firstOrFail();
         return response()->json($book, 200);
     }
 
@@ -141,6 +142,7 @@ class BookController extends Controller
             [
                 'title' => 'required|string',
                 'quantity' => 'required|integer',
+
             ],
             [
                 'title.required' => 'Titolo richiesto',
@@ -148,7 +150,7 @@ class BookController extends Controller
             ]
         );
 
-        $book = Book::find($request->id)->first()->update([
+        $book = Book::find($request->id)->update([
             'title' => $request->title,
             'author' => $request->author,
             'description' => $request->description,
@@ -156,6 +158,12 @@ class BookController extends Controller
             'publisher' => $request->publisher,
             'quantity' => $request->quantity,
         ]);
+        $book = Book::where('id', $request->id)->first();
+        $book->categories()->detach();
+        foreach($request->categories as $category) {
+            $book->categories()->attach($category['id']);
+        }
+
 
         return response()->json(['message' => 'Libro modificato con successo'], 201);
     }
@@ -168,7 +176,7 @@ class BookController extends Controller
      */
     public function destroy($id)
     {
-        $book = Book::find($id);
+        $book = Book::findOrFail($id);
         $book->delete();
         return response()->json(
             ['message' => 'Libro eliminato con successo'],
@@ -178,7 +186,7 @@ class BookController extends Controller
 
     public function categories()
     {
-        $categories = Category::select('name', 'id')->get(); // Return array of categories
+        $categories = Category::all(); // Return array of categories
         return response()->json($categories, 200);
     }
 
@@ -197,7 +205,7 @@ class BookController extends Controller
             ]
         );
 
-        $book = Book::find($id)->first();
+        $book = Book::findOrFail($id);
         //Get original file name
         $filename = $request->image->getClientOriginalName();
         $path = $request->image->storeAs('images/books', $filename, 'public');

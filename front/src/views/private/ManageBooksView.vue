@@ -86,7 +86,7 @@ const toBook = (book: number) => {
                     </td>
                     <td scope="row"
                         class="pl-6 py-4 flex flex-nowrap align-middle gap-3 font-medium text-gray-900 whitespace-nowrap">
-                        <span :class="'bg-' + cat.color + '-200 bg-' + cat.color + '-300'"
+                        <span :class="'hover:bg-' + cat.color + '-400 bg-' + cat.color + '-500'"
                             class="px-4 py-2 text-white rounded-full font-semibold text-sm flex align-center w-max cursor-pointer transition duration-300 ease"
                             v-for="cat, index in book.categories" :key="index">{{ cat.name }}</span>
                     </td>

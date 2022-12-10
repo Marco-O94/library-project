@@ -4,6 +4,11 @@ namespace App\Models;
 
 use Illuminate\Database\Eloquent\Relations\Pivot;
 
+/**
+ * That's the pivot table between books and users - it's a many-to-many relationship
+ * and let books to be borrowed by users and librarians can see who borrowed what book or create
+ * new borrowings.
+ */
 class BookUser extends Pivot
 {
     protected $table = 'book_user';
@@ -11,21 +16,22 @@ class BookUser extends Pivot
     protected $fillable = [
         'book_id',
         'user_id',
-        'status',
         'due_date',
     ];
 
     protected $hidden = [
-        'created_at',
         'updated_at',
-        'Pivot'
+        'book_id',
+        'user_id'
+    ];
+
+    // Casting due_date as date and created_at as date with custom format 😁
+    protected $casts = [
+        'due_date' => 'date:d/m/Y',
+        'created_at' => 'date:d/m/Y'
     ];
 
 
-    /**
-     * Indicates if the IDs are auto-incrementing.
-     *
-     * @var bool
-     */
-    public $incrementing = true;
+
+
 }

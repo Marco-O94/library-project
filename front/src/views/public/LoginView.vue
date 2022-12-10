@@ -25,7 +25,7 @@ const loginData = reactive<LoginData>({
                 alt="Phone image"
               />
             </div>
-            <div class="md:w-8/12 lg:w-5/12 lg:ml-20">
+            <div class="w-10/12 lg:w-5/12 lg:ml-20">
                 <h1 class="text-4xl font-bold mb-8">Login</h1>
               <form @submit.prevent="userStore.loginRequest(loginData)">
                 <!-- Email input -->

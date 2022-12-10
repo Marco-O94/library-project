@@ -58,5 +58,10 @@ export interface BookData {
 
 }
 
+export interface Pivot {
+    created_at?: string | null;
+    due_date?: string;
+}
+
 
 

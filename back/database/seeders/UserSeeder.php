@@ -25,16 +25,10 @@ class UserSeeder extends Seeder
                 function ($book) {
                     $book->categories()->attach(Category::all()->random(1));
                 }
-            ), ['borrow_date' => now(), 'expiration_date' => now()->addDays(7)]);
+            ), ['due_date' => now()->addDays(7)]);
         });
         // Attach categories to books
 
-        // Generate 10 users with Student role
-        /*User::factory(10)->create()->each(function ($user) {
-            $user->roles()->attach(Role::where('name', 'Student')->first());
-
-            $user->books()->attach(Book::factory(5)->count(5)->make(), ['borrow_date' => now()]);
-        });*/
         // Admin user
         User::create([
 

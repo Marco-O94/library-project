@@ -40,8 +40,12 @@ class LibrarianController extends Controller
      */
     public function show($id)
     {
-        $user = User::where('id', $id)->with('role', 'books')->first();
+       $user = User::where('id', $id)->with('role', 'books')->first();
         return response()->json($user, 200);
+
+
+
+
     }
 
     /**
@@ -53,17 +57,30 @@ class LibrarianController extends Controller
     public function update(Request $request)
     {
         $request->validate([
-            'name' => 'string|max:255',
-            'email' => 'string|email|max:255|unique:users,email,' . $request->id,
-        ]);
+            'name' => 'required|string|max:255',
+            'email' => 'required|string|email|max:255|unique:users,email,' . $request->id,
+            'role' => 'required',
+        ],
+            [
+                'name.required' => 'Il nome è obbligatorio',
+                'name.string' => 'Il nome deve essere una stringa',
+                'name.max' => 'Il nome deve essere di massimo 255 caratteri',
+                'email.required' => 'L\'email è obbligatoria',
+                'email.string' => 'L\'email deve essere una stringa',
+                'email.email' => 'L\'email deve essere un\'email valida',
+                'email.max' => 'L\'email deve essere di massimo 255 caratteri',
+                'email.unique' => 'L\'email è già stata utilizzata',
+                'role.required' => 'Il ruolo è obbligatorio',
+            ]);
 
         // Request user through token
-        $user = $request->id;
+        $user = User::find($request->id);
         $user->update([
             'name' => $request->name,
             'email' => $request->email,
+            'role_id' => $request->role,
         ]);
-        $user = User::where('id', $user->id)->with('role')->first();
+        $user = User::where('id', $user->id)->with('role')->firstOrFail();
         return response()->json([
             'message' => 'Profilo modificato con successo',
             'user' => $user,
@@ -99,11 +116,9 @@ class LibrarianController extends Controller
             'image_path' => $path
         ]);
 
-        // Return User with role
-        $user = User::where('id', $request->id)->with('role')->first();
-
+        $image = User::where('id', $user->id)->select('image_path')->first();
         return response()->json([
-            'user' =>  $user,
+            'image' =>  $image,
             'message' => 'Immagine aggiornata con successo'
         ], 201);
     }
@@ -129,7 +144,7 @@ class LibrarianController extends Controller
      */
     public function destroy($id)
     {
-        $user = User::find($id);
+        $user = User::findOrFail($id);
         $user->delete();
 
         return response()->json([

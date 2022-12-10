@@ -88,7 +88,7 @@ const toUser = (user: number) => {
                     </td>
                     
                     <td scope="row" class="pl-6 py-4 font-medium text-gray-900 whitespace-nowrap">
-                        <span :class="'bg-' + user.role.color + '-200 bg-' + user.role.color + '-300'"
+                        <span :class="'hover:bg-' + user.role.color + '-400 bg-' + user.role.color + '-500'"
                             class="px-4 py-2 text-white rounded-full font-semibold text-sm flex align-center w-max cursor-pointer transition duration-300 ease"
                             >{{ user.role.name }}</span>
                     </td>

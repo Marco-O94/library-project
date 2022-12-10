@@ -19,3 +19,16 @@ bg-green-300
 bg-blue-300
 bg-indigo-300
 bg-violet-300
+bg-red-500
+bg-orange-500
+bg-yellow-500
+bg-green-500
+bg-blue-500
+bg-indigo-500
+bg-violet-500
+hover:bg-orange-400
+hover:bg-yellow-400
+hover:bg-green-400
+hover:bg-blue-400
+hover:bg-indigo-400
+hover:bg-violet-400

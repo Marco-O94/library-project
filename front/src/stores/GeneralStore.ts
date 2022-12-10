@@ -15,8 +15,11 @@ state: () => ({
         image: [],
         title: [],
         quantity: [],
+        role: [],
     } as Errors,
+    loading: false,
 }),
+
 
 
 });

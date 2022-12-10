@@ -1,6 +1,7 @@
-
+import { Book } from './BookData'
 
 export interface User {
+    books: Book[];
     id: number;
     name: string;
     is_admin: boolean;

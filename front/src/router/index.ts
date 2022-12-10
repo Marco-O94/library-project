@@ -10,7 +10,7 @@ import { UserStore } from '@/stores/UserStore'
 
 const routes: Array<RouteRecordRaw> = [
   // Public Routes
-/* ----- HOME ----- */
+  /* ----- HOME ----- */
   {
     path: '/',
     name: 'home',
@@ -33,7 +33,7 @@ const routes: Array<RouteRecordRaw> = [
     path: '/books',
     component: () => import(/* webpackChunkName: "booksIndex" */ '@/views/public/BooksView.vue'),
     children: [
-      
+
       {
         path: '',
         name: 'books',
@@ -68,13 +68,7 @@ const routes: Array<RouteRecordRaw> = [
         component: () => import(/* webpackChunkName: "profile" */ '@/views/private/ProfileView.vue'),
         meta: { requiresAuth: true },
       },
-      /* ----- ADD NEW BOOK ----- */
-      {
-        path: 'add',
-        name: 'addBook',
-        component: () => import(/* webpackChunkName: "addBook" */ '@/views/private/AddBookView.vue'),
-        meta: { requiresAuth: true, requiresLibrarian: true  },
-      },
+
       /* ----- SHOW / EDIT BOOKS ----- */
       {
         path: 'users',
@@ -111,12 +105,19 @@ const routes: Array<RouteRecordRaw> = [
             meta: { requiresAuth: true, requiresLibrarian: true },
 
           },
+          /* ----- ADD NEW BOOK ----- */
+          {
+            path: 'add',
+            name: 'addBook',
+            component: () => import(/* webpackChunkName: "addBook" */ '@/views/private/AddBookView.vue'),
+            meta: { requiresAuth: true, requiresLibrarian: true },
+          },
         ]
       },
-      
+
     ]
   },
-  
+
 
   // 404
   {
@@ -133,9 +134,9 @@ const router = createRouter({
 })
 
 router.beforeEach((to, from, next) => {
-  if (to.name !== 'Login' && !UserStore().isLogged && to.meta.requiresAuth) next({ name: 'Login' })
-  if(to.meta.requiresLibrarian && UserStore().user.role.name !== 'Librarian') next({ name: 'home' })
-  
+  if (to.name !== 'login' && !UserStore().isLogged && to.meta.requiresAuth) next({ name: 'login' })
+  if (to.meta.requiresLibrarian && UserStore().user.role.name !== 'Librarian') next({ name: 'home' })
+
   next()
 });
 

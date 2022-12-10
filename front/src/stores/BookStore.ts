@@ -35,7 +35,6 @@ export const BookStore = defineStore("BookStore", {
             }, (err) => {
                 console.log(err);
             });
-            return;
         },
 
         /* GET BOOKS PAGINATION */
@@ -59,7 +58,6 @@ export const BookStore = defineStore("BookStore", {
             }, (err) => {
                 console.log(err);
             });
-            return;
         },
         /* GET PAGINATED BOOKS FOR LIBRARIAN */
         async librarianlist(page = 1) {
@@ -83,7 +81,9 @@ export const BookStore = defineStore("BookStore", {
             }).then((res) => {
                 if (res.status === 200) {
                     this.categories = res.data;
+                    
                 }
+                console.log(res);
             }, (err) => {
                 console.log(err);
             });
@@ -91,7 +91,7 @@ export const BookStore = defineStore("BookStore", {
 
         /* MODIFY BOOK */
         async modify(formData: FormData) {
-            UserStore().loading = true;
+            GeneralStore().loading = true;
             await axios.put("/books/update", formData, {
                 headers: {
                     authorization: Cookies.get("token"),
@@ -106,7 +106,7 @@ export const BookStore = defineStore("BookStore", {
             ).catch((err) => {
                 console.log(err);
             });
-            UserStore().loading = false;
+            GeneralStore().loading = false;
         },
 
         /* DELETE BOOK */

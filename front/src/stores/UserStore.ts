@@ -33,7 +33,7 @@ export const UserStore = defineStore("UserStore", {
         roles: [] as Role[],
         token: Cookies.get('token') || '',
         returnURL: '' as string,
-        loading: false,
+        
     }),
 
     getters: {
@@ -104,7 +104,7 @@ export const UserStore = defineStore("UserStore", {
 
           /* UPDATE USER */
         async updateUser(formData: FormData) {
-            this.loading = true;
+            GeneralStore().loading = true;
             await axios.put("/users/selfupdate", formData, {
                 headers: {
                     authorization: Cookies.get("token"),
@@ -122,7 +122,7 @@ export const UserStore = defineStore("UserStore", {
             ).catch((err) => {
                 console.log(err);
             });
-            this.loading = false;
+            GeneralStore().loading = false;
     },
 
          /* GET ROLES */
@@ -172,7 +172,8 @@ export const UserStore = defineStore("UserStore", {
         /* --- END USER FUNCTIONS FOR ALL --- */
 
         /* --- USER FUNCTIONS FOR LIBRARIAN --- */
-        /* GET USER */
+
+        /* GET SINGLE USER */
         async getUser(id: number) {
             await axios.get(`/users/show/${id}`, {
                 headers: {
@@ -181,7 +182,7 @@ export const UserStore = defineStore("UserStore", {
             }).then((res) => {
                 if (res.status === 200) {
                     this.anotherUser = res.data;
-                    return res.data;
+                    console.log(res.data);
                 }
             }, (err) => {
                 console.log(err);
@@ -199,8 +200,7 @@ export const UserStore = defineStore("UserStore", {
             this.users = res.data;
         }, (err) => {
             console.log(err);
-        });
-        return;
+        }); 
     },
     /* GET PAGINATED USERS FOR LIBRARIAN */
     async userlist(page = 1) {
@@ -217,7 +217,7 @@ export const UserStore = defineStore("UserStore", {
 
     /* EDIT USER FOR LIBRARIAN */
     async editUser(formData: FormData) {
-        this.loading = true;
+        GeneralStore().loading = true;
         await axios.put(`/users/update`, formData, {
             headers: {
                 authorization: Cookies.get("token"),
@@ -226,13 +226,36 @@ export const UserStore = defineStore("UserStore", {
                 },
         }).then((res) => {
             if(res.status === 201) {
-                return res.data;
+                this.anotherUser = res.data.user;
+                GeneralStore().flash.message = res.data.message;
+            }else{
+                GeneralStore().errors = res.data.errors;
             }
         }
         ).catch((err) => {
             console.log(err);
         });
-        this.loading = false;
+        GeneralStore().loading = false;
+},
+/* CHANGE USER IMAGE */
+async changeImageByLib(id: number, formData: FormData) { 
+    await axios.post(`/users/image/${id}`, formData, { 
+        headers: {
+            authorization: Cookies.get("token"),
+            'Content-Type': 'multipart/form-data',
+          },
+          transformRequest: formData => formData
+        }).then((res) => {
+        if(res.status === 201) {
+            this.anotherUser.image_path = res.data.image;
+            GeneralStore().flash.message = res.data.message;
+            console.log(res.data);
+        }else{
+            GeneralStore().errors.image = res.data.errors.image;
+        }
+    }).catch((err) => {
+        console.log(err);
+    });
 },
     /* --- END USER FUNCTIONS FOR LIBRARIAN --- */
 }

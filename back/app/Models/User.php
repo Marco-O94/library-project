@@ -59,7 +59,7 @@ class User extends Authenticatable
     // User can book many books
     public function books()
     {
-        return $this->belongsToMany(Book::class)->using(BookUser::class)->withPivot('borrow_date', 'expiration_date');
+        return $this->belongsToMany(Book::class)->using(BookUser::class)->withPivot('due_date','created_at');
     }
 
     // User can have one role (Inverse of Role)

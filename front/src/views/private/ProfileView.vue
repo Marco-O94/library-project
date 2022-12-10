@@ -41,7 +41,7 @@ const userForm = ref({
                       " id="name" placeholder="Inserisci qui il tuo nome" />
                 </div>
                 <div>
-                    <label for="exampleEmail0" class="form-label inline-block mb-2 text-gray-700"
+                    <label for="email" class="form-label inline-block mb-2 text-gray-700"
                     >Indirizzo Email</label>
                     <input 
                     v-model="userForm.email"
