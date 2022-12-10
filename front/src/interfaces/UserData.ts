@@ -1,8 +1,4 @@
-export interface Role {
-    id: number;
-    name: string;
-    color: string;
-}
+
 
 export interface User {
     id: number;
@@ -10,10 +6,14 @@ export interface User {
     is_admin: boolean;
     email: string;
     role_id: number;
-    email_verified_at: Date;
     image_path?: any;
     books_count: number;
-    role: Role;
+    role: Role | null;
+}
+export interface Role {
+    id: number;
+    name: string;
+    color: string;
 }
 
 export interface Link {

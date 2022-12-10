@@ -4,6 +4,7 @@ use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\AuthController;
 use App\Http\Controllers\BookController;
+use App\Http\Controllers\LibrarianController;
 use App\Http\Controllers\UserController;
 
 /*
@@ -27,16 +28,23 @@ Route::middleware('auth:sanctum')->group(function () {
 /* Logout */
 Route::post('logout', [AuthController::class, 'logout']);
 
+/* Shared Routes */
+
+ Route::prefix('users')->controller(LibrarianController::class)->group(function () {
+    // Show roles for User creation and Table
+    Route::get('/roles', 'roles');
+    // Delete User
+    Route::delete('/', 'destroy');
+ });
+
+
 /* Users Routes */
 Route::prefix('users')->controller(UserController::class)->group(function () {
     // Edit User
-    Route::put('/update/{id}', 'update');
-    // Delete User
-    Route::delete('/{id}', 'destroy');
+    Route::put('/selfupdate', 'update');
     // Change image to the User
-    Route::post('/selfImage', 'selfUpdateImage');
-    // Change data to the User
-    Route::put('/selfupdate', 'selfUpdate');
+    Route::post('/image', 'updateImage');
+
 });
 
 /* ---------- */
@@ -44,17 +52,18 @@ Route::prefix('users')->controller(UserController::class)->group(function () {
 /* ------ Librarian Routes ------ */
 Route::middleware('role:Librarian')->group(function () {
 
-    Route::prefix('users')->controller(UserController::class)->group(function () {
+    Route::prefix('users')->controller(LibrarianController::class)->group(function () {
         // All Users
         Route::get('/', 'index');
+        // Show User
+        Route::get('/show/{id}', 'show');
+        // Update User
+        Route::put('/update', 'update');
+        // Update Image
+        Route::post('/image/{id}', 'updateImage');
+
         // Store a new User
         //Route::post('/store', 'store'); <-- Skipped for now
-        // Show single User
-        Route::get('/show/{id}', 'show');
-        // Show roles for User creation and Table
-        Route::get('/roles', 'roles');
-        Route::put('/update', 'update');
-        Route::post('/image/{id}', 'updateImage');
 
     });
 

@@ -12,6 +12,9 @@ state: () => ({
         name: [],
         password_confirmation: [],
         message: [],
+        image: [],
+        title: [],
+        quantity: [],
     } as Errors,
 }),
 

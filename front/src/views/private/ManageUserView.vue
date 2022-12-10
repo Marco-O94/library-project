@@ -23,12 +23,15 @@ const userForm = computed(() => {
         id: parseInt(route.params.id[0]),
         name: userStore.anotherUser.name,
         email: userStore.anotherUser.email,
-        image: userStore.anotherUser.image_path,
+        role: userStore.anotherUser.role,
+        image_path: [],
+
     };
 });
 </script>
 <template>
-        <h1 class="font-bold text-4xl mb-5">Modifica i tuoi dati</h1>
+    <h1 class="font-bold text-4xl mb-2">Stai modificando l'uente:</h1>
+    <h2 class="font-bold text-2xl mb-5">{{ userForm.name }}</h2>
         <div class="grid grid-cols-1 md:grid-cols-3 mt-6 mb-10 items-center">
             <div class="col-span-1">
             <img class="w-28 h-28 rounded-full" v-if="userStore.user.image_path" :src="userStore.user.image_path" />
@@ -61,6 +64,6 @@ const userForm = computed(() => {
             
         </div>
         <!-- Button Group -->
-        <LoadingButton text="Salva" />
+        <LoadingButton text="Modifica" />
     </form>
 </template>

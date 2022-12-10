@@ -2,7 +2,7 @@ import { defineStore } from "pinia";
 import axios from 'axios';
 import { LoginData, RegisterData } from '../interfaces/FormData';
 import { GeneralStore } from './GeneralStore';
-import { Role, User, Users, userSearch } from '../interfaces/UserData';
+import {  User, Role, Users, userSearch } from '../interfaces/UserData';
 import router from '@/router';
 // eslint-disable-next-line @typescript-eslint/no-var-requires
 const Cookies = require('js-cookie');
@@ -27,7 +27,7 @@ axios.defaults.withCredentials = true;
 
 export const UserStore = defineStore("UserStore", {
     state: () => ({
-        user: JSON.parse(Cookies.get("user") || "{}")  as User,
+        user: JSON.parse(Cookies.get("user") || "{}") || {} as User,
         anotherUser: {} as User,
         users: {} as Users,
         roles: [] as Role[],
@@ -142,7 +142,7 @@ export const UserStore = defineStore("UserStore", {
 
     /* CHANGE USER IMAGE */
     async changeImage(formData: FormData) { 
-        await axios.post("/users/selfImage", formData, { 
+        await axios.post("/users/image", formData, { 
             headers: {
                 authorization: Cookies.get("token"),
                 'Content-Type': 'multipart/form-data',

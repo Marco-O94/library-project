@@ -1,9 +1,9 @@
 <script>
-import { ref } from "vue";
 import { BookStore } from "@/stores/BookStore";
+import { GeneralStore } from "@/stores/GeneralStore";
 import LoadingButton from "@/components/LoadingButton.vue";
 import CKEditor from '@ckeditor/ckeditor5-vue';
-// eslint-disable-next-line @typescript-eslint/no-unused-vars
+import ErrorField from '@/components/ErrorField.vue';
 import InlineEditor from '@ckeditor/ckeditor5-build-inline';
 import FilePond from "vue-filepond";
 import FilePondPluginFileValidateType from 'filepond-plugin-file-validate-type';
@@ -22,6 +22,7 @@ export default {
             FilePondPluginFileValidateType,
             FilePondPluginImagePreview,
         ),
+        ErrorField,
     },
     data() {
         return {
@@ -55,7 +56,8 @@ export default {
     },
     setup() {
         const bookStore = BookStore();
-        return { bookStore };
+        const generalStore = GeneralStore();
+        return { bookStore, generalStore };
     },
     methods: {
         updateFile(fileItem) {
@@ -77,6 +79,7 @@ export default {
                 <label for="title" class="form-label inline-block mb-2 text-gray-700">Titolo</label>
                 <input type="text" v-model="book.title" placeholder="Inserisci il titolo del libro"
                     class="form-control block w-full px-3 py-1.5 text-base font-normal text-gray-700 bg-white bg-clip-padding border border-solid border-gray-300 rounded  transition ease-in-out m-0focus:text-gray-700 focus:bg-white focus:border-blue-600 focus:outline-none" />
+                    <ErrorField :errors="generalStore.errors.title" />
             </div>
             <!-- Author Input-->
             <div>
@@ -95,7 +98,8 @@ export default {
                 <label for="isbn" class="form-label inline-block mb-2 text-gray-700">Quantità</label>
                 <input type="number" v-model="book.quantity" placeholder="Inserisci il codice ISBN del libro"
                     class="form-control block w-full px-3 py-1.5 text-base font-normal text-gray-700 bg-white bg-clip-padding border border-solid border-gray-300 rounded  transition ease-in-out m-0focus:text-gray-700 focus:bg-white focus:border-blue-600 focus:outline-none" />
-            </div>
+                <ErrorField :errors="generalStore.errors.quantity" />
+                </div>
             <!-- ISBN Input-->
             <div>
                 <label for="isbn" class="form-label inline-block mb-2 text-gray-700">ISBN</label>
@@ -115,8 +119,9 @@ export default {
                 labelIdle="Trascina i tuoi file qui o <span class='filepond--label-action'> cerca nel pc </span>"
                 allowMultiple="false" maxFiles="1" @updatefiles="updateFile"
                 accepted-file-types="image/jpg, image/jpeg, image/png" labelInvalidField="Solo immagini!" />
+                <ErrorField :errors="generalStore.errors.image" />
         </div>
-        <LoadingButton text="Modifica" />
+        <LoadingButton text="Aggiungi" />
     </form>
 
 

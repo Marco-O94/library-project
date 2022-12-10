@@ -141,7 +141,7 @@ export const BookStore = defineStore("BookStore", {
                 }
                 console.log(res);
             }, (err) => {
-                console.log(err);
+                GeneralStore().errors = err.response.data.errors;
             }
             );
         },

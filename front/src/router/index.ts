@@ -45,12 +45,6 @@ const routes: Array<RouteRecordRaw> = [
         path: 'show/:id',
         name: 'show',
         component: () => import(/* webpackChunkName: "bookDetails" */ '@/views/public/BookDetailsView.vue'),
-        /*beforeEnter: (to, from, next) => {
-          // check to.params.id / to.params.code
-         if (to.params.id === BookStore().books.data.find(book => book.id === to.params.id)) return next()
-
-         next({ name: '404' })*/
-
       }
     ]
   },

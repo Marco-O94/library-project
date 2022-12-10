@@ -85,6 +85,12 @@ class BookController extends Controller
             'title' => 'required|string',
             'quantity' => 'required|integer',
             'image' => 'image|mimes:jpeg,png,jpg|max:1024',
+        ], [
+            'title.required' => 'Il titolo è obbligatorio',
+            'quantity.required' => 'La quantità è obbligatoria',
+            'image.image' => 'Il file deve essere un\'immagine',
+            'image.mimes' => 'Il file deve essere un\'immagine',
+            'image.max' => 'Il file deve essere un\'immagine',
         ]);
         $book = new Book;
         $book->title = $request->title; // string
