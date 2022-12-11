@@ -1,7 +1,7 @@
 <script setup lang="ts">
 import { UserStore } from '@/stores/UserStore';
 import { GeneralStore } from '@/stores/GeneralStore';
-import { BorrowStore } from '@/stores/BorrowStore';
+import { LoanStore } from '@/stores/LoanStore';
 import { computed } from 'vue';
 import LoadingButton from '@/components/LoadingButton.vue';
 import { useRoute } from 'vue-router';
@@ -9,7 +9,7 @@ import ErrorField from '@/components/ErrorField.vue';
 const route = useRoute();
 const userStore = UserStore();
 const generalStore = GeneralStore();
-const borrowStore = BorrowStore();
+const loanStore = LoanStore();
 
 
 // eslint-disable-next-line @typescript-eslint/no-explicit-any
@@ -22,7 +22,7 @@ const onFileInput = (event: { target: { files: any[]; }; }) => {
 
 userStore.getUser(parseInt(route.params.id[0]));
 userStore.getRoles();
-
+window.scrollTo(0,0); 
 /* 😍 Finally I found solution in Composition Api Style 😍 */
 const userForm = computed(() => {
     return {
@@ -31,7 +31,10 @@ const userForm = computed(() => {
         email: userStore.anotherUser.email,
         role: userStore.anotherUser.role_id,
     };
+});
 
+const userBooks = computed(() => {
+    return userStore.anotherUser.books;
 });
 </script>
 <template>
@@ -84,10 +87,8 @@ const userForm = computed(() => {
         <LoadingButton text="Modifica" />
     </form>
 
-    <!-- If user has Books borrowed show table -->
-    <div>
+    <!-- If user has Books loaned show table -->
         <h2 class="font-bold text-2xl mt-12 mb-6">Libri presi in prestito</h2>
-    <template v-if="userStore.anotherUser.books">
         <div class="relative overflow-x-auto shadow-md rounded-lg mt-5 mb-16">
             <table class="w-full text-sm text-left text-gray-500">
                 <thead class="text-xs text-gray-900 uppercase bg-neutral-50">
@@ -113,7 +114,7 @@ const userForm = computed(() => {
                     </tr>
                 </thead>
                 <tbody>
-                    <tr v-for="book, index in userStore.anotherUser.books" :key="index"
+                    <tr v-for="book, index in userBooks" :key="index"
                         class="border-b text-gray-900 bg-neutral-50  odd:bg-white even:bg-gray-50 ">
                         <td scope="row" class="pl-6 py-4 font-medium text-gray-900 whitespace-nowrap">
                             {{ index + 1 }}
@@ -138,7 +139,7 @@ const userForm = computed(() => {
                             </button>
                         </td>
                         <td scope="row" class="pl-10 py-4 font-medium whitespace-nowrap">
-                            <button class="font-medium" @click="borrowStore.delete(parseInt(route.params.id[0]), book.id)">
+                            <button class="font-medium" @click="loanStore.delete('', parseInt(route.params.id[0]), book.id)">
                                 <svg class="fill-red-600 hover:fill-red-500 w-5 h-5" xmlns="http://www.w3.org/2000/svg"
                                     viewBox="0 0 448 512">
                                     <path
@@ -150,7 +151,4 @@ const userForm = computed(() => {
                 </tbody>
             </table>
         </div>
-    </template>
-
-</div>
 </template>

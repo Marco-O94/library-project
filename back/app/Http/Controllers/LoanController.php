@@ -5,8 +5,12 @@ namespace App\Http\Controllers;
 use Illuminate\Http\Request;
 use App\Models\User;
 use App\Models\Book;
+use Symfony\Component\Console\Input\Input;
+use App\Models\BookUser;
+use App\Models\Status;
 
-class BorrowController extends Controller
+
+class LoanController extends Controller
 {
 
     /**
@@ -38,7 +42,7 @@ class BorrowController extends Controller
     }
 
     /**
-     * Create a borrow book request
+     * Create a loan book request
      *
      */
 
@@ -78,7 +82,7 @@ class BorrowController extends Controller
     }
 
     /**
-     * Delete user borrowed book
+     * Delete user loaned book
      *
      * @return \Illuminate\Http\Response
      */
@@ -94,31 +98,18 @@ class BorrowController extends Controller
     }
 
     /**
-     * Get all Borrowed Books
-     *
-     * @return \Illuminate\Http\Response
-     */
-
-    public function borrowedBooks()
-    {
-        $books = User::whereHas('books')->with('books')->paginate(10);
-
-        return response()->json($books, 200);
-    }
-
-    /**
-     * Get One Borrowed Book
+     * Get One Loaned Book
      * @param int $id
      * @return \Illuminate\Http\Response
      */
 
-    public function borrowedBook($id) {
+    public function loanedBook($id) {
         $book = User::whereHas('books')->with('books')->findOrFail($id);
         return response()->json($book, 200);
     }
 
     /**
-     * Update due_date of borrowed book
+     * Update due_date of loaned book
      *
      * @return \Illuminate\Http\Response
      */
@@ -141,5 +132,65 @@ class BorrowController extends Controller
         return response()->json([
             'message' => 'Data di restituzione aggiornata con successo'
         ], 200);
+    }
+
+    /**
+     * Update status of loaned book
+     *
+     * @return \Illuminate\Http\Response
+     */
+    public function updateStatus($id, Request $request)
+    {
+        $user = User::findOrFail($id);
+        $user->books()->updateExistingPivot($request->book_id, ['status' => $request->status]);
+
+        return response()->json([
+            'message' => 'Stato aggiornato con successo'
+        ], 200);
+    }
+
+    public function getStatuses() {
+        return response()->json(Status::all(), 200);
+    }
+
+    /**
+     * Complex query for loaned books
+     * @param Request $request
+     * @return \Illuminate\Http\Response
+     */
+    public function queryLoans(Request $request) {
+       $query = BookUser::query()
+        ->join('books', 'book_user.book_id', '=', 'books.id')
+        ->join('users', 'book_user.user_id', '=', 'users.id')
+        ->when($request->input('search_user') ?? '', function ($query, $search_user) {
+            return $query->where('users.name', 'like', '%' . $search_user . '%');
+        })
+        ->when($request->input('search_book') ?? '', function ($query, $search_book) {
+            return $query->where('books.title', 'like', '%' . $search_book . '%');
+        })
+        ->when($request->input('search_due_date') ?? '', function ($query, $search_due_date) {
+            return $query->where('book_user.due_date', 'like', '%' . $search_due_date . '%');
+        })->when($request->input('sort') ?? '', function ($query, $sort) {
+            return $query->orderBy($sort, 'asc');
+        })->when($request->input('status') ?? '', function ($query, $status) {
+            return $query->where('book_user.status', $status);
+        })
+        ->select('book_user.due_date', 'book_user.created_at', 'books.title', 'users.name', 'users.id as user_id', 'users.image_path as user_image', 'books.image as book_image', 'books.id as book_id', 'book_user.status')
+        ->paginate(10);
+        return response()->json($query, 200);
+    }
+
+    /**
+     * Get user loaned books
+     *
+     * @param  int  $id
+     * @return \Illuminate\Http\Response
+     */
+    public function userBooks($id)
+    {
+        $user = User::find($id);
+        $books = $user->books()->get()->withPivot();
+
+        return response()->json($books, 200);
     }
 }

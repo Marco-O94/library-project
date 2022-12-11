@@ -96,7 +96,7 @@ const routes: Array<RouteRecordRaw> = [
             path: '',
             name: 'managebooks',
             component: () => import(/* webpackChunkName: "booksManage" */ '@/views/private/ManageBooksView.vue'),
-            meta: { requiresAuth: true, requiresLibrarian: true },
+            meta: { requiresAuth: true, requiresLibrarian: true, scrollTop: 0 },
           },
           {
             path: ':id',
@@ -114,6 +114,14 @@ const routes: Array<RouteRecordRaw> = [
           },
         ]
       },
+      
+      /* ----- LOANS ----- */
+      {
+        path: 'loans',
+        name: 'loansList',
+        component: () => import(/* webpackChunkName: "loansManage" */ '@/views/private/ManageLoansView.vue'),
+      }
+      
 
     ]
   },
@@ -132,6 +140,7 @@ const router = createRouter({
   history: createWebHistory(process.env.BASE_URL),
   routes
 })
+
 
 router.beforeEach((to, from, next) => {
   if (to.name !== 'login' && !UserStore().isLogged && to.meta.requiresAuth) next({ name: 'login' })

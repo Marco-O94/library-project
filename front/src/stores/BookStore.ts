@@ -167,6 +167,11 @@ export const BookStore = defineStore("BookStore", {
             );
         },
 
+        /* GO TO BOOK */
+        toBook(book: number) {
+            router.push({ name: 'editbook', params: { id: book } })
+        },
+
         /* CHANGE BOOK IMAGE */
         async changeImage(formData: FormData) {
             await axios.post(`/books/image/${this.book.id}`, formData, {

@@ -2,6 +2,7 @@
 import { defineProps } from 'vue';
 import { BookStore } from '../stores/BookStore';
 import { UserStore } from '../stores/UserStore';
+import { LoanStore } from '@/stores/LoanStore';
 
 const props = defineProps({
     currentPage: {
@@ -31,6 +32,8 @@ const getPage = (value: number | undefined) => {
         BookStore().list(value)
     } else if (props.scope === "users") {
         UserStore().userlist(value)
+    } else if (props.scope === "loans") {
+        LoanStore().loanslist(value)
     }
     return void 0;
 }

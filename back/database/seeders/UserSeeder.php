@@ -25,7 +25,9 @@ class UserSeeder extends Seeder
                 function ($book) {
                     $book->categories()->attach(Category::all()->random(1));
                 }
-            ), ['due_date' => now()->addDays(7)]);
+                //Random days between 1 and 30
+
+            ), ['due_date' => now()->addDays(rand(10,30)), 'status_id' => rand(1,3)]);
         });
         // Attach categories to books
 

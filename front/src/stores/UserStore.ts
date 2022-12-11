@@ -3,7 +3,8 @@ import axios from 'axios';
 import { LoginData, RegisterData } from '../interfaces/FormData';
 import { GeneralStore } from './GeneralStore';
 import { User, Role, Users, userSearch } from '../interfaces/UserData';
-import router from '@/router';
+import router from '@/router'
+
 // eslint-disable-next-line @typescript-eslint/no-var-requires
 const Cookies = require('js-cookie');
 /* ❗❗ I usually use Cookies to store the token, but I'm using localStorage for this example ❗❗ */
@@ -38,7 +39,7 @@ export const UserStore = defineStore("UserStore", {
 
     getters: {
         isLogged: state => !!state.token, // !! converts to boolean
-
+        userBooks: state => state.anotherUser.books,
     },
 
     actions: {
@@ -173,6 +174,11 @@ export const UserStore = defineStore("UserStore", {
 
         /* --- USER FUNCTIONS FOR LIBRARIAN --- */
 
+        /* TO USER PAGE */
+        toUser(user: number) {
+            router.push({ name: 'edituser', params: { id: user } })
+        },
+        
         /* GET SINGLE USER */
         async getUser(id: number) {
             await axios.get(`/users/show/${id}`, {
@@ -257,7 +263,7 @@ export const UserStore = defineStore("UserStore", {
         },
         // Get User Books
         async getUserBooks(id: number) {
-            await axios.get(`/users/books/${id}`, {
+            await axios.get(`/loans/user/${id}`, {
                 headers: {
                     authorization: Cookies.get("token"),
                 }

@@ -3,7 +3,7 @@
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\AuthController;
-use App\Http\Controllers\BorrowController;
+use App\Http\Controllers\LoanController;
 use App\Http\Controllers\BookController;
 use App\Http\Controllers\UserController;
 use App\Http\Controllers\LibrarianController;
@@ -62,8 +62,6 @@ Route::middleware('auth:sanctum')->group(function () {
             Route::put('/update', 'update');
             // Update Image
             Route::post('/image/{id}', 'updateImage');
-            // Get user books
-            Route::get('/books/{id}', 'userBooks');
 
             // Store a new User
             //Route::post('/store', 'store'); <-- Skipped for now
@@ -88,20 +86,24 @@ Route::middleware('auth:sanctum')->group(function () {
             Route::post('/image/{id}', 'updateImage');
         });
 
-        /* Borrow Routes */
-        Route::prefix('borrows')->controller(BorrowController::class)->group(function () {
+        /* Loan Routes */
+        Route::prefix('loans')->controller(LoanController::class)->group(function () {
             // Return Book
             Route::delete('/', 'returnBook');
-            // Update due_date of borrowed book
-            Route::put('/update', 'updateDueDate');
-            // Show all Borrowed Books
-            Route::get('/', 'borrowedBooks');
-            // Show Borrowed Book
-            Route::get('/{id}', 'borrowedBook');
+            // Update due_date of loaned book
+            Route::put('/update/date/{id}', 'updateDueDate');
+            // Update status of loaned book
+            Route::put('/update/status/{id}', 'updateDueDate');
+            // Show all Loaned Books
+            Route::get('/', 'queryLoans');
+            // Show Loaned Book
+            Route::get('/{id}', 'loanedBook');
             // User get book
             Route::post('/create', 'getBook');
             // Librarian give book
             Route::post('/librarian/create', 'giveBook');
+             // Get user loans
+             Route::get('/user/{id}', 'userBooks');
         });
     }); // End of Librarian Routes
 }); // End of Authenticated Routes
@@ -129,6 +131,4 @@ Route::prefix('books')->controller(BookController::class)->group(function () {
     Route::get('/single/{id}', 'singleBook');
 });
 
-
-/* ---------- */
-Route::get('/test', [BorrowController::class, 'borrowedBooks']);
+Route::get('test', [LoanController::class, 'queryLoans']);

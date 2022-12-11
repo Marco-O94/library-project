@@ -5,10 +5,8 @@ import { debounce } from '@/stores/myFunctions';
 import { userSearch } from "@/interfaces/UserData";
 import SearchBar from "@/components/SearchBar.vue";
 import ListPagination from '@/components/ListPagination.vue';
-import { useRouter } from 'vue-router';
 
 const userStore = UserStore();
-const router = useRouter();
 
 const data = ref<userSearch>({
     search: '',
@@ -16,14 +14,11 @@ const data = ref<userSearch>({
 });
 userStore.getRoles();
 userStore.userSearch(data.value);
-const debouncedFunction = debounce(function (value: userSearch) { userStore.userSearch(value); }, 500);
+const debouncedFunction = debounce((value: userSearch) => { userStore.userSearch(value); }, 500);
 watch(() => [data.value.search, data.value.role], (() => {
     debouncedFunction(data.value);
 }));
 
-const toUser = (user: number) => {
-    router.push({ name: 'edituser', params: { id: user } })
-};
 
 </script>
 
@@ -88,16 +83,16 @@ const toUser = (user: number) => {
                     </td>
 
                     <td scope="row" class="pl-6 py-4 font-medium text-gray-900 whitespace-nowrap">
-                        <span :class="'hover:bg-' + user.role.color + '-400 bg-' + user.role.color + '-500'"
+                        <span :class="'hover:bg-' + user.role?.color + '-400 bg-' + user.role?.color + '-500'"
                             class="px-4 py-2 text-white rounded-full font-semibold text-sm flex align-center w-max cursor-pointer transition duration-300 ease">{{
-                                    user.role.name
+                                    user.role?.name
                             }}</span>
                     </td>
                     <td scope="row" class="pl-6 py-4 font-medium text-gray-900 whitespace-nowrap">
                         {{ user.books_count }}
                     </td>
                     <td scope="row" class="pl-12 py-4 font-medium whitespace-nowrap">
-                        <button @click="toUser(user.id)" class="font-medium">
+                        <button @click="userStore.toUser(user.id)" class="font-medium">
                             <svg class="w-5 h-5 fill-blue-600 hover:fill-blue-500" xmlns="http://www.w3.org/2000/svg"
                                 viewBox="0 0 512 512">
                                 <path

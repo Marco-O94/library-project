@@ -16,14 +16,10 @@ const data = ref({
     category: '',
 });
 bookStore.librarianSearch(data.value);
-const debouncedFunction = debounce(function (value: librarianSearch) { bookStore.librarianSearch(value); }, 500);
+const debouncedFunction = debounce((value: librarianSearch) => { bookStore.librarianSearch(value); }, 500);
 watch(() => [data.value.search, data.value.category], (() => {
     debouncedFunction(data.value);
 }));
-
-const toBook = (book: number) => {
-    router.push({ name: 'editbook', params: { id: book } })
-};
 
 </script>
 
@@ -99,7 +95,7 @@ const toBook = (book: number) => {
                         {{ book.quantity - book.users_count }}
                     </td>
                     <td scope="row" class="pl-6 py-4 font-medium whitespace-nowrap">
-                        <button @click="toBook(book.id)" class="font-medium">
+                        <button @click="bookStore.toBook(book.id)" class="font-medium">
                             <svg class="w-5 h-5 fill-blue-600 hover:fill-blue-500" xmlns="http://www.w3.org/2000/svg"
                                 viewBox="0 0 512 512">
                                 <path

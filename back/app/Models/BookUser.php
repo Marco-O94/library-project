@@ -6,8 +6,8 @@ use Illuminate\Database\Eloquent\Relations\Pivot;
 
 /**
  * That's the pivot table between books and users - it's a many-to-many relationship
- * and let books to be borrowed by users and librarians can see who borrowed what book or create
- * new borrowings.
+ * and let books to be loaned by users and librarians can see who loaned what book or create
+ * new loanings.
  */
 class BookUser extends Pivot
 {
@@ -17,13 +17,11 @@ class BookUser extends Pivot
         'book_id',
         'user_id',
         'due_date',
+        'status'
     ];
 
     protected $hidden = [
         'updated_at',
-        'book_id',
-        'user_id',
-
     ];
 
 
@@ -33,7 +31,20 @@ class BookUser extends Pivot
         'created_at' => 'date:d/m/Y'
     ];
 
+    protected $attributes = [
+        'status' => 1
+    ];
 
+    /**
+     * Get Status of the loan
+     * @return \Illuminate\Database\Eloquent\Relations\BelongsTo
+     * @see \App\Models\Status
+     * @see \App\Models\BookUser
+     *
+     */
 
+    public function status() {
+        return $this->belongsTo(Status::class);
+    }
 
 }

@@ -13,7 +13,7 @@ import SectionCard from '@/components/SectionCard.vue';
             <SectionCard title="Utenti" link="manageusers" :icon="2" />
         </div>
         <div>
-            <SectionCard title="Prestiti" link="home" :icon="3" />
+            <SectionCard title="Prestiti" link="loansList" :icon="3" />
         </div>
     </div>
 </template>

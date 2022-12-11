@@ -54,6 +54,7 @@ export default {
             console.log(err);
         });
         BookStore().getCategories;
+        window.scrollTo(0,0); // Scroll to top of page
         const bookStore = BookStore();
         return { bookStore };
 
@@ -76,20 +77,12 @@ export default {
                 BookStore().book = value;
             }
         },
-        /*cats: {
-             get() {
-                 return BookStore().categories;
-             },
-             set(value: any) {
-                 BookStore().categories = value;
-             }
-         }*/
     }
 }
 </script>
 
 <template>
-    <h1 class="font-bold text-4xl mb-2">Stai modificando il libro:</h1>
+   <h1 class="font-bold text-4xl mb-2">Stai modificando il libro:</h1>
     <h2 class="font-bold text-2xl mb-5">{{ book.title }}</h2>
     <!-- I'm sprinting a little bit here 🚀 🚀 -->
     <div class="grid grid-cols-1 md:grid-cols-3 mt-6 mb-10 items-center">

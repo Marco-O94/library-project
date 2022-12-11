@@ -1,53 +1,80 @@
 import { defineStore } from "pinia";
-import { Users } from "@/interfaces/UserData";
+import { Loans, Loan } from "@/interfaces/BookData";
 import { GeneralStore } from "./GeneralStore";
 import { UserStore } from "./UserStore";
+import { loansSearch } from "@/interfaces/BookData";
 import axios from "axios";
 // eslint-disable-next-line @typescript-eslint/no-var-requires
 const Cookies = require('js-cookie');
 
-export const BorrowStore = defineStore("BorrowStore", {
+export const LoanStore = defineStore("LoanStore", {
     state: () => ({
-        borrows: {} as Users,
+        loans: {} as Loans,
+        loan: {} as Loan,
     }),
     actions: {
 
         /* GET BORROWS */
-        async getBorrows() {
-            await axios.get("/borrows").then((res) => {
-                this.borrows = res.data;
+        async getLoans(data: loansSearch) {
+            await axios.get("/loans", {
+                params: {
+                    search_book: data.search_book,
+                    search_user: data.search_user,
+                    search_due_date: data.search_due_date,
+                    sort: data.sort,
+                },
+                headers: {
+                    authorization: Cookies.get("token"),
+                }
+            },
+            ).then((res) => {
+                console.log(res.data);
+                this.loans = res.data;
             }, (err) => {
                 console.log(err);
             });
         },
 
         /* GET SINGLE BORROW */
-        async getSingleBorrow(id: number) {
-            await axios.get(`/borrows/${id}`).then((res) => {
-                this.borrows = res.data;
+        async getSingleLoan(id: number) {
+            await axios.get(`/loans/${id}`).then((res) => {
+                this.loans = res.data;
             }, (err) => {
                 console.log(err);
             });
         },
 
+        async loanslist(page = 1) {
+            await axios.get(`/loans?page=${page}`, {
+                headers: {
+                    authorization: Cookies.get("token"),
+                }
+            }).then(({ data }) => {
+                this.loans = data
+            }).catch(({ response }) => {
+                console.error(response)
+            })
+        },
+
 
         /* DELETE BORROW */
-        async delete(user: number, book: number) {
+        async delete(scope: string, user: number, book: number) {
+            const query = {} as loansSearch;
             const data = {
                 user_id: user,
                 book_id: book,
                 _method: "DELETE",
             }
             
-            await axios.post("/borrows", data, {
+            await axios.post("/loans", data, {
                     headers: {
                         authorization: Cookies.get("token"),
                         
                     },
                     
                 }).then((res) => {
-                    // Remove the book from the user's borrow list
-                    UserStore().getUserBooks(user);
+                    // Remove the book from the user's loan list
+                        scope === "many" ? this.getLoans(query) : UserStore().getUserBooks(user);
                     GeneralStore().flash.message = res.data.message;
                 }, (err) => {
                     console.log(err);
@@ -56,7 +83,7 @@ export const BorrowStore = defineStore("BorrowStore", {
 
         /* UPDATE DUE DATE */
         async updateDueDate(id: number, data: string) {
-            await axios.put(`/borrows/update/${id}`, data, {
+            await axios.put(`/loans/update/date/${id}`, data, {
                 headers: {
                     authorization: Cookies.get("token"),
                 }
@@ -71,7 +98,7 @@ export const BorrowStore = defineStore("BorrowStore", {
 
         /* BORROW REQUEST BY USER */
         async sendRequest(data: string) {
-            await axios.post(`/borrows/create`, data, {
+            await axios.post(`/loans/create`, data, {
                 headers: {
                     authorization: Cookies.get("token"),
                 }
@@ -84,7 +111,7 @@ export const BorrowStore = defineStore("BorrowStore", {
 
         /* CREATE BORROW REQUEST BY LIBRARIAN */
         async create(data: string) {
-            await axios.post("/borrows/librarian/create", data, {
+            await axios.post("/loans/librarian/create", data, {
                 headers: {
                     authorization: Cookies.get("token"),
                 }
