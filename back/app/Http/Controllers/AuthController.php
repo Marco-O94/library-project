@@ -93,13 +93,13 @@ class AuthController extends Controller
     /* Logout Api
     * @return \Laravel\Fortify\Contracts\LogoutResponse
     */
-    function logout(Request $request)
+    function logout()
     {
         /* Revoke all tokens of the current user
         If Intelephense gives error, it's a bug of the extension
         */
         Auth::user()->tokens()->delete();
 
-        return response()->json([], 200);
+        return response()->json(200);
     }
 }

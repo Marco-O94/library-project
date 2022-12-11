@@ -1,6 +1,5 @@
 import { defineStore } from "pinia";
 import { Errors } from "@/interfaces/Errors";
-import router from "@/router";
 
 export const GeneralStore = defineStore("GeneralStore", {
     state: () => ({

@@ -128,7 +128,7 @@ Route::prefix('books')->controller(BookController::class)->group(function () {
     // Show all Books for Public
     Route::get('/query', 'index');
     // Show single Book for Public
-    Route::get('/show/{id}', 'show');
+    Route::get('/{id}', 'show');
     // Count the Books
     Route::get('/count', 'booksCount');
     // Show single Book for Librarian

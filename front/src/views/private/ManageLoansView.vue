@@ -4,7 +4,6 @@ import { LoanStore } from '@/stores/LoanStore';
 import { UserStore } from '@/stores/UserStore';
 import { BookStore } from '@/stores/BookStore';
 import { ref, watch } from 'vue';
-import Popper from "vue3-popper";
 import { loansSearch } from '@/interfaces/BookData';
 import ListPagination from '@/components/ListPagination.vue';
 import SearchBar from '@/components/SearchBar.vue';

@@ -60,7 +60,7 @@ class BookController extends Controller
                 });
             })
             ->with('categories')
-            ->withCount('users')
+            ->with('users')
             ->paginate(10);
 
         return response()->json($books, 200);
@@ -119,7 +119,7 @@ class BookController extends Controller
      */
     public function show($id)
     {
-        $book = Book::find($id)->with('categories')->firstOrFail();
+        $book = Book::where('id',$id)->with('categories')->withCount('users')->firstOrFail();
         return response()->json($book, 200);
     }
 

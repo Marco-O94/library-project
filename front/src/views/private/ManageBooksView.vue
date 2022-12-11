@@ -5,11 +5,9 @@ import { debounce } from '@/stores/myFunctions';
 import { librarianSearch } from "@/interfaces/BookData";
 import SearchBar from "@/components/SearchBar.vue";
 import ListPagination from '@/components/ListPagination.vue';
-import { useRouter } from 'vue-router';
 
 const bookStore = BookStore();
 bookStore.getCategories();
-const router = useRouter();
 
 const data = ref({
     search: '',

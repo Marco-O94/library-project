@@ -25,6 +25,7 @@ const props = defineProps({
 });
 
 const getPage = (value: number | undefined) => {
+    window.scrollTo(0,100); 
     if (props.scope === "librarianBooks") {
         BookStore().librarianlist(value)
     }

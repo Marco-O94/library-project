@@ -82,20 +82,21 @@ export const UserStore = defineStore("UserStore", {
         },
 
         /* LOGOUT */
-        async logout() {
-            await axios.post("/logout", {}, {
+         logout() {
+             axios.post("/logout", {}, {
                 headers: {
                     authorization: Cookies.get("token"),
-
                 }
             }).then((res) => {
                 if (res.status === 200) {
                     //this.user = {} as User
                     //this.token = ''  
-                    delete axios.defaults.headers.common["authorization"]
-                    Cookies.remove("token")
-                    Cookies.remove("user")
-                    router.push({ name: "login" })
+                    delete axios.defaults.headers.common["authorization"];
+                    this.user = {};
+                    this.token = '';
+                    Cookies.remove("token");
+                    Cookies.remove("user");
+                    router.push({ name: "login" });
                 }
 
             }).catch((err) => {

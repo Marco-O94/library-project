@@ -14,8 +14,8 @@ export const BookStore = defineStore("BookStore", {
         av_books: 0 as number,
         av_bookings: 0 as number,
         categories: [] as Category[],
-
     }),
+
     actions: {
         /* Remove Object from array */
         // eslint-disable-next-line @typescript-eslint/no-explicit-any
@@ -189,6 +189,21 @@ export const BookStore = defineStore("BookStore", {
                 console.log(err);
             });
         },
+
+        /* GET BOOK */
+        async getBook(id: number) {
+            await axios.get(`/books/${id}`, {
+            }).then((res) => {
+                if (res.status === 200) {
+                    this.book = res.data;
+                }
+            }
+            ).catch((err) => {
+                console.log(err);
+            });
+
+        },
+
     }
 
-});
+    });

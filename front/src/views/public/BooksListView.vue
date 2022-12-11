@@ -28,7 +28,7 @@ watch(() => data.value.search, ((search) => {
 
             <div v-if="!bookStore.books.data" class="mt-10 font-bold text-xl">Inizia a cercare!</div>
             <template v-else>
-                <div class="grid grid-cols-1 gap-6 mt-10 lg:mt-16 lg:gap-4 md:grid-cols-2 lg:grid-cols-3">
+                <div class="grid grid-cols-1 mt-10 lg:mt-16 gap-10 md:grid-cols-2 lg:grid-cols-3">
                     <div class="relative group" v-for="book, index in bookStore.books.data" :key="index">
                         <div class="overflow-hidden aspect-w-1 aspect-h-1">
                             <img v-if="book.image"
@@ -46,7 +46,7 @@ watch(() => data.value.search, ((search) => {
                         </div>
                         <div class="flex items-start justify-between mt-4 space-x-4">
                             <div>
-                                <h3 class="text-xs font-bold text-gray-900 sm:text-sm md:text-base">
+                                <h3 class="text-xs font-bold text-gray-900 sm:text-md md:text-lg">
                                     <router-link :to="`/books/show/${book.id}`">
                                         {{ book.title }}
                                         <span class="absolute inset-0" aria-hidden="true"></span>
