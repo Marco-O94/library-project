@@ -4,9 +4,9 @@ namespace Database\Seeders;
 
 use Illuminate\Database\Console\Seeds\WithoutModelEvents;
 use Illuminate\Database\Seeder;
-use App\Models\Status;
+use App\Models\LoanStatus;
 
-class StatusSeeder extends Seeder
+class LoanStatusSeeder extends Seeder
 {
     /**
      * Run the database seeds.
@@ -31,7 +31,7 @@ class StatusSeeder extends Seeder
         ];
 
         foreach ($roles as $role) {
-            Status::create($role);
+            LoanStatus::create($role);
         }
     }
 }

@@ -25,7 +25,8 @@
     "tw-elements": "^1.0.0-alpha13",
     "vue": "^3.2.13",
     "vue-filepond": "^7.0.3",
-    "vue-router": "^4.0.3"
+    "vue-router": "^4.0.3",
+    "vue3-popper": "^1.5.0"
   },
   "devDependencies": {
     "@types/js-cookie": "^3.0.2",

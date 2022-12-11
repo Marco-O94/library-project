@@ -120,6 +120,7 @@ const routes: Array<RouteRecordRaw> = [
         path: 'loans',
         name: 'loansList',
         component: () => import(/* webpackChunkName: "loansManage" */ '@/views/private/ManageLoansView.vue'),
+        meta: { requiresAuth: true, requiresLibrarian: true },
       }
       
 

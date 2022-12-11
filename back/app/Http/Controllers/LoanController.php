@@ -5,9 +5,8 @@ namespace App\Http\Controllers;
 use Illuminate\Http\Request;
 use App\Models\User;
 use App\Models\Book;
-use Symfony\Component\Console\Input\Input;
 use App\Models\BookUser;
-use App\Models\Status;
+use App\Models\LoanStatus;
 
 
 class LoanController extends Controller
@@ -139,10 +138,11 @@ class LoanController extends Controller
      *
      * @return \Illuminate\Http\Response
      */
-    public function updateStatus($id, Request $request)
+    public function updateLoanStatus(Request $request)
     {
-        $user = User::findOrFail($id);
-        $user->books()->updateExistingPivot($request->book_id, ['status' => $request->status]);
+        BookUser::where('user_id', $request->user_id)
+            ->where('book_id', $request->book_id)
+            ->update(['status_id' => $request->status_id]);
 
         return response()->json([
             'message' => 'Stato aggiornato con successo'
@@ -150,7 +150,10 @@ class LoanController extends Controller
     }
 
     public function getStatuses() {
-        return response()->json(Status::all(), 200);
+
+        /* No mutch time */
+        $statuses = LoanStatus::select('id', 'name')->get();
+        return response()->json($statuses, 200);
     }
 
     /**
@@ -162,6 +165,7 @@ class LoanController extends Controller
        $query = BookUser::query()
         ->join('books', 'book_user.book_id', '=', 'books.id')
         ->join('users', 'book_user.user_id', '=', 'users.id')
+        ->join('loan_statuses', 'book_user.status_id', '=', 'loan_statuses.id')
         ->when($request->input('search_user') ?? '', function ($query, $search_user) {
             return $query->where('users.name', 'like', '%' . $search_user . '%');
         })
@@ -173,9 +177,19 @@ class LoanController extends Controller
         })->when($request->input('sort') ?? '', function ($query, $sort) {
             return $query->orderBy($sort, 'asc');
         })->when($request->input('status') ?? '', function ($query, $status) {
-            return $query->where('book_user.status', $status);
+            return $query->where('book_user.status_id', $status);
         })
-        ->select('book_user.due_date', 'book_user.created_at', 'books.title', 'users.name', 'users.id as user_id', 'users.image_path as user_image', 'books.image as book_image', 'books.id as book_id', 'book_user.status')
+        ->select('book_user.due_date',
+        'book_user.created_at',
+        'books.title',
+        'users.name',
+        'users.id as user_id',
+        'users.image_path as user_image',
+        'books.image as book_image',
+        'books.id as book_id',
+        'loan_statuses.name as status_name',
+        'loan_statuses.id as status_id',
+        'loan_statuses.color as status_color')
         ->paginate(10);
         return response()->json($query, 200);
     }

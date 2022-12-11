@@ -84,6 +84,8 @@ Route::middleware('auth:sanctum')->group(function () {
             Route::get('/categories', 'categories');
             // Change image to the Book
             Route::post('/image/{id}', 'updateImage');
+            // Update Loan Status
+
         });
 
         /* Loan Routes */
@@ -93,7 +95,7 @@ Route::middleware('auth:sanctum')->group(function () {
             // Update due_date of loaned book
             Route::put('/update/date/{id}', 'updateDueDate');
             // Update status of loaned book
-            Route::put('/update/status/{id}', 'updateDueDate');
+            Route::put('/update/status', 'updateLoanStatus');
             // Show all Loaned Books
             Route::get('/', 'queryLoans');
             // Show Loaned Book
@@ -102,9 +104,11 @@ Route::middleware('auth:sanctum')->group(function () {
             Route::post('/create', 'getBook');
             // Librarian give book
             Route::post('/librarian/create', 'giveBook');
-             // Get user loans
-             Route::get('/user/{id}', 'userBooks');
+            // Get user loans
+            Route::get('/user/{id}', 'userBooks');
         });
+        // It returns all the statuses, I placed it here cause of a bug... 😅
+        Route::get('/statuses', [LoanController::class, 'getStatuses']);
     }); // End of Librarian Routes
 }); // End of Authenticated Routes
 
@@ -131,4 +135,3 @@ Route::prefix('books')->controller(BookController::class)->group(function () {
     Route::get('/single/{id}', 'singleBook');
 });
 
-Route::get('test', [LoanController::class, 'queryLoans']);

@@ -2,7 +2,7 @@ import { defineStore } from "pinia";
 import { Loans, Loan } from "@/interfaces/BookData";
 import { GeneralStore } from "./GeneralStore";
 import { UserStore } from "./UserStore";
-import { loansSearch } from "@/interfaces/BookData";
+import { loansSearch, Status } from "@/interfaces/BookData";
 import axios from "axios";
 // eslint-disable-next-line @typescript-eslint/no-var-requires
 const Cookies = require('js-cookie');
@@ -11,7 +11,11 @@ export const LoanStore = defineStore("LoanStore", {
     state: () => ({
         loans: {} as Loans,
         loan: {} as Loan,
+        statuses: [] as Status[],
+        status: 0 as number,
+        active: false as boolean,
     }),
+
     actions: {
 
         /* GET BORROWS */
@@ -22,6 +26,7 @@ export const LoanStore = defineStore("LoanStore", {
                     search_user: data.search_user,
                     search_due_date: data.search_due_date,
                     sort: data.sort,
+                    status: data.status,
                 },
                 headers: {
                     authorization: Cookies.get("token"),
@@ -120,7 +125,44 @@ export const LoanStore = defineStore("LoanStore", {
             }, (err) => {
                 console.log(err);
             });
-        }
+        },
+
+        /* GET LOANS STATUSES */
+        async getLoansStatuses() {
+            await axios.get("/statuses", {
+                headers: {
+                    authorization: Cookies.get("token"),
+                }
+            }).then((res) => {
+                console.log(res.data);
+                this.statuses = res.data;
+            }
+            ).catch((err) => {
+                console.log(err);
+            }
+            );
+        },
+
+        /* CHANGE LOAN STATUS */
+        async changeStatus(data: object) {
+            this.active = false;
+            const query = {} as loansSearch;
+            await axios.put(`/loans/update/status/`, data, {
+                headers: {
+                    authorization: Cookies.get("token"),
+                }
+            }).then((res) => {
+                if(res.status === 200) {
+                    console.log(res.data);
+                GeneralStore().flash.message = res.data.message;
+                this.getLoans(query);
+                }
+            }
+            ).catch((err) => {
+                console.log(err);
+            });
+
 
     },
+}
 });

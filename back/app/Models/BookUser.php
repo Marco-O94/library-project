@@ -17,7 +17,7 @@ class BookUser extends Pivot
         'book_id',
         'user_id',
         'due_date',
-        'status'
+        'status_id'
     ];
 
     protected $hidden = [
@@ -32,19 +32,7 @@ class BookUser extends Pivot
     ];
 
     protected $attributes = [
-        'status' => 1
+        'status_id' => 1
     ];
-
-    /**
-     * Get Status of the loan
-     * @return \Illuminate\Database\Eloquent\Relations\BelongsTo
-     * @see \App\Models\Status
-     * @see \App\Models\BookUser
-     *
-     */
-
-    public function status() {
-        return $this->belongsTo(Status::class);
-    }
 
 }

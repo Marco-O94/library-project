@@ -76,7 +76,9 @@ export interface Loan {
     book_image: string;
     user_id: number;
     book_id: number;
-    status: string;
+    status_id: number;
+    status_color: string;
+    status_name: string;
 }
 
 export interface Loans {
@@ -100,7 +102,14 @@ export interface loansSearch {
     search_book: string;
     search_due_date: string;
     sort: string;
+    status: number;
     
+}
+
+export interface Status {
+    id: string;
+    name: string;
+    color: string;
 }
 
 

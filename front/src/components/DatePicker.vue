@@ -10,9 +10,9 @@ const props = defineProps({
 });
 </script>
 <template>
-    <div class="datepicker relative form-floating mb-3 xl:w-96">
+    <div class="datepicker relative form-floating mb-3 w-full">
         <input @input="$emit('update:date', $event?.target?.value)" type="date"
-          class="form-control block w-full px-3 py-1.5 text-base font-normal text-gray-700 bg-white bg-clip-padding border border-solid border-gray-300 rounded transition ease-in-out m-0 focus:text-gray-700 focus:bg-white focus:border-blue-600 focus:outline-none"
+          class="form-control bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 "
           placeholder="Seleziona una data" />
         <label for="floatingInput" class="text-gray-700">{{ props.text }}</label>
       </div>
