@@ -1,6 +1,5 @@
 <script>
 import { BookStore } from "@/stores/BookStore";
-import { Category } from "@/interfaces/BookData";
 import { GeneralStore } from "@/stores/GeneralStore";
 import LoadingButton from "@/components/LoadingButton.vue";
 import CKEditor from '@ckeditor/ckeditor5-vue';

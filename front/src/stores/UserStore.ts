@@ -38,6 +38,7 @@ export const UserStore = defineStore("UserStore", {
 
     getters: {
         isLogged: state => !!state.token, // !! converts to boolean
+
     },
 
     actions: {
@@ -254,6 +255,21 @@ export const UserStore = defineStore("UserStore", {
                 console.log(err);
             });
         },
+        // Get User Books
+        async getUserBooks(id: number) {
+            await axios.get(`/users/books/${id}`, {
+                headers: {
+                    authorization: Cookies.get("token"),
+                }
+            }).then((res) => {
+                if (res.status === 200) {
+                    this.anotherUser.books = res.data;
+                }
+            }, (err) => {
+                console.log(err);
+            });
+        },
+
         /* --- END USER FUNCTIONS FOR LIBRARIAN --- */
     }
 

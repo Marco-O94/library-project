@@ -17,9 +17,10 @@ export const BookStore = defineStore("BookStore", {
 
     }),
     actions: {
-
         /* Remove Object from array */
+        // eslint-disable-next-line @typescript-eslint/no-explicit-any
         removeObject(arr: any, id: number) {
+            // eslint-disable-next-line @typescript-eslint/no-explicit-any
             const objWithIdIndex = arr.findIndex((obj: any) => obj.id === id);
 
             if (objWithIdIndex > -1) {
@@ -29,7 +30,9 @@ export const BookStore = defineStore("BookStore", {
         },
 
         /* Add Object to array */
+        // eslint-disable-next-line @typescript-eslint/no-explicit-any
         addObject(arr: any, obj: any) {
+            // eslint-disable-next-line @typescript-eslint/no-explicit-any
             if (arr.find((o: any) => o.id === obj.id)) {
                 return;
             } else {

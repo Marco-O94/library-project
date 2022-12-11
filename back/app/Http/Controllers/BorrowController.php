@@ -10,26 +10,26 @@ class BorrowController extends Controller
 {
 
     /**
-     * Borrow a book
+     * Get a book by User
      *
      * @return \Illuminate\Http\Response
      */
 
-    public function getBook($id, Request $request)
+    public function getBook(Request $request)
     {
         $user = User::findOrFail($request->user()->id);
-        if ($user->books()->where('book_id', $id)->count() >= Book::where('id', $id)->quantity) {
+        if ($user->books()->where('book_id', $request->book_id)->count() >= Book::where('id', $request->book_id)->quantity) {
             return response()->json([
                 'message' => 'Questo libro non è al momento disponibile'
             ], 400);
         }
 
         if($user->role()->name == 'Student') {
-            $user->books()->attach($id);
+            $user->books()->attach($request->book_id);
         } else {
             // 30 days from now
             $due_date = now()->addDays(30);
-            $user->books()->attach($id, ['due_date' => $due_date]);
+            $user->books()->attach($request->book_id, ['due_date' => $due_date]);
         }
 
         return response()->json([
@@ -83,9 +83,9 @@ class BorrowController extends Controller
      * @return \Illuminate\Http\Response
      */
 
-    public function returnBook($request)
+    public function returnBook(Request $request)
     {
-        $user = User::findOrFail($request->id);
+        $user = User::findOrFail($request->user_id);
         $user->books()->detach($request->book_id);
 
         return response()->json([
@@ -102,6 +102,7 @@ class BorrowController extends Controller
     public function borrowedBooks()
     {
         $books = User::whereHas('books')->with('books')->paginate(10);
+
         return response()->json($books, 200);
     }
 
@@ -122,7 +123,7 @@ class BorrowController extends Controller
      * @return \Illuminate\Http\Response
      */
 
-    public function updateDueDate(Request $request)
+    public function updateDueDate($id, Request $request)
     {
         $request->validate(
             [
@@ -134,7 +135,7 @@ class BorrowController extends Controller
             ]
         );
 
-        $user = User::findOrFail($request->id);
+        $user = User::findOrFail($id);
         $user->books()->updateExistingPivot($request->book_id, ['due_date' => $request->due_date]);
 
         return response()->json([

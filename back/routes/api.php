@@ -62,6 +62,8 @@ Route::middleware('auth:sanctum')->group(function () {
             Route::put('/update', 'update');
             // Update Image
             Route::post('/image/{id}', 'updateImage');
+            // Get user books
+            Route::get('/books/{id}', 'userBooks');
 
             // Store a new User
             //Route::post('/store', 'store'); <-- Skipped for now
@@ -89,17 +91,17 @@ Route::middleware('auth:sanctum')->group(function () {
         /* Borrow Routes */
         Route::prefix('borrows')->controller(BorrowController::class)->group(function () {
             // Return Book
-            Route::delete('/return', 'returnBook');
+            Route::delete('/', 'returnBook');
             // Update due_date of borrowed book
             Route::put('/update', 'updateDueDate');
             // Show all Borrowed Books
-            Route::get('/query', 'borrowedBooks');
+            Route::get('/', 'borrowedBooks');
             // Show Borrowed Book
-            Route::get('/query/{id}', 'borrowedBook');
+            Route::get('/{id}', 'borrowedBook');
             // User get book
-            Route::post('/get', 'getBook');
+            Route::post('/create', 'getBook');
             // Librarian give book
-            Route::post('/give', 'giveBook');
+            Route::post('/librarian/create', 'giveBook');
         });
     }); // End of Librarian Routes
 }); // End of Authenticated Routes

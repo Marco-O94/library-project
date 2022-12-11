@@ -66,13 +66,6 @@ class BookController extends Controller
         return response()->json($books, 200);
     }
 
-    public function userBooks($id)
-    {
-        $user = User::find($id);
-        $books = $user->books()->get();
-        return response()->json($books, 200);
-    }
-
     /**
      * Store a newly created resource in storage.
      *

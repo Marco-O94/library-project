@@ -149,4 +149,17 @@ class LibrarianController extends Controller
             'message' => 'Utente eliminato con successo'
         ], 200);
     }
+
+    /**
+     * Get user books
+     *
+     * @param  int  $id
+     * @return \Illuminate\Http\Response
+     */
+    public function userBooks($id)
+    {
+        $user = User::find($id);
+        $books = $user->books()->get();
+        return response()->json($books, 200);
+    }
 }
