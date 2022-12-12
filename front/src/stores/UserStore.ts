@@ -65,13 +65,14 @@ export const UserStore = defineStore("UserStore", {
 
         /* REGISTER */
         async registerRequest(registerData: RegisterData) {
-            return axios.post("/register", registerData).then((res) => {
+            await axios.post("/register", registerData).then((res) => {
                 if (res.status === 201) {
                     Cookies.set("user", JSON.stringify(res.data.user));
                     Cookies.set("token", makeToken(res.data.token));
                     this.user = res.data.user;
                     this.token = res.data.token;
                     router.push({ name: "dashboard" });
+                    console.log(res);
                 }
             }
             ).catch((err) => {

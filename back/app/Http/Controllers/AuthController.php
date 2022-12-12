@@ -43,7 +43,7 @@ class AuthController extends Controller
         $data['password'] = bcrypt($data['password']);
         $user = User::create($data);
         $token = $user->createToken('token')->plainTextToken;
-
+        $user = User::where('email', $request->email)->with('role')->first();
         $response = [
             'user' => $user,
             'token' => $token

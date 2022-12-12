@@ -96,7 +96,7 @@ const routes: Array<RouteRecordRaw> = [
             path: '',
             name: 'managebooks',
             component: () => import(/* webpackChunkName: "booksManage" */ '@/views/private/ManageBooksView.vue'),
-            meta: { requiresAuth: true, requiresLibrarian: true, scrollTop: 0 },
+            meta: { requiresAuth: true, requiresLibrarian: true},
           },
           {
             path: ':id',

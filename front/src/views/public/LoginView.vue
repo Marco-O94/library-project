@@ -46,9 +46,6 @@ loginData = reactive<LoginData>({
                 <label class="form-check-label inline-block text-gray-800" for="exampleCheck2">Mantieni
                   l'accesso</label>
               </div>
-              <a href="#!"
-                class="text-blue-600 hover:text-blue-700 focus:text-blue-700 active:text-blue-800 duration-200 transition ease-in-out">Password
-                dimenticata?</a>
               <ErrorField v-if="generalStore.errors.password" :errors="generalStore.errors.password" />
             </div>
 
