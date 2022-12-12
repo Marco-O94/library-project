@@ -152,10 +152,14 @@ export const UserStore = defineStore("UserStore", {
                 },
                 transformRequest: formData => formData
             }).then((res) => {
-                if (res.status === 201) {
+                if (res.status === 201 && res.data.user) {
                     this.user = res.data.user;
                     Cookies.remove("user");
                     Cookies.set("user", JSON.stringify(res.data.user));
+                    GeneralStore().flash.message = res.data.message;
+                }else{
+                    console.log(res);
+                    this.anotherUser.image_path = res.data.image.image_path;
                     GeneralStore().flash.message = res.data.message;
                 }
             }).catch((err) => {
@@ -165,7 +169,7 @@ export const UserStore = defineStore("UserStore", {
 
         /* DELETE USER */
         async delete(id: number) {
-            await axios.delete(`/users/${id}`).then((res) => {
+            await axios.delete(`/users/delete/${id}`).then((res) => {
                 if (res.status === 200) {
                     GeneralStore().flash.message = res.data.message;
                 }
@@ -242,25 +246,6 @@ export const UserStore = defineStore("UserStore", {
                 console.log(err);
             });
             GeneralStore().loading = false;
-        },
-        /* CHANGE USER IMAGE */
-        async changeImageByLib(id: number, formData: FormData) {
-            await axios.post(`/users/image/${id}`, formData, {
-                headers: {
-                    authorization: Cookies.get("token"),
-                    'Content-Type': 'multipart/form-data',
-                },
-                transformRequest: formData => formData
-            }).then((res) => {
-                if (res.status === 201) {
-                    this.anotherUser.image_path = res.data.image;
-                    GeneralStore().flash.message = res.data.message;
-                } else {
-                    GeneralStore().errors.image = res.data.errors.image;
-                }
-            }).catch((err) => {
-                console.log(err);
-            });
         },
         // Get User Books
         async getUserBooks(id: number) {

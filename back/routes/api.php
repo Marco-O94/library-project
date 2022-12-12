@@ -6,7 +6,8 @@ use App\Http\Controllers\AuthController;
 use App\Http\Controllers\LoanController;
 use App\Http\Controllers\BookController;
 use App\Http\Controllers\UserController;
-use App\Http\Controllers\LibrarianController;
+use App\Models\LoanStatus;
+use Carbon\Carbon;
 
 /*
 |--------------------------------------------------------------------------
@@ -22,74 +23,57 @@ use App\Http\Controllers\LibrarianController;
 
 /* ❗ Api Routes have to be refactored with Route::resource ❗ */
 
-/* ----- Authenticated Routes ----- */
+/* ----- BOOKS ----- */
 
-/* --- Some Routes need to be refactored --- */
+Route::prefix('books')->controller(BookController::class)->group(function () {
 
-Route::middleware('auth:sanctum')->group(function () {
-    /* Logout */
-    Route::post('logout', [AuthController::class, 'logout']);
+    /* --- Public Routes --- */
+    // Show all Books for Public
+    Route::get('/', 'index');
+    // Show single Book for Public
+    Route::get('/show/{id}', 'show');
+    // Count the Books
+    Route::get('/count', 'booksCount');
+    // Show single Book for Librarian
+    Route::get('/single/{id}', 'singleBook');
 
-    /* Shared Routes */
-
-    Route::prefix('users')->controller(LibrarianController::class)->group(function () {
-        // Show roles for User creation and Table
-        Route::get('/roles', 'roles');
-        // Delete User
-        Route::delete('/', 'destroy');
-    });
-
-
-    /* Users Routes */
-    Route::prefix('users')->controller(UserController::class)->group(function () {
-        // Edit User
-        Route::put('/selfupdate', 'update');
-        // Change image to the User
+    /* --- Authenticated Routes --- */
+    Route::group(['middleware' => ['auth:sanctum', 'role:Librarian']], function () {
+        // Show categories for Book creation
+        Route::get('/create', 'create');
+        // Store a new Book
+        Route::post('/store', 'store');
+        // Edit Book
+        Route::put('/update', 'update');
+        // Delete Book
+        Route::delete('/delete/{id}', 'destroy');
+        // Show books for Librarian
+        Route::get('/librarians/query', 'librarianIndex');
+        // Show categories for Book creation and Table
+        Route::get('/categories', 'categories');
+        // Change image to the Book
         Route::post('/image', 'updateImage');
     });
+});
 
-    /* ---------- */
+/* ----- LOANS ----- */
 
-    /* ------ Librarian Routes ------ */
-    Route::middleware('role:Librarian')->group(function () {
+/* --- Authenticated Routes --- */
+Route::group(
+    [
+        'prefix' => 'loans',
+        'middleware' => ['auth:sanctum'],
+        'controller' => LoanController::class
+    ],
 
-        Route::prefix('users')->controller(LibrarianController::class)->group(function () {
-            // All Users
-            Route::get('/', 'index');
-            // Show User
-            Route::get('/show/{id}', 'show');
-            // Update User
-            Route::put('/update', 'update');
-            // Update Image
-            Route::post('/image/{id}', 'updateImage');
 
-            // Store a new User
-            //Route::post('/store', 'store'); <-- Skipped for now
 
-        });
+    function () {
+        // User get book
+        Route::post('/user/create/{id}', 'getBook');
 
-        /* Books Routes */
-        Route::prefix('books')->controller(BookController::class)->group(function () {
-            // Show categories for Book creation
-            Route::get('/create', 'create');
-            // Store a new Book
-            Route::post('/store', 'store');
-            // Edit Book
-            Route::put('/update', 'update');
-            // Delete Book
-            Route::delete('/{id}', 'destroy');
-            // Show books for Librarian
-            Route::get('/librarians/query', 'librarianIndex');
-            // Show categories for Book creation and Table
-            Route::get('/categories', 'categories');
-            // Change image to the Book
-            Route::post('/image/{id}', 'updateImage');
-            // Update Loan Status
-
-        });
-
-        /* Loan Routes */
-        Route::prefix('loans')->controller(LoanController::class)->group(function () {
+        /* --- Librarian Routes --- */
+        Route::middleware('role:Librarian')->group(function () {
             // Return Book
             Route::delete('/', 'returnBook');
             // Update due_date of loaned book
@@ -98,40 +82,54 @@ Route::middleware('auth:sanctum')->group(function () {
             Route::put('/update/status', 'updateLoanStatus');
             // Show all Loaned Books
             Route::get('/', 'queryLoans');
-            // Show Loaned Book
-            Route::get('/{id}', 'loanedBook');
-            // User get book
-            Route::post('/create', 'getBook');
             // Librarian give book
             Route::post('/librarian/create', 'giveBook');
             // Get user loans
             Route::get('/user/{id}', 'userBooks');
+            // Get loans Statuses
+            Route::get('/statuses', 'getStatuses');
         });
-        // It returns all the statuses, I placed it here cause of a bug... 😅
-        Route::get('/statuses', [LoanController::class, 'getStatuses']);
-    }); // End of Librarian Routes
-}); // End of Authenticated Routes
+    }
+);
 
 
-/* <(°.°<) <(°.°)> (>°.°)> */
+/* ----- USERS ----- */
+
+Route::group(
+    [
+        'prefix' => 'users',
+        'middleware' => ['auth:sanctum'],
+        'controller' => UserController::class
+    ],
+    function () {
+        // Show roles for User creation and Table
+        Route::get('/roles', 'roles');
+        /* --- Shared Routes --- */
+        // Delete User
+        Route::delete('/delete/{id}', 'destroy');
+        // Edit User
+        Route::put('/selfupdate', 'update');
+        // Change User image
+        Route::post('/image', 'updateImage');
+        // Show User
+        Route::get('/show/{id}', 'show');
+        // Update User
+        Route::put('/update', 'update');
+        // All Users
+        Route::get('/', 'index')->middleware('role:Librarian');
+    }
+);
+//Route middleware + prefix
 
 
-/* ----- Public Routes ----- */
+/* --- Main Routes --- */
 
+/* Logout */
+Route::post('logout', [AuthController::class, 'logout'])->middleware('auth:sanctum');
 /* Login  Register Routes  */
 Route::controller(AuthController::class)->group(function () {
     Route::post('login', 'login');
     Route::post('register', 'register');
 });
 
-Route::prefix('books')->controller(BookController::class)->group(function () {
-    // Show all Books for Public
-    Route::get('/query', 'index');
-    // Show single Book for Public
-    Route::get('/{id}', 'show');
-    // Count the Books
-    Route::get('/count', 'booksCount');
-    // Show single Book for Librarian
-    Route::get('/single/{id}', 'singleBook');
-});
-
+/* <(°.°<) <(°.°)> (>°.°)> */

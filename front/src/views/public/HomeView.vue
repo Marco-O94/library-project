@@ -46,7 +46,9 @@ bookStore.getBooksData();
                             <p v-else class="ml-3 text-sm text-gray-900 font-pj">Libri<br />Prestati</p>
                         </div>
                     </div>
+                    <p class="mt-2 text-lg text-gray-600 sm:mt-8 font-inter">Scopri il nostro catalogo</p>
                 </div>
+                
                 <div
                     class="bg-[url('https://images.unsplash.com/photo-1633354516388-41b56d6fe980?ixlib=rb-4.0.3&ixid=MnwxMjA3fDB8MHxzZWFyY2h8MTZ8fGxpYnJhcnl8ZW58MHwyfDB8fA%3D%3D&auto=format&fit=crop&w=800&q=60')] bg-contain rounded-lg bg-no-repeat md:w-[500px] md:h-[500px]">
                 </div>

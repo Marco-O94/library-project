@@ -4,10 +4,9 @@ import { LoginData } from '@/interfaces/FormData';
 import ErrorField from '@/components/ErrorField.vue';
 import { UserStore } from '@/stores/UserStore';
 import { GeneralStore } from '@/stores/GeneralStore';
-const userStore = UserStore();
-const generalStore = GeneralStore();
-
-const loginData = reactive<LoginData>({
+const userStore = UserStore(),
+generalStore = GeneralStore(),
+loginData = reactive<LoginData>({
   email: '',
   password: '',
   remember: false,

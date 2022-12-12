@@ -2,19 +2,20 @@
 import { ref } from 'vue';
 import { UserStore } from '@/stores/UserStore';
 import LoadingButton from '@/components/LoadingButton.vue';
-const userStore = UserStore();
+const userStore = UserStore(),
 
 // eslint-disable-next-line @typescript-eslint/no-explicit-any
-const onFileInput = (event: { target: { files: any[]; }; }) => {
+onFileInput = (event: { target: { files: any[]; }; }) => {
     let formData = new FormData();
-    formData.append('userpic', event.target.files[0]);
+    formData.append('image', event.target.files[0]);
+    formData.append('id', userStore.user.id);
     userStore.changeImage(formData);
     return void 0;
-};
+},
 
-const userData = userStore.user;
+userData = userStore.user,
 
-const userForm = ref({
+userForm = ref({
     name: userData.name,
     email: userData.email,
 });

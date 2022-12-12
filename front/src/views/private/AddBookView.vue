@@ -56,8 +56,7 @@ export default {
         }
     },
     setup() {
-        const bookStore = BookStore();
-        const generalStore = GeneralStore();
+        const bookStore = BookStore(), generalStore = GeneralStore();
         bookStore.getCategories();
         return { bookStore, generalStore };
     },

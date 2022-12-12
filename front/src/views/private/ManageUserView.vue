@@ -6,17 +6,18 @@ import { computed } from 'vue';
 import LoadingButton from '@/components/LoadingButton.vue';
 import { useRoute } from 'vue-router';
 import ErrorField from '@/components/ErrorField.vue';
-const route = useRoute();
-const userStore = UserStore();
-const generalStore = GeneralStore();
-const loanStore = LoanStore();
+const route = useRoute(),
+userStore = UserStore(),
+generalStore = GeneralStore(),
+loanStore = LoanStore(),
 
 
 // eslint-disable-next-line @typescript-eslint/no-explicit-any
-const onFileInput = (event: { target: { files: any[]; }; }) => {
+onFileInput = (event: { target: { files: any[]; }; }) => {
     let formData = new FormData();
-    formData.append('userpic', event.target.files[0]);
-    userStore.changeImageByLib(parseInt(route.params.id[0]), formData);
+    formData.append('image', event.target.files[0]);
+    formData.append('id', route.params.id[0]);
+    userStore.changeImage(formData);
     return void 0;
 };
 

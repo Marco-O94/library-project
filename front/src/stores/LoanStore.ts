@@ -2,10 +2,11 @@ import { defineStore } from "pinia";
 import { Loans, Loan } from "@/interfaces/BookData";
 import { GeneralStore } from "./GeneralStore";
 import { UserStore } from "./UserStore";
+import { useRouter } from "vue-router";
 import { loansSearch, Status } from "@/interfaces/BookData";
 import axios from "axios";
 // eslint-disable-next-line @typescript-eslint/no-var-requires
-const Cookies = require('js-cookie');
+const Cookies = require('js-cookie'), router = useRouter();
 
 export const LoanStore = defineStore("LoanStore", {
     state: () => ({
@@ -40,15 +41,6 @@ export const LoanStore = defineStore("LoanStore", {
             });
         },
 
-        /* GET SINGLE BORROW */
-        async getSingleLoan(id: number) {
-            await axios.get(`/loans/${id}`).then((res) => {
-                this.loans = res.data;
-            }, (err) => {
-                console.log(err);
-            });
-        },
-
         async loanslist(page = 1) {
             await axios.get(`/loans?page=${page}`, {
                 headers: {
@@ -70,20 +62,20 @@ export const LoanStore = defineStore("LoanStore", {
                 book_id: book,
                 _method: "DELETE",
             }
-            
+
             await axios.post("/loans", data, {
-                    headers: {
-                        authorization: Cookies.get("token"),
-                        
-                    },
-                    
-                }).then((res) => {
-                    // Remove the book from the user's loan list
-                        scope === "many" ? this.getLoans(query) : UserStore().getUserBooks(user);
-                    GeneralStore().flash.message = res.data.message;
-                }, (err) => {
-                    console.log(err);
-                });
+                headers: {
+                    authorization: Cookies.get("token"),
+
+                },
+
+            }).then((res) => {
+                // Remove the book from the user's loan list
+                scope === "many" ? this.getLoans(query) : UserStore().getUserBooks(user);
+                GeneralStore().flash.message = res.data.message;
+            }, (err) => {
+                console.log(err);
+            });
         },
 
         /* UPDATE DUE DATE */
@@ -102,15 +94,17 @@ export const LoanStore = defineStore("LoanStore", {
         },
 
         /* BORROW REQUEST BY USER */
-        async sendRequest(data: string) {
-            await axios.post(`/loans/create`, data, {
+        async getRequest(id: number) {
+            await axios.post(`/loans/user/create/${id}`, null,{
                 headers: {
                     authorization: Cookies.get("token"),
                 }
             }).then((res) => {
-                GeneralStore().flash.message = res.data.message;
+                    GeneralStore().flash.message = res.data.message;
+                    router.push({ name: "dashboard" });
             }, (err) => {
                 console.log(err);
+                GeneralStore().flash.message = err.response.data.message;
             });
         },
 
@@ -129,7 +123,7 @@ export const LoanStore = defineStore("LoanStore", {
 
         /* GET LOANS STATUSES */
         async getLoansStatuses() {
-            await axios.get("/statuses", {
+            await axios.get("/loans/statuses", {
                 headers: {
                     authorization: Cookies.get("token"),
                 }
@@ -152,10 +146,12 @@ export const LoanStore = defineStore("LoanStore", {
                     authorization: Cookies.get("token"),
                 }
             }).then((res) => {
-                if(res.status === 200) {
+                if (res.status === 200) {
                     console.log(res.data);
-                GeneralStore().flash.message = res.data.message;
-                this.getLoans(query);
+                    GeneralStore().flash.message = res.data.message;
+                    this.getLoans(query);
+                } else {
+                    GeneralStore().flash.message = res.data.message;
                 }
             }
             ).catch((err) => {
@@ -163,6 +159,6 @@ export const LoanStore = defineStore("LoanStore", {
             });
 
 
-    },
-}
+        },
+    }
 });

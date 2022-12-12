@@ -7,6 +7,7 @@ use App\Models\User;
 use App\Models\Book;
 use App\Models\Category;
 
+
 class BookController extends Controller
 {
     public function booksCount()
@@ -60,7 +61,7 @@ class BookController extends Controller
                 });
             })
             ->with('categories')
-            ->with('users')
+            ->withCount('users')
             ->paginate(10);
 
         return response()->json($books, 200);
@@ -156,8 +157,6 @@ class BookController extends Controller
         foreach ($request->categories as $category) {
             $book->categories()->attach($category['id']);
         }
-
-
         return response()->json(['message' => 'Libro modificato con successo'], 201);
     }
 
@@ -219,4 +218,5 @@ class BookController extends Controller
         $book = Book::where('id', $id)->with('categories')->first();
         return response()->json($book, 200);
     }
+
 }

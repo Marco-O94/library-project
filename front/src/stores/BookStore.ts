@@ -53,7 +53,7 @@ export const BookStore = defineStore("BookStore", {
 
         /* GET BOOKS */
         async search(data: string) {
-            await axios.get("/books/query", { params: { search: data } }).then((res) => {
+            await axios.get("/books", { params: { search: data } }).then((res) => {
                 this.books = res.data;
             }, (err) => {
                 console.log(err);
@@ -62,7 +62,7 @@ export const BookStore = defineStore("BookStore", {
 
         /* GET BOOKS PAGINATION */
         async list(page = 1) {
-            await axios.get(`/books/query?page=${page}`).then(({ data }) => {
+            await axios.get(`/books?page=${page}`).then(({ data }) => {
                 this.books = data
             }).catch(({ response }) => {
                 console.error(response)
@@ -106,7 +106,6 @@ export const BookStore = defineStore("BookStore", {
                     this.categories = res.data;
 
                 }
-                console.log(res);
             }, (err) => {
                 console.log(err);
             });
@@ -134,7 +133,7 @@ export const BookStore = defineStore("BookStore", {
 
         /* DELETE BOOK */
         async delete(id: number) {
-            await axios.delete(`/books/${id}`, {
+            await axios.delete(`/books/delete/${id}`, {
                 headers: {
                     authorization: Cookies.get("token"),
                 }
@@ -192,7 +191,7 @@ export const BookStore = defineStore("BookStore", {
 
         /* GET BOOK */
         async getBook(id: number) {
-            await axios.get(`/books/${id}`, {
+            await axios.get(`/books/show/${id}`, {
             }).then((res) => {
                 if (res.status === 200) {
                     this.book = res.data;
@@ -203,6 +202,8 @@ export const BookStore = defineStore("BookStore", {
             });
 
         },
+
+        
 
     }
 

@@ -5,18 +5,14 @@ import { UserStore } from '@/stores/UserStore';
 import { GeneralStore } from '@/stores/GeneralStore';
 import ErrorField from '@/components/ErrorField.vue';
 
-
 const registerData = reactive<RegisterData>({
   name: '',
   email: '',
   password: '',
   password_confirmation: '',
-});
-
-const userStore = UserStore();
-const generalStore = GeneralStore();
-
-
+}),
+userStore = UserStore(),
+generalStore = GeneralStore();
 
 </script>
 

@@ -18,7 +18,7 @@ class LoanStatusSeeder extends Seeder
         $roles = [
             [
                 'name' => 'In sospeso',
-                'color' => 'green',
+                'color' => 'orange',
             ],
             [
                 'name' => 'Consegnato',

@@ -1,12 +1,13 @@
 <script setup lang="ts">
 import { BookStore } from '@/stores/BookStore';
+import { LoanStore } from '@/stores/LoanStore';
 import { UserStore } from '@/stores/UserStore';
 import { useRoute } from 'vue-router';
-const route = useRoute();
-const bookStore = BookStore();
-const userStore = UserStore();
+const route = useRoute(),
+bookStore = BookStore(),
+userStore = UserStore(),
+loanStore = LoanStore();
 bookStore.getBook(parseInt(route.params.id[0]))
-
 </script>
 
 <template>
@@ -35,12 +36,11 @@ bookStore.getBook(parseInt(route.params.id[0]))
                         <p class="text-sm">{{ bookStore.book.isbn }}</p>
                     </div>
                     </div>
-                    <p>
-                        {{ bookStore.book.description }}
+                    <p v-html="bookStore.book.description">
                     </p>
                     <div class="mt-8">
-                        <template v-if="userStore.isLogged">
-                    <button v-if="(bookStore.book.quantity - bookStore.book.users_count) > 0" type="button" class="text-white bg-blue-700 hover:bg-blue-800 focus:ring-4 focus:outline-none focus:ring-blue-300 font-medium rounded-lg text-sm px-5 py-2.5 text-center inline-flex items-center mr-2 ">
+                        <template v-if="userStore.isLogged && userStore.user.role.name != 'Librarian'">
+                    <button @click="loanStore.getRequest(bookStore.book.id)" v-if="(bookStore.book.quantity - bookStore.book.users_count) > 0" type="button" class="text-white bg-blue-700 hover:bg-blue-800 focus:ring-4 focus:outline-none focus:ring-blue-300 font-medium rounded-lg text-sm px-5 py-2.5 text-center inline-flex items-center mr-2 ">
                         <svg aria-hidden="true" class="mr-2 -ml-1 w-5 h-5" fill="currentColor" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 448 512">
                             <path d="M96 0C43 0 0 43 0 96V416c0 53 43 96 96 96H384h32c17.7 0 32-14.3 32-32s-14.3-32-32-32V384c17.7 0 32-14.3 32-32V32c0-17.7-14.3-32-32-32H384 96zm0 384H352v64H96c-17.7 0-32-14.3-32-32s14.3-32 32-32zm32-240c0-8.8 7.2-16 16-16H336c8.8 0 16 7.2 16 16s-7.2 16-16 16H144c-8.8 0-16-7.2-16-16zm16 48H336c8.8 0 16 7.2 16 16s-7.2 16-16 16H144c-8.8 0-16-7.2-16-16s7.2-16 16-16z"/></svg>
                         Richiedi
@@ -50,6 +50,13 @@ bookStore.getBook(parseInt(route.params.id[0]))
                             <path d="M96 0C43 0 0 43 0 96V416c0 53 43 96 96 96H384h32c17.7 0 32-14.3 32-32s-14.3-32-32-32V384c17.7 0 32-14.3 32-32V32c0-17.7-14.3-32-32-32H384 96zm0 384H352v64H96c-17.7 0-32-14.3-32-32s14.3-32 32-32zm32-240c0-8.8 7.2-16 16-16H336c8.8 0 16 7.2 16 16s-7.2 16-16 16H144c-8.8 0-16-7.2-16-16zm16 48H336c8.8 0 16 7.2 16 16s-7.2 16-16 16H144c-8.8 0-16-7.2-16-16s7.2-16 16-16z"/></svg>
                         Non disponibile
                       </button>
+                    </template>
+                    <template v-else-if="userStore.isLogged && userStore.user.role.name == 'Librarian'">
+                        <button @click="bookStore.toBook(bookStore.book.id)" type="button" class="text-white bg-blue-700 hover:bg-blue-800 focus:ring-4 focus:outline-none focus:ring-blue-300 font-medium rounded-lg text-sm px-5 py-2.5 text-center inline-flex items-center mr-2 ">
+                            <svg aria-hidden="true" class="mr-2 -ml-1 w-5 h-5" fill="currentColor" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 448 512">
+                                <path d="M96 0C43 0 0 43 0 96V416c0 53 43 96 96 96H384h32c17.7 0 32-14.3 32-32s-14.3-32-32-32V384c17.7 0 32-14.3 32-32V32c0-17.7-14.3-32-32-32H384 96zm0 384H352v64H96c-17.7 0-32-14.3-32-32s14.3-32 32-32zm32-240c0-8.8 7.2-16 16-16H336c8.8 0 16 7.2 16 16s-7.2 16-16 16H144c-8.8 0-16-7.2-16-16zm16 48H336c8.8 0 16 7.2 16 16s-7.2 16-16 16H144c-8.8 0-16-7.2-16-16s7.2-16 16-16z"/></svg>
+                            Modifica
+                          </button>
                     </template>
                     <template v-else>
                         <router-link :to="{name: 'register'}" type="button" class="text-white bg-blue-700 hover:bg-blue-800 focus:ring-4 focus:outline-none focus:ring-blue-300 font-medium rounded-lg text-sm px-5 py-2.5 text-center inline-flex items-center mr-2 ">

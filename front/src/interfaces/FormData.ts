@@ -13,4 +13,8 @@ export interface RegisterData {
     _method?: string;
 }
 
+export interface GetBookData {
+    book_id : number;
+    user_id : number;
 
+}
