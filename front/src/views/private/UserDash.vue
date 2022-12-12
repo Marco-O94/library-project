@@ -17,7 +17,7 @@ const userStore = UserStore();
             <SectionCard link="profile" title="Profilo" :icon="1" />
         </div>
         <div class="w-full h-full">
-            <SectionCard link="home" title="Libri in prestito" :icon="3" />
+            <SectionCard link="mybooks" title="Libri in prestito" :icon="3" />
         </div>
     </div>
 </template>

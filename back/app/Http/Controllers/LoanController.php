@@ -193,7 +193,7 @@ class LoanController extends Controller
     public function userBooks($id)
     {
         $user = User::find($id);
-        $books = $user->books()->get()->withPivot();
+        $books = $user->books()->get();
 
         return response()->json($books, 200);
     }

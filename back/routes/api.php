@@ -52,7 +52,7 @@ Route::prefix('books')->controller(BookController::class)->group(function () {
         // Show categories for Book creation and Table
         Route::get('/categories', 'categories');
         // Change image to the Book
-        Route::post('/image', 'updateImage');
+        Route::post('/image/{id}', 'updateImage');
     });
 });
 
@@ -71,6 +71,8 @@ Route::group(
     function () {
         // User get book
         Route::post('/user/create/{id}', 'getBook');
+        // Get user loans
+        Route::get('/user/{id}', 'userBooks');
 
         /* --- Librarian Routes --- */
         Route::middleware('role:Librarian')->group(function () {
@@ -84,8 +86,6 @@ Route::group(
             Route::get('/', 'queryLoans');
             // Librarian give book
             Route::post('/librarian/create', 'giveBook');
-            // Get user loans
-            Route::get('/user/{id}', 'userBooks');
             // Get loans Statuses
             Route::get('/statuses', 'getStatuses');
         });

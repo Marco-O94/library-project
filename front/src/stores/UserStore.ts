@@ -255,7 +255,10 @@ export const UserStore = defineStore("UserStore", {
                     authorization: Cookies.get("token"),
                 }
             }).then((res) => {
-                if (res.status === 200) {
+                if (this.user.id === id) {
+                    this.user.books = res.data;
+                    console.log(res.data);
+                }else{
                     this.anotherUser.books = res.data;
                 }
             }, (err) => {

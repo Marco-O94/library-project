@@ -68,6 +68,12 @@ const routes: Array<RouteRecordRaw> = [
         component: () => import(/* webpackChunkName: "profile" */ '@/views/private/ProfileView.vue'),
         meta: { requiresAuth: true },
       },
+      {
+        path: 'mybooks',
+        name: 'mybooks',
+        component: () => import(/* webpackChunkName: "profile" */ '@/views/private/MyBooksView.vue'),
+        meta: { requiresAuth: true },
+      },
 
       /* ----- SHOW / EDIT BOOKS ----- */
       {
